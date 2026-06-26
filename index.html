@@ -1,245 +1,297 @@
 <!DOCTYPE html>
-<html dir="rtl" lang="he">
+<html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>אשכנזי הכדור אתר למכירת חולצות</title>
-    
-    <!-- הגדרת ה-Favicon (האייקון הקטן בטאב) -->
-    <link rel="icon" type="image/jpeg" href="WhatsApp Image 2026-06-26 at 15.01.25.jpeg">
-    
+    <title>אשכנזי - הזמנת חולצות</title>
     <style>
         :root {
-            --primary: #ff4757;
-            --whatsapp: #25d366;
-            --bg-grad: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --bg-color: #1a1e29;
+            --card-bg: #252b3b;
+            --accent-red: #ff4a5a;
+            --accent-green: #00c853;
+            --text-color: #ffffff;
+            --text-muted: #a0aec0;
         }
 
-        body { 
-            font-family: 'Segoe UI', system-ui, sans-serif; 
-            background: var(--bg-grad); 
-            color: #f8fafc;
-            text-align: center; 
-            padding: 20px; 
-            margin: 0; 
-            min-height: 100vh;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
         }
 
         .container {
+            max-width: 450px;
+            width: 100%;
             display: flex;
             flex-direction: column;
-            max-width: 500px;
-            width: 100%;
             gap: 20px;
         }
 
-        .gallery-container {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 24px;
-            padding: 10px;
-            text-align: center;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-            overflow: hidden;
-        }
-
-        .main-img-wrapper {
-            width: 100%;
-            padding-top: 133%;
-            position: relative;
-            background: #111;
-            border-radius: 16px;
-        }
-
-        .main-img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: contain; 
-            transition: opacity 0.2s ease;
-        }
-
-        .gallery-nav {
+        /* שדרוג למחשב: מיכל התמונה עם חיתוך גבולות */
+        .image-card {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            padding: 15px;
             display: flex;
-            justify-content: center;
-            gap: 10px;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            overflow: hidden; /* מונע מהתמונה לצאת מהמסגרת בזמן הזום */
+        }
+
+        .image-container {
+            width: 100%;
+            border-radius: 15px;
+            overflow: hidden; /* חשוב מאוד לאפקט הזום */
+            position: relative;
+        }
+
+        /* האפקט המטורף למחשב */
+        .image-container img {
+            width: 100%;
+            display: block;
+            transition: transform 0.5s ease; /* הופך את הזום לחלק ונעים לעין */
+        }
+
+        /* כשהעכבר עובר על התמונה במחשב */
+        @media (hover: hover) {
+            .image-container:hover img {
+                transform: scale(1.08); /* מגדיל את התמונה ב-8% בצורה חלקה */
+            }
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
             margin-top: 15px;
-            padding-bottom: 5px;
+            width: 100%;
         }
 
-        .nav-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #cbd5e1;
-            padding: 10px 20px;
-            border-radius: 30px;
+        .btn-nav {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
             cursor: pointer;
-            font-weight: 600;
+            font-weight: bold;
             font-size: 14px;
-            transition: all 0.2s ease;
+            transition: background 0.2s;
         }
 
-        .nav-btn.active, .nav-btn:hover {
-            background: var(--primary);
-            border-color: var(--primary);
+        .btn-prev { background-color: #3b4252; color: white; }
+        .btn-next { background-color: var(--accent-red); color: white; }
+
+        .badge-sale {
+            background-color: var(--accent-red);
             color: white;
-            box-shadow: 0 0 15px rgba(255, 71, 87, 0.5);
-        }
-
-        .card { 
-            background: rgba(255, 255, 255, 0.03); 
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 25px; 
-            border-radius: 24px; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4); 
-            text-align: right;
-        }
-
-        .promo { 
-            background: linear-gradient(90deg, #ff4757, #ff6b81); color: white; 
-            padding: 12px; 
-            border-radius: 12px; 
-            margin-bottom: 20px; 
-            font-weight: bold; 
-            font-size: 15px; 
             text-align: center;
-            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+            padding: 10px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 4px 15px rgba(255, 74, 90, 0.3);
         }
 
-        h1 { 
-            margin: 0 0 20px 0;
-            font-size: 32px; 
-            font-weight: 800;
-            text-align: center;
-            background: linear-gradient(45deg, #fff, #cbd5e1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .form-card {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
         }
-        
-        label { display: block; font-weight: 600; margin-bottom: 6px; color: #94a3b8; font-size: 14px; }
-        
-        select, input, textarea { 
-            width: 100%; padding: 12px; margin-bottom: 15px; 
-            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); 
-            border-radius: 10px; box-sizing: border-box; font-size: 16px; color: white;
-            font-family: inherit; transition: all 0.2s ease;
+
+        h1 {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-size: 28px;
+            letter-spacing: 1px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        select, input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #3b4252;
+            border-radius: 12px;
+            background-color: #1e2330;
+            color: white;
+            font-size: 16px;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.2s;
         }
 
         select:focus, input:focus, textarea:focus {
-            outline: none; border-color: var(--primary); background: rgba(255, 255, 255, 0.08);
+            border-color: var(--accent-red);
         }
 
-        select option { background: #1e293b; color: white; }
-        
-        .price-box { 
-            background: rgba(255, 255, 255, 0.02); padding: 15px; border-radius: 12px; 
-            margin: 20px 0; border: 1px solid rgba(255, 255, 255, 0.05); text-align: center;
+        .price-box {
+            background-color: #1e2330;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            margin-top: 25px;
+            border: 1px dashed #3b4252;
         }
 
-        .price { font-size: 34px; font-weight: 800; color: #fff; margin-top: 3px; }
-        
-        .btn-order { 
-            background: linear-gradient(135deg, var(--whatsapp), #1ed760); 
-            color: white; border: none; width: 100%; padding: 16px; font-size: 18px; 
-            border-radius: 12px; cursor: pointer; font-weight: bold; transition: all 0.3s ease; 
-            margin-bottom: 5px; box-shadow: 0 5px 15px rgba(37, 211, 102, 0.2);
+        .price-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            display: block;
+            margin-bottom: 5px;
         }
 
-        .btn-order:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4); }
+        .price-amount {
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .btn-submit {
+            width: 100%;
+            background-color: var(--accent-green);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0, 200, 83, 0.3);
+            transition: transform 0.1s, background 0.2s;
+        }
+
+        .btn-submit:active {
+            transform: scale(0.98);
+        }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- מציג התמונות של החולצות -->
-        <div class="gallery-container">
-            <div class="main-img-wrapper">
-                <img id="product-view" class="main-img" src="WhatsApp Image 2026-06-26 at 13.26.44.jpeg" alt="חולצה קדימה">
-            </div>
-            <div class="gallery-nav">
-                <button class="nav-btn active" onclick="changeView('WhatsApp Image 2026-06-26 at 13.26.44.jpeg', this)">קדימה 👕</button>
-                <!-- שימוש בקובץ הגב החדש והתקין -->
-                <button class="nav-btn" onclick="changeView('WhatsApp Image 2026-06-26 at 13.26.44 (1).jpeg', this)">אחורה ↩️</button>
-            </div>
+<div class="container">
+
+    <!-- כרטיס תמונה עם אפקט הזום החדש -->
+    <div class="image-card">
+        <div class="image-container">
+            <!-- שים לב: החלף את ה-URL לתמונה האמיתית של אשכנזי בגיטהאב שלך -->
+            <img id="product-img" src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=500" alt="חולצת אשכנזי">
+        </div>
+        <div class="nav-buttons">
+            <button class="btn-nav btn-prev" onclick="changeImage(-1)">◀ אחורה</button>
+            <button class="btn-nav btn-next" onclick="changeImage(1)">קדימה ▶</button>
+        </div>
+    </div>
+
+    <!-- באנר מבצע -->
+    <div class="badge-sale">
+        🔥 מבצע: 3 חולצות ומעלה ב-60 ₪ בלבד!
+    </div>
+
+    <!-- כרטיס הטופס -->
+    <div class="form-card">
+        <h1>אשכנזי</h1>
+        
+        <div class="form-group">
+            <label>🎨 צבע חולצה:</label>
+            <select id="color" onchange="updatePrice()">
+                <option value="לבן">לבן</option>
+                <option value="שחור">שחור</option>
+            </select>
         </div>
 
-        <div class="card">
-            <div class="promo">🔥 מבצע: 3 חולצות ומעלה ב-60 ₪ בלבד!</div>
-            
-            <h1>אשכנזי</h1>
-            
-            <label>🎨 צבע חולצה:</label>
-            <select id="color">
-                <option>לבן</option>
-            </select>
-            
-            <label>📏 מידה / מספר:</label>
+        <div class="form-group">
+            <label>📏 מידה / ספה:</label>
             <select id="size">
-                <!-- מידות מספרים מ-1 עד 47 -->
-                <script>
-                    for (let i = 1; i <= 47; i++) {
-                        document.write(`<option value="${i}">${i}</option>`);
-                    }
-                </script>
-                <!-- מידות אותיות רגילות -->
                 <option value="S">S</option>
                 <option value="M" selected>M</option>
                 <option value="L">L</option>
                 <option value="XL">XL</option>
-                <option value="XXL">XXL</option>
             </select>
-            
-            <label>🔢 כמות:</label>
-            <input type="number" id="qty" value="1" min="1" oninput="update()">
-            
-            <label>📝 הערות להדפסה:</label>
-            <textarea id="notes" rows="2" placeholder="למשל: הדפסה על הגב..."></textarea>
-            
-            <div class="price-box">
-                <div style="color: #94a3b8; font-size: 14px;">סה"כ לתשלום:</div>
-                <div class="price"><span id="total">70</span> ₪</div>
-            </div>
-            
-            <button class="btn-order" onclick="order()">שלח הזמנה בוואטסאפ ✅</button>
         </div>
+
+        <div class="form-group">
+            <label>🔢 כמות:</label>
+            <input type="number" id="quantity" value="1" min="1" oninput="updatePrice()">
+        </div>
+
+        <div class="form-group">
+            <label>💬 הערות להדפסה:</label>
+            <textarea id="notes" rows="2" placeholder="למשל: הדפסה על הגב..."></textarea>
+        </div>
+
+        <div class="price-box">
+            <span class="price-label">סה"כ לתשלום:</span>
+            <div class="price-amount"><span id="total-price">70</span> ₪</div>
+        </div>
+
+        <button class="btn-submit" onclick="sendToWhatsApp()">✓ שלח הזמנה בוואטסאפ</button>
     </div>
 
-    <script>
-        function changeView(imgSrc, btn) {
-            const imgElement = document.getElementById('product-view');
-            imgElement.style.opacity = 0;
-            
-            setTimeout(() => {
-                imgElement.src = imgSrc;
-                imgElement.style.opacity = 1;
-            }, 100);
+</div>
 
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-        }
+<script>
+    // מערך תמונות (תוכל להחליף לקישורים של התמונות שלך)
+    const images = [
+        "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=500",
+        "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=500"
+    ];
+    let currentImgIndex = 0;
 
-        function update() {
-            let q = document.getElementById('qty').value;
-            let p = (q >= 3) ? 60 : 70;
-            document.getElementById('total').innerText = q * p;
-        }
+    function changeImage(direction) {
+        currentImgIndex += direction;
+        if (currentImgIndex < 0) currentImgIndex = images.length - 1;
+        if (currentImgIndex >= images.length) currentImgIndex = 0;
+        document.getElementById('product-img').src = images[currentImgIndex];
+    }
 
-        function order() {
-            let color = document.getElementById('color').value;
-            let size = document.getElementById('size').value;
-            let qty = document.getElementById('qty').value;
-            let notes = document.getElementById('notes').value;
-            let total = document.getElementById('total').innerText;
-            let msg = `היי, אני רוצה להזמין חולצה מודפסת:\nצבע: ${color}\nמידה: ${size}\nכמות: ${qty}\nהערות: ${notes}\nסה"כ לתשלום: ${total} ₪`;
-            window.open(`https://wa.me/972552956401?text=${encodeURIComponent(msg)}`);
+    // חישוב מחיר אוטומטי חכם לפי חוקי המבצע!
+    function updatePrice() {
+        const qty = parseInt(document.getElementById('quantity').value) || 1;
+        let pricePerUnit = 70;
+        
+        if (qty >= 3) {
+            pricePerUnit = 60; // הנחת המבצע!
         }
-    </script>
+        
+        const total = qty * pricePerUnit;
+        document.getElementById('total-price').innerText = total;
+    }
+
+    function sendToWhatsApp() {
+        const color = document.getElementById('color').value;
+        const size = document.getElementById('size').value;
+        const qty = document.getElementById('quantity').value;
+        const notes = document.getElementById('notes').value;
+        const total = document.getElementById('total-price').innerText;
+
+        const baseMessage = `היי אשכנזי, אני רוצה להזמין חולצה!\n\n` +
+                            `🎨 צבע: ${color}\n` +
+                            `📏 מידה: ${size}\n` +
+                            `🔢 כמות: ${qty}\n` +
+                            `💬 הערות: ${notes ? notes : 'אין'}\n\n` +
+                            `💰 סה"כ לתשלום: ${total} ₪`;
+
+        const whatsappUrl = `https://wa.me/972500000000?text=${encodeURIComponent(baseMessage)}`; // החלף את המספר למספר האמיתי
+        window.open(whatsappUrl, '_blank');
+    }
+</script>
+
 </body>
 </html>
