@@ -106,20 +106,20 @@
             border-color: var(--primary);
         }
 
+        /* תצוגת תמונות מקוריות בגודל רגיל וטבעי בלי עיוותים */
         .product-images {
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
         }
 
         .product-img {
-            flex: 1;
             width: 100%;
+            height: auto; /* שומר על הגובה המקורי והטבעי של התמונה */
             border-radius: 12px;
             border: 1px solid rgba(255,107,0,0.3);
-            object-fit: cover;
-            aspect-ratio: 1;
-            background: #151f28;
+            display: block;
         }
 
         .btn-group {
@@ -161,9 +161,10 @@
                 <div class="card">
                     <h1>אשכנזי הכדור - מכירת חולצות</h1>
                     
+                    <!-- שתי התמונות המקוריות שלך - מקדימה ומאחורה בגודל מלא -->
                     <div class="product-images">
-                        <img src="front-shirt.jpg" alt="חולצה מקדימה" class="product-img" onerror="this.src='https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=200'">
-                        <img src="back-shirt.jpg" alt="חולצה מאחורה" class="product-img" onerror="this.src='https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=200'">
+                        <img src="front-shirt.jpg" alt="חולצה מקדימה" class="product-img">
+                        <img src="back-shirt.jpg" alt="חולצה מאחורה" class="product-img">
                     </div>
 
                     <div style="background: #0d131a; padding: 12px; border-radius: 12px; text-align: center; margin-bottom: 15px;">
