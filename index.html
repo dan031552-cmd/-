@@ -3,11 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ASHKENAZI FC - האתר הרשמי</title>
-    
-    <!-- ספריות גוגל פיירבייס הרשמיות והמלאות לעבודה עם שרת בענן -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+    <title>אשכנזי הכדור - מכירת חולצות</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
 
     <style>
         :root {
@@ -35,7 +32,6 @@
             padding-bottom: 60px;
         }
 
-        /* תפריט ניווט עליון - מציג רק 3 דפים ללקוח */
         .nav-tabs {
             display: flex;
             justify-content: space-between;
@@ -56,7 +52,6 @@
             font-weight: bold;
             cursor: pointer;
             border-radius: 8px;
-            transition: all 0.2s ease;
             text-align: center;
         }
 
@@ -65,19 +60,12 @@
             color: #000000;
         }
 
-        /* מבנה דפים */
-        .page {
+        .step-container {
             display: none;
-            animation: fadeIn 0.2s ease-in-out;
         }
 
-        .page.active {
+        .step-container.active {
             display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         .card {
@@ -86,6 +74,7 @@
             border-radius: 20px;
             padding: 25px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
         }
 
         h1 { font-size: 28px; text-align: center; color: #ffffff; margin: 0 0 20px 0; }
@@ -99,7 +88,7 @@
             font-size: 14px;
         }
 
-        input, textarea {
+        input, textarea, select {
             width: 100%;
             padding: 12px;
             background: #0d131a;
@@ -112,387 +101,242 @@
             font-family: inherit;
         }
 
-        input:focus, textarea:focus {
+        input:focus, textarea:focus, select:focus {
             outline: none;
             border-color: var(--primary);
         }
 
-        .btn-main {
+        .product-images {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .product-img {
+            flex: 1;
             width: 100%;
+            border-radius: 12px;
+            border: 1px solid rgba(255,107,0,0.3);
+            object-fit: cover;
+            aspect-ratio: 1;
+            background: #151f28;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-main {
+            flex: 1;
             padding: 15px;
-            background: var(--primary);
-            color: #000000;
             border: none;
             border-radius: 10px;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            transition: background 0.2s;
+            text-align: center;
         }
 
-        .btn-main:hover { background: #ff8c00; }
-
-        .btn-plus {
-            position: fixed;
-            bottom: 30px;
-            left: 30px;
-            width: 60px;
-            height: 60px;
-            background: var(--primary);
-            color: #000000;
-            border: none;
-            border-radius: 50%;
-            font-size: 32px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255,107,0,0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 99;
-        }
-
-        /* רשימת ביקורות */
-        .review-item {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 12px;
-        }
-
-        .review-header {
-            display: flex;
-            justify-content: space-between;
-            font-size: 13px;
-            color: var(--gray);
-            margin-bottom: 5px;
-        }
-
-        .review-name { font-weight: bold; color: #ffffff; }
-        .review-text { font-size: 15px; line-height: 1.4; color: #e2e8f0; }
-
-        /* ניהול פאנל */
-        .admin-item {
-            background: #0d131a;
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 10px;
-            padding: 12px;
-            margin-bottom: 10px;
-        }
-
-        .btn-delete {
-            background: var(--danger);
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 12px;
-            margin-top: 5px;
-        }
-
-        /* חלונות מודל */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        .modal.open { display: flex; }
-        .modal-content {
-            background: var(--card);
-            border: 2px solid var(--primary);
-            border-radius: 20px;
-            padding: 25px;
-            width: 100%;
-            max-width: 400px;
-            position: relative;
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 15px; left: 15px;
-            background: transparent; border: none;
-            color: var(--gray); font-size: 20px; cursor: pointer;
-        }
+        .btn-primary { background: var(--primary); color: #000000; }
+        .btn-secondary { background: #2d3748; color: #ffffff; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-success { background: var(--success); color: white; }
     </style>
 </head>
 <body>
 
     <div class="container">
 
-        <!-- ניווט שלוש דפים עליון (הדף הרביעי מוסתר ויופיע רק לאדמין) -->
+        <!-- תפריט ניווט עליון -->
         <div class="nav-tabs">
-            <button id="tab-home" class="tab-btn active" onclick="switchPage('home')">👕 דף ראשי</button>
-            <button id="tab-address" class="tab-btn" onclick="switchPage('address')">📍 דף הכתובת</button>
-            <button id="tab-reviews" class="tab-btn" onclick="switchPage('reviews')">⭐ ביקורות</button>
-            <button id="tab-admin" class="tab-btn" onclick="switchPage('admin')" style="display:none; border: 1px solid var(--primary);">⚙️ פאנל ניהול סודי</button>
+            <button id="tab-order" class="tab-btn active" onclick="switchMainTab('order')">👕 ביצוע הזמנה</button>
+            <button id="tab-reviews" class="tab-btn" onclick="switchMainTab('reviews')">⭐ ביקורות</button>
+            <button id="tab-admin" class="tab-btn" onclick="switchMainTab('admin')" style="display:none; border: 1px solid var(--primary);">⚙️ פאנל ניהול</button>
         </div>
 
-        <!-- ================= דף 1: דף ראשי ================= -->
-        <div id="page-home" class="page active">
-            <div class="card">
-                <h1>ASHKENAZI FC</h1>
-                <p style="text-align: center; color: var(--gray);">חולצות אולטראס באיכות הגבוהה ביותר בשוק.</p>
-                <div style="background: #0d131a; padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 20px;">
-                    <span style="font-size: 14px; color: var(--gray); display: block;">מחיר פריט:</span>
-                    <span style="font-size: 36px; font-weight: 900; color: var(--primary);">70 ₪</span>
+        <div id="page-order" class="main-page-section" style="display: block;">
+            
+            <!-- שלב 1: פרטי מוצר -->
+            <div id="checkout-step-1" class="step-container active">
+                <div class="card">
+                    <h1>אשכנזי הכדור - מכירת חולצות</h1>
+                    
+                    <div class="product-images">
+                        <img src="front-shirt.jpg" alt="חולצה מקדימה" class="product-img" onerror="this.src='https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=200'">
+                        <img src="back-shirt.jpg" alt="חולצה מאחורה" class="product-img" onerror="this.src='https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=200'">
+                    </div>
+
+                    <div style="background: #0d131a; padding: 12px; border-radius: 12px; text-align: center; margin-bottom: 15px;">
+                        <span style="font-size: 13px; color: var(--gray); display: block;">מחיר חולצה:</span>
+                        <span style="font-size: 28px; font-weight: 900; color: var(--primary);">70 ₪</span>
+                    </div>
+
+                    <!-- בחירת מידה - מתחילה ריקה וכוללת אותיות ומספרים -->
+                    <label>📏 בחר מידה:</label>
+                    <select id="prod-size">
+                        <option value="" disabled selected hidden>לחץ לבחירת מידה...</option>
+                        <option value="XS">XS (אקסטרה שמאל)</option>
+                        <option value="S">S (שמאל)</option>
+                        <option value="M">M (מדיום)</option>
+                        <option value="L">L (לארג')</option>
+                        <option value="XL">XL (אקסטרה לארג')</option>
+                        <option value="XXL">XXL (דאבל אקסטרה לארג')</option>
+                        <!-- מידות מספרים -->
+                        <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option><option value="32">32</option><option value="33">33</option><option value="34">34</option><option value="35">35</option><option value="36">36</option><option value="37">37</option><option value="38">38</option><option value="39">39</option><option value="40">40</option><option value="41">41</option><option value="42">42</option><option value="43">43</option><option value="44">44</option><option value="45">45</option><option value="46">46</option><option value="47">47</option>
+                    </select>
+
+                    <!-- שדה הקלדה חופשי לחלוטין לכמות -->
+                    <label>🔢 כמות חולצות מבוקשת:</label>
+                    <input type="number" id="prod-quantity" value="1" min="1" placeholder="הקלד כמות ידנית...">
+
+                    <label>✍️ הערות להדפסה על החולצה:</label>
+                    <textarea id="prod-notes" rows="2" placeholder="למשל: להדפיס מאחורה מספר 10 או שם מסוים..."></textarea>
+
+                    <label id="label-pickup-name" style="color: #ff9d00;">👤 להטבת איסוף עצמי, אנא רשום שם קודם:</label>
+                    <input type="text" id="pickup-name" placeholder="השם שלך (חובה רק לאיסוף עצמי)">
+
+                    <div class="btn-group">
+                        <button class="btn-main btn-secondary" onclick="finishWithSelfPickup()">🏠 איסוף עצמי (סיים)</button>
+                        <button class="btn-main btn-primary" onclick="goToStep(2)">🛵 משלוח (המשך) ◄</button>
+                    </div>
                 </div>
-                <button class="btn-main" onclick="switchPage('address')">המשך להזנת כתובת ◄</button>
+            </div>
+
+            <!-- שלב 2: משלוח -->
+            <div id="checkout-step-2" class="step-container">
+                <div class="card">
+                    <h2>פרטי יעד למשלוח</h2>
+                    <p style="color: var(--gray); font-size: 13px; text-align: center; margin-bottom: 20px;">אנא מלא את פרטי הכתובת המדויקים שלך למשלוח החולצה.</p>
+                    
+                    <label>👤 שם מלא של המקבל:</label>
+                    <input type="text" id="cust-name" placeholder="הכנס את שמך המלא">
+
+                    <label>🏙️ עיר מגורים:</label>
+                    <input type="text" id="cust-city" placeholder="למשל: יבנה, רחובות">
+
+                    <label>🛣️ רחוב ומספר בית:</label>
+                    <input type="text" id="cust-street" placeholder="שם הרחוב ומספר הבית">
+
+                    <div class="btn-group">
+                        <button class="btn-main btn-secondary" onclick="goToStep(1)">► חזור</button>
+                        <button class="btn-main btn-success" onclick="finishWithDelivery()">אישור וסיום הזמנה 🚀</button>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- ================= דף 2: דף הכתובת והמשלוח ================= -->
-        <div id="page-address" class="page">
-            <div class="card">
-                <h2>פרטי יעד למשלוח</h2>
-                
-                <label>👤 שם מלא:</label>
-                <input type="text" id="cust-name" placeholder="הכנס את שמך">
-
-                <label>🏙️ עיר מגורים:</label>
-                <input type="text" id="cust-city" placeholder="למשל: יבנה, רחובות">
-
-                <label>🛣️ רחוב ומספר בית:</label>
-                <input type="text" id="cust-street" placeholder="שם הרחוב ומספר הבית">
-
-                <button class="btn-main" style="background: var(--success); color: white;" onclick="processAddressSubmission()">אישור ושליחה 🚀</button>
-            </div>
-        </div>
-
-        <!-- ================= דף 3: דף ביקורות הלקוחות ================= -->
-        <div id="page-reviews" class="page">
+        <div id="page-reviews" class="main-page-section" style="display: none;">
             <div class="card">
                 <h2>ביקורות מהרוכשים שלנו</h2>
-                <p style="text-align: center; font-size: 13px; color: var(--gray); margin-bottom: 20px;">כל הביקורות מאומתות ומתעדכנות בזמן אמת מהשרת.</p>
-                
                 <div id="reviews-container">
-                    <div style="text-align: center; color: var(--gray); padding: 20px;">טוען ביקורות חיות מהשרת...</div>
+                    <div style="text-align: center; color: var(--gray); padding: 20px;">אין עדיין ביקורות רשומות בשרת.</div>
                 </div>
             </div>
-
-            <button class="btn-plus" onclick="openReviewModal()">+</button>
         </div>
 
-        <!-- ================= דף 4: פאנל ניהול (הדף הרביעי הנסתר) ================= -->
-        <div id="page-admin" class="page">
+        <div id="page-admin" class="main-page-section" style="display: none;">
             <div class="card">
                 <h2>⚙️ פאנל ניהול אדמין סודי</h2>
-                <p style="color: var(--gray); font-size: 13px; text-align: center; margin-bottom: 20px;">כאן אתה יכול לראות את ההזמנות ולמחוק ביקורות פקטיביות.</p>
-                
-                <h3 style="color: var(--primary); border-bottom: 1px solid rgba(255,107,0,0.2); padding-bottom: 5px;">📦 הזמנות אחרונות בשרת:</h3>
-                <div id="admin-orders-container">אין הזמנות כרגע.</div>
-
-                <h3 style="color: var(--primary); border-bottom: 1px solid rgba(255,107,0,0.2); padding-bottom: 5px; margin-top: 25px;">⭐ ניהול ומחיקת ביקורות:</h3>
-                <div id="admin-reviews-container">אין ביקורות כרגע.</div>
+                <div id="admin-orders-container">השרת לא מופעל במחשב זה.</div>
             </div>
-        </div>
-
-    </div>
-
-    <!-- חלון קופץ להוספת ביקורת -->
-    <div id="review-modal" class="modal">
-        <div class="modal-content">
-            <button class="close-modal" onclick="closeReviewModal()">✕</button>
-            <h3 style="margin-top: 0; color: var(--primary); text-align: center;">הוסף ביקורת חדשה</h3>
-            
-            <label>👤 השם שלך:</label>
-            <input type="text" id="new-rev-name" placeholder="איך תרצה להופיע באתר?">
-
-            <label>💬 תוכן הביקורת:</label>
-            <textarea id="new-rev-text" rows="3" placeholder="כתוב כאן את חוות דעתך..."></textarea>
-
-            <button class="btn-main" onclick="submitReview()">פרסם ביקורת שכולם יראו! 🔥</button>
         </div>
     </div>
 
     <script>
-        // פרטי פרויקט השרת הרשמיים והמלאים של גוגל פיירבייס - מתוקן לחלוטין!
-        const firebaseConfig = {
-            apiKey: "AIzaSyAsX54D_ExampleKeyFix123456789",
-            authDomain: "ashkenazi-fc-default.firebaseapp.com",
-            databaseURL: "https://ashkenazi-fc-default-rtdb.firebaseio.com/",
-            projectId: "ashkenazi-fc-default",
-            storageBucket: "ashkenazi-fc-default.appspot.com"
-        };
-        
-        // אתחול השרת הראשי
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
+        const WHATSAPP_NUMBER = '972552956401';
+        const API_URL = 'http://localhost:3000';
 
-        // מעבר חלק בין הדפים
-        function switchPage(pageId) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            
-            document.getElementById(`page-${pageId}`).classList.add('active');
-            document.getElementById(`tab-${pageId}`).classList.add('active');
+        function goToStep(stepNum) {
+            document.querySelectorAll('.step-container').forEach(s => s.classList.remove('active'));
+            document.getElementById(`checkout-step-${stepNum}`).classList.add('active');
+            window.scrollTo(0, 0);
         }
 
-        // עיבוד שדה הכתובת - המנגנון הסודי ומערכת הסיומות
-        function processAddressSubmission() {
+        function switchMainTab(tabId) {
+            document.querySelectorAll('.main-page-section').forEach(p => p.style.display = 'none');
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(`page-${tabId}`).style.display = 'block';
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+        }
+
+        function finishWithSelfPickup() {
+            const pickupName = document.getElementById('pickup-name').value.trim();
+            const quantity = parseInt(document.getElementById('prod-quantity').value) || 1;
+            const selectedSize = document.getElementById('prod-size').value;
+            const notes = document.getElementById('prod-notes').value.trim() || 'אין הערות';
+
+            if (!selectedSize) {
+                alert('⚠️ עצור! לא בחרת מידה לחולצה.');
+                document.getElementById('prod-size').focus();
+                return;
+            }
+
+            if (!pickupName) {
+                alert('⚠️ חסרים פרטים! אנא מלא את שמך בשדה "להטבת איסוף עצמי, אנא רשום שם קודם".');
+                document.getElementById('pickup-name').focus();
+                return;
+            }
+            sendOrderToDatabaseAndWhatsApp(pickupName, "איסוף עצמי", `איסוף עצמי | מידה: ${selectedSize}, כמות: ${quantity}, הערות: ${notes}`, quantity, notes, true, selectedSize);
+        }
+
+        function finishWithDelivery() {
             const name = document.getElementById('cust-name').value.trim();
             const city = document.getElementById('cust-city').value.trim();
             let street = document.getElementById('cust-street').value.trim();
+            const quantity = parseInt(document.getElementById('prod-quantity').value) || 1;
+            const selectedSize = document.getElementById('prod-size').value;
+            const notes = document.getElementById('prod-notes').value.trim() || 'אין הערות';
 
-            if(!name || !city || !street) {
-                alert('אנא מלא את כל פרטי הכתובת לפני השליחה!');
+            if (!selectedSize) {
+                alert('⚠️ עצור! לא בחרת מידה לחולצה. חזור שלב אחד אחורה ובחר מידה.');
+                goToStep(1);
                 return;
             }
 
-            // בדיקה אם הוכנס הקוד הסודי "2323" בשדה הרחוב
+            if (!name || !city || !street) {
+                alert('⚠️ עצור! לא מילאת את כל פרטי הכתובת למשלוח.');
+                if(!name) document.getElementById('cust-name').focus();
+                else if(!city) document.getElementById('cust-city').focus();
+                else if(!street) document.getElementById('cust-street').focus();
+                return;
+            }
+
             if (street === "2323" || street.endsWith("2323")) {
-                localStorage.setItem('isAdmin', 'true');
+                localStorage.setItem('adminSecret', '2323');
                 document.getElementById('tab-admin').style.display = 'block';
-                alert('🔓 קוד אדמין זוהה בהצלחה! מעביר אותך לדף הניהול הנסתר.');
-                switchPage('admin');
+                alert('🔓 קוד אדמין נכון!');
+                switchMainTab('admin');
                 return;
             }
 
-            // לקוח רגיל - הוספת סיומת תלת-ספרתית קבועה (105) בסוף הכתובת שלו
-            if (!street.endsWith("/105")) {
-                street = street + "/105";
-            }
+            if (!street.endsWith("/105")) street = street + "/105";
+            sendOrderToDatabaseAndWhatsApp(name, city, `${street} | מידה: ${selectedSize}, כמות: ${quantity}, הערות: ${notes}`, quantity, notes, false, selectedSize, street);
+        }
 
-            // שמירת ההזמנה בשרת הפיירבייס לאדמין
-            database.ref('orders').push({
-                name: name,
-                city: city,
-                street: street,
-                date: new Date().toLocaleString('he-IL')
-            });
+        function sendOrderToDatabaseAndWhatsApp(name, city, streetDesc, quantity, notes, isSelfPickup, size, originalStreet = "") {
+            fetch(`${API_URL}/api/orders`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, city, street: streetDesc })
+            })
+            .then(() => { executeWhatsAppRedirect(name, city, quantity, notes, isSelfPickup, size, originalStreet); })
+            .catch(() => { executeWhatsAppRedirect(name, city, quantity, notes, isSelfPickup, size, originalStreet); });
+        }
 
-            // פתיחת הרשאה מקומית לכתיבת ביקורת
+        function executeWhatsAppRedirect(name, city, quantity, notes, isSelfPickup, size, originalStreet) {
             localStorage.setItem('hasOrdered', 'true');
-
-            // בניית הודעת וואטסאפ
-            let msg = `👕 הזמנה חדשה מאתר ASHKENAZI FC!\n\n`;
-            msg += `👤 שם הלקוח: ${name}\n`;
-            msg += `🏙️ עיר: ${city}\n`;
-            msg += `🛣️ רחוב ומספר (כולל קוד יעד): ${street}\n\n`;
-            msg += `💰 סכום: 70 ₪`;
-
-            window.open(`https://wa.me/972552956401?text=${encodeURIComponent(msg)}`, '_blank');
-            alert('הזמנתך נשמרה והועברה לוואטסאפ! כעת אתה מורשה לכתוב ביקורת בדף הביקורות.');
-            switchPage('reviews');
-        }
-
-        // פתיחת חלון הוספת ביקורת רק למי שהזמין
-        function openReviewModal() {
-            if(localStorage.getItem('hasOrdered') === 'true' || localStorage.getItem('isAdmin') === 'true') {
-                document.getElementById('review-modal').classList.add('open');
+            let msg = `👕 הזמנה חדשה מאתר אשכנזי הכדור!\n\n`;
+            if (isSelfPickup) {
+                msg += `🏠 סוג אספקה: איסוף עצמי\n👤 שם הלקוח: ${name}\n`;
             } else {
-                alert('גישה חסומה! ניתן להוסיף ביקורת רק לאחר שמילאת פרטי כתובת ולחצת על כפתור השליחה.');
+                msg += `📦 סוג אספקה: משלוח לבית\n👤 שם: ${name}\n🏙️ עיר: ${city}\n👑 כתובת: ${originalStreet}\n`;
             }
+            msg += `📏 מידה נבחרת: ${size}\n🔢 כמות: ${quantity}\n✍️ הערות הדפסה: ${notes}\n\n💰 סכום לתשלום: ${70 * quantity} ₪`;
+            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+            goToStep(1);
         }
 
-        function closeReviewModal() {
-            document.getElementById('review-modal').classList.remove('open');
-        }
-
-        // הוספת ביקורת לשרת
-        function submitReview() {
-            const name = document.getElementById('new-rev-name').value.trim();
-            const text = document.getElementById('new-rev-text').value.trim();
-
-            if(!name || !text) {
-                alert('אנא מלא את כל השדות!');
-                return;
-            }
-
-            database.ref('reviews').push({
-                name: name,
-                text: text,
-                date: new Date().toLocaleDateString('he-IL')
-            }).then(() => {
-                document.getElementById('new-rev-name').value = '';
-                document.getElementById('new-rev-text').value = '';
-                closeReviewModal();
-                alert('הביקורת שלך פורסמה בהצלחה! 🏆');
-            });
-        }
-
-        // טעינה ועדכון אוטומטי של ביקורות מהשרת בזמן אמת לכל המשתמשים בעולם
-        database.ref('reviews').on('value', (snapshot) => {
-            const container = document.getElementById('reviews-container');
-            const adminContainer = document.getElementById('admin-reviews-container');
-            container.innerHTML = '';
-            adminContainer.innerHTML = '';
-            
-            const data = snapshot.val();
-            if(!data) {
-                container.innerHTML = '<div style="text-align: center; color: var(--gray); padding: 20px;">אין עדיין ביקורות באתר. תהיה הראשון לכתוב!</div>';
-                adminContainer.innerHTML = 'אין ביקורות לניהול.';
-                return;
-            }
-
-            const items = Object.keys(data).map(key => ({ id: key, ...data[key] })).reverse();
-
-            items.forEach(r => {
-                container.innerHTML += `
-                    <div class="review-item">
-                        <div class="review-header">
-                            <span class="review-name">${r.name}</span>
-                            <span>${r.date}</span>
-                        </div>
-                        <div class="review-text">${r.text}</div>
-                    </div>
-                `;
-
-                adminContainer.innerHTML += `
-                    <div class="admin-item">
-                        <strong>${r.name}</strong> (${r.date}): <br> "${r.text}" <br>
-                        <button class="btn-delete" onclick="deleteReview('${r.id}')">❌ מחק ביקורת זו מהשרת</button>
-                    </div>
-                `;
-            });
-        });
-
-        // טעינת רשימת ההזמנות לפאנל הניהול בזמן אמת מהשרת
-        database.ref('orders').on('value', (snapshot) => {
-            const adminOrdersContainer = document.getElementById('admin-orders-container');
-            adminOrdersContainer.innerHTML = '';
-            
-            const data = snapshot.val();
-            if(!data) {
-                adminOrdersContainer.innerHTML = 'אין הזמנות רשומות בשרת.';
-                return;
-            }
-
-            const orders = Object.keys(data).map(key => ({ id: key, ...data[key] })).reverse();
-            orders.forEach(o => {
-                adminOrdersContainer.innerHTML += `
-                    <div class="admin-item">
-                        <strong>שם:</strong> ${o.name} | <strong>תאריך:</strong> ${o.date}<br>
-                        <strong>כתובת מלאה שנשמרה:</strong> ${o.city}, ${o.street}<br>
-                        <button class="btn-delete" onclick="deleteOrder('${o.id}')">🗑️ מחק היסטוריית הזמנה</button>
-                    </div>
-                `;
-            });
-        });
-
-        // פונקציות מחיקה בלעדיות של האדמין בשרת
-        function deleteReview(id) {
-            if(confirm('האם למחוק את הביקורת הזו לצמיתות מהשרת הכללי?')) {
-                database.ref('reviews/' + id).remove();
-            }
-        }
-
-        function deleteOrder(id) {
-            if(confirm('למחוק את תיעוד ההזמנה הזו?')) {
-                database.ref('orders/' + id).remove();
-            }
-        }
-
-        // בדיקה אוטומטית בזמן טעינת האתר אם המכשיר כבר רשום כמנהל
-        if(localStorage.getItem('isAdmin') === 'true') {
+        if(localStorage.getItem('adminSecret') === '2323') {
             document.getElementById('tab-admin').style.display = 'block';
         }
     </script>
