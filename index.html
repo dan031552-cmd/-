@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>אשכנזי הכדור - מכירת חולצות</title>
-    <!-- תמונת הכדור המחייך כלוגו הקטן בטאב -->
-    <link rel="icon" type="image/jpeg" href="ball-logo.jpg">
+    <!-- שימוש בשם הקובץ המדויק של הוואטסאפ לאייקון הטאב -->
+    <link rel="icon" type="image/jpeg" href="WhatsApp Image 2026-06-26 at 15.01.24.jpeg">
 
     <style>
         :root {
@@ -166,14 +166,7 @@
             margin-bottom: 15px;
             border: 1px solid rgba(255,255,255,0.05);
         }
-        .order-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
 
-        /* עיצוב שדה קוד הניהול הדינמי */
         .admin-trigger-box {
             background: #0d131a;
             padding: 15px;
@@ -206,12 +199,13 @@
                     <div class="admin-trigger-box">
                         <label style="margin-bottom: 5px; color: var(--gray);">🔑 קוד זיהוי אתר:</label>
                         <input type="text" id="admin-code-input" value="1502" oninput="checkDynamicAdminCode()" style="text-align: center; letter-spacing: 2px; font-weight: bold; margin-bottom: 0; max-width: 150px; display: inline-block;">
+                        <button onclick="checkDynamicAdminCode()" style="background: rgba(255,107,0,0.2); color: #fff; border: 1px solid var(--primary); padding: 5px 10px; border-radius: 6px; font-size: 12px; cursor: pointer; margin-right: 5px;">בדיקת פאנל</button>
                     </div>
                     
-                    <!-- תמונות הדוגמן -->
+                    <!-- תמונות הדוגמן עם שמות קבצי הוואטסאפ המקוריים שלך -->
                     <div class="product-images">
-                        <img src="front-model.jpg" alt="חולצה מקדימה" class="product-img">
-                        <img src="back-model.jpg" alt="חולצה מאחורה" class="product-img">
+                        <img src="WhatsApp Image 2026-06-26 at 13.26.41.jpeg" alt="חולצה מקדימה" class="product-img">
+                        <img src="WhatsApp Image 2026-06-26 at 13.26.38.jpeg" alt="חולצה מאחורה" class="product-img">
                     </div>
 
                     <div style="background: #0d131a; padding: 12px; border-radius: 12px; text-align: center; margin-bottom: 15px;">
@@ -243,7 +237,6 @@
                         <option value="delivery">📦 משלוח לבית ביבנה (תוספת 10 ₪)</option>
                     </select>
 
-                    <!-- שדות דינמיים בהתאם לבחירה -->
                     <div id="fields-pickup">
                         <label style="color: #ff9d00;">👤 שם מלא לאיסוף עצמי:</label>
                         <input type="text" id="pickup-name" placeholder="הכנס את שמך">
@@ -270,9 +263,7 @@
                     <h2>📋 סיכום ההזמנה שלך</h2>
                     <p style="color: var(--gray); font-size: 14px; text-align: center; margin-bottom: 20px;">אנא בדוק שהפרטים נכונים לפני השליחה</p>
                     
-                    <div class="summary-details" id="summary-content">
-                        <!-- מתמלא דינמית -->
-                    </div>
+                    <div class="summary-details" id="summary-content"></div>
 
                     <div class="btn-group">
                         <button class="btn-main btn-secondary" onclick="goToStep(1)">✍️ חזור לשינוי פרטים</button>
@@ -311,12 +302,17 @@
         const WHATSAPP_NUMBER = '972552956401';
         let currentOrderData = {};
 
-        // פונקציית זיהוי השינוי בקוד ל-152323 ומעבר אוטומטי לפאנל
         function checkDynamicAdminCode() {
             const codeInput = document.getElementById('admin-code-input').value;
             if (codeInput === '152323') {
+                alert('🔓 קוד תקין! פאנל הניהול נפתח כעת בלשונית למעלה.');
                 document.getElementById('tab-admin').style.display = 'block';
                 switchMainTab('admin');
+            } else {
+                if (document.getElementById('tab-admin').style.display === 'block' === false) {
+                    // אם הקוד לא נכון, מוודאים שהלשונית מוסתרת
+                    document.getElementById('tab-admin').style.display = 'none';
+                }
             }
         }
 
@@ -387,7 +383,6 @@
                 };
             }
 
-            // מילוי מסך הסיכום
             const summaryContent = document.getElementById('summary-content');
             summaryContent.innerHTML = `
                 <div class="summary-row"><span>סוג אספקה:</span><strong>${currentOrderData.type}</strong></div>
@@ -409,7 +404,6 @@
         }
 
         function confirmAndSendFinalOrder() {
-            // שמירה מקומית בפאנל הניהול
             const orders = JSON.parse(localStorage.getItem('site_orders') || '[]');
             orders.push({
                 id: Date.now(),
@@ -421,11 +415,10 @@
             });
             localStorage.setItem('site_orders', JSON.stringify(orders));
 
-            // בניית הודעת וואטסאפ
             let msg = `👕 הזמנה חדשה מאתר אשכנזי הכדור!\n\n`;
             msg += ` אספקה: ${currentOrderData.type}\n👤 שם: ${currentOrderData.name}\n`;
             if (currentOrderData.shippingCost > 0) {
-                msg += `🏙️ עיר: יבנה\n[][] רחוב: ${currentOrderData.street}\n`;
+                msg += `🏙️ עיר: יבנה\n🛣️ כתובת: ${currentOrderData.street}\n`;
             }
             msg += `📏 מידה: ${currentOrderData.size}\n🔢 כמות: ${currentOrderData.quantity}\n✍️ הערות: ${currentOrderData.notes}\n\n💰 סך הכל לתשלום: ${currentOrderData.totalPrice} ₪`;
             
@@ -433,18 +426,17 @@
             goToStep(1);
         }
 
-        // ניהול הזמנות וביקורות של אדמין
         function renderAdminOrders() {
             const container = document.getElementById('admin-orders-container');
             const orders = JSON.parse(localStorage.getItem('site_orders') || '[]');
             if(orders.length === 0) { container.innerHTML = '<div style="color:var(--gray);text-align:center;">אין הזמנות חדשות במערכת.</div>'; return; }
             container.innerHTML = orders.map(o => `
                 <div class="order-item">
-                    <div class="order-header">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
                         <strong>${o.name} (${o.date})</strong>
                         <button class="btn-danger" onclick="deleteOrder(${o.id})">🗑️ מחק</button>
                     </div>
-                    <div style="font-size:14px; color:var(--gray); margin-top:5px;">${o.details}</div>
+                    <div style="font-size:14px; color:var(--gray);">${o.details}</div>
                 </div>
             `).join('');
         }
