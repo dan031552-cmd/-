@@ -166,6 +166,22 @@
             margin-bottom: 15px;
             border: 1px solid rgba(255,255,255,0.05);
         }
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        /* עיצוב שדה קוד הניהול הדינמי */
+        .admin-trigger-box {
+            background: #0d131a;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px dashed rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -181,12 +197,18 @@
 
         <div id="page-order" class="main-page-section" style="display: block;">
             
-            <!-- שלב 1: בחירת מוצר -->
+            <!-- שלב 1: בחירת מוצר ופרטים ראשוניים -->
             <div id="checkout-step-1" class="step-container active">
                 <div class="card">
                     <h1>אשכנזי הכדור - מכירת חולצות</h1>
+
+                    <!-- שדה קוד הניהול הדינמי -->
+                    <div class="admin-trigger-box">
+                        <label style="margin-bottom: 5px; color: var(--gray);">🔑 קוד זיהוי אתר:</label>
+                        <input type="text" id="admin-code-input" value="1502" oninput="checkDynamicAdminCode()" style="text-align: center; letter-spacing: 2px; font-weight: bold; margin-bottom: 0; max-width: 150px; display: inline-block;">
+                    </div>
                     
-                    <!-- תמונות הדוגמן המקוריות שלך -->
+                    <!-- תמונות הדוגמן -->
                     <div class="product-images">
                         <img src="front-model.jpg" alt="חולצה מקדימה" class="product-img">
                         <img src="back-model.jpg" alt="חולצה מאחורה" class="product-img">
@@ -215,50 +237,46 @@
                     <label>✍️ הערות להדפסה על החולצה:</label>
                     <textarea id="prod-notes" rows="2" placeholder="למשל: מספר 10 מאחורה..."></textarea>
 
-                    <label id="label-pickup-name" style="color: #ff9d00;">👤 להטבת איסוף עצמי, אנא רשום שם קודם:</label>
-                    <input type="text" id="pickup-name" placeholder="השם שלך">
+                    <label>🛵 בחר סוג אספקה:</label>
+                    <select id="delivery-type" onchange="toggleDeliveryFields()">
+                        <option value="pickup" selected>🏠 איסוף עצמי (חינם - 70 ₪ לחולצה)</option>
+                        <option value="delivery">📦 משלוח לבית ביבנה (תוספת 10 ₪)</option>
+                    </select>
 
-                    <div class="btn-group">
-                        <button class="btn-main btn-secondary" onclick="processSelfPickup()">🏠 איסוף עצמי</button>
-                        <button class="btn-main btn-primary" onclick="goToStep(2)">🛵 משלוח (יבנה בלבד) ◄</button>
+                    <!-- שדות דינמיים בהתאם לבחירה -->
+                    <div id="fields-pickup">
+                        <label style="color: #ff9d00;">👤 שם מלא לאיסוף עצמי:</label>
+                        <input type="text" id="pickup-name" placeholder="הכנס את שמך">
                     </div>
+
+                    <div id="fields-delivery" style="display: none;">
+                        <label>👤 שם מלא של המקבל:</label>
+                        <input type="text" id="cust-name" placeholder="הכנס את שמך המלא">
+
+                        <label>🏙️ עיר מגורים:</label>
+                        <input type="text" value="יבנה" disabled style="background: #1a232d; color: var(--gray); cursor: not-allowed;">
+
+                        <label>🛣️ רחוב ומספר בית:</label>
+                        <input type="text" id="cust-street" placeholder="שם הרחוב ומספר הבית">
+                    </div>
+
+                    <button class="btn-main btn-primary" style="width: 100%; margin-top: 10px;" onclick="processOrderDetails()">המשך למסך סיכום פרטים ◄</button>
                 </div>
             </div>
 
-            <!-- שלב 2: משלוח (רק ביבנה ב-10 שקלים) -->
+            <!-- שלב 2: מסך סיכום פרטים -->
             <div id="checkout-step-2" class="step-container">
                 <div class="card">
-                    <h2>פרטי יעד למשלוח (יבנה בלבד - 10 ₪)</h2>
-                    
-                    <label>👤 שם מלא של המקבל:</label>
-                    <input type="text" id="cust-name" placeholder="הכנס את שמך המלא">
-
-                    <label>🏙️ עיר מגורים:</label>
-                    <input type="text" value="יבנה" disabled style="background: #1a232d; color: var(--gray); cursor: not-allowed;">
-
-                    <label>🛣️ רחוב ומספר בית:</label>
-                    <input type="text" id="cust-street" placeholder="שם הרחוב ומספר הבית">
-
-                    <div class="btn-group">
-                        <button class="btn-main btn-secondary" onclick="goToStep(1)">► חזור</button>
-                        <button class="btn-main btn-primary" onclick="processDelivery()">המשך לסיכום ◄</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- שלב 3: מסך סיכום פרטים ומחיר סופי (השלב החמישי שביקשת) -->
-            <div id="checkout-step-3" class="step-container">
-                <div class="card">
                     <h2>📋 סיכום ההזמנה שלך</h2>
-                    <p style="color: var(--gray); font-size: 14px; text-align: center; margin-bottom: 20px;">בדוק שהכל נכון לפני השליחה הסופית</p>
+                    <p style="color: var(--gray); font-size: 14px; text-align: center; margin-bottom: 20px;">אנא בדוק שהפרטים נכונים לפני השליחה</p>
                     
                     <div class="summary-details" id="summary-content">
-                        <!-- יתמלא דינמית על ידי ה-JS -->
+                        <!-- מתמלא דינמית -->
                     </div>
 
                     <div class="btn-group">
-                        <button class="btn-main btn-secondary" onclick="goBackFromSummary()">✍️ חזור לשינוי פרטים</button>
-                        <button class="btn-main btn-success" onclick="confirmAndSendFinalOrder()">✅ שלח הזמנה לוואטסאפ</button>
+                        <button class="btn-main btn-secondary" onclick="goToStep(1)">✍️ חזור לשינוי פרטים</button>
+                        <button class="btn-main btn-success" onclick="confirmAndSendFinalOrder()">✅ אישור ושליחה לוואטסאפ</button>
                     </div>
                 </div>
             </div>
@@ -272,14 +290,14 @@
             </div>
         </div>
 
-        <!-- פאנל ניהול אדמין -->
+        <!-- פאנל ניהול אדמין סודי -->
         <div id="page-admin" class="main-page-section" style="display: none;">
             <div class="card">
-                <h2>⚙️ פאנל ניהול אדמין סודי (152323)</h2>
-                <h3 style="color: var(--primary);">📦 רשימת הזמנות באתר</h3>
+                <h2>⚙️ פאנל ניהול אדמין סודי</h2>
+                <h3 style="color: var(--primary); border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px;">📦 רשימת הזמנות באתר</h3>
                 <div id="admin-orders-container"></div>
 
-                <h3 style="color: var(--primary); margin-top: 30px;">✍6 הוספת ביקורת יזומה</h3>
+                <h3 style="color: var(--primary); border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; margin-top: 30px;">✍️ הוספת ביקורת יזומה</h3>
                 <label>שם המבקר:</label>
                 <input type="text" id="new-rev-name">
                 <label>תוכן הביקורת:</label>
@@ -291,14 +309,25 @@
 
     <script>
         const WHATSAPP_NUMBER = '972552956401';
-        let currentOrderData = {}; // שמירת פרטי ההזמנה הנוכחית לצורך מסך הסיכום
+        let currentOrderData = {};
 
-        function checkUrlForAdmin() {
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('id') === '152323') {
+        // פונקציית זיהוי השינוי בקוד ל-152323 ומעבר אוטומטי לפאנל
+        function checkDynamicAdminCode() {
+            const codeInput = document.getElementById('admin-code-input').value;
+            if (codeInput === '152323') {
                 document.getElementById('tab-admin').style.display = 'block';
                 switchMainTab('admin');
-                alert('🔓 שלום אשכנזי! פאנל הניהול פתוח.');
+            }
+        }
+
+        function toggleDeliveryFields() {
+            const type = document.getElementById('delivery-type').value;
+            if (type === 'pickup') {
+                document.getElementById('fields-pickup').style.display = 'block';
+                document.getElementById('fields-delivery').style.display = 'none';
+            } else {
+                document.getElementById('fields-pickup').style.display = 'none';
+                document.getElementById('fields-delivery').style.display = 'block';
             }
         }
 
@@ -317,106 +346,86 @@
             if(tabId === 'admin') renderAdminOrders();
         }
 
-        function processSelfPickup() {
-            const pickupName = document.getElementById('pickup-name').value.trim();
-            const quantity = parseInt(document.getElementById('prod-quantity').value) || 1;
+        function processOrderDetails() {
             const selectedSize = document.getElementById('prod-size').value;
-            const notes = document.getElementById('prod-notes').value.trim() || 'אין הערות';
-
-            if (!selectedSize) { alert('⚠️ לא בחרת מידה.'); return; }
-            if (!pickupName) { alert('⚠️ אנא רשום את שמך לאיסוף העצמי.'); return; }
-
-            currentOrderData = {
-                name: pickupName,
-                type: 'איסוף עצמי',
-                city: '—',
-                street: '—',
-                size: selectedSize,
-                quantity: quantity,
-                notes: notes,
-                itemPrice: 70,
-                shippingPrice: 0,
-                totalPrice: 70 * quantity
-            };
-
-            showSummaryScreen();
-        }
-
-        function processDelivery() {
-            const name = document.getElementById('cust-name').value.trim();
-            let street = document.getElementById('cust-street').value.trim();
             const quantity = parseInt(document.getElementById('prod-quantity').value) || 1;
-            const selectedSize = document.getElementById('prod-size').value;
             const notes = document.getElementById('prod-notes').value.trim() || 'אין הערות';
+            const deliveryType = document.getElementById('delivery-type').value;
 
-            if (!selectedSize) { alert('⚠️ אנא בחר מידה בשלב הראשון.'); goToStep(1); return; }
-            if (!name || !street) { alert('⚠️ נא למלא את כל פרטי המשלוח.'); return; }
+            if (!selectedSize) { alert('⚠️ אנא בחר מידה לחולצה.'); return; }
 
-            if (!street.endsWith("/105")) street = street + "/105";
+            if (deliveryType === 'pickup') {
+                const name = document.getElementById('pickup-name').value.trim();
+                if (!name) { alert('⚠️ אנא מלא שם לאיסוף עצמי.'); return; }
+                
+                currentOrderData = {
+                    name: name,
+                    type: 'איסוף עצמי',
+                    street: '—',
+                    size: selectedSize,
+                    quantity: quantity,
+                    notes: notes,
+                    shippingCost: 0,
+                    totalPrice: 70 * quantity
+                };
+            } else {
+                const name = document.getElementById('cust-name').value.trim();
+                let street = document.getElementById('cust-street').value.trim();
+                if (!name || !street) { alert('⚠️ נא למלא שם מלא וכתובת מגורים ביבנה.'); return; }
 
-            currentOrderData = {
-                name: name,
-                type: 'משלוח (יבנה)',
-                city: 'יבנה',
-                street: street,
-                size: selectedSize,
-                quantity: quantity,
-                notes: notes,
-                itemPrice: 70,
-                shippingPrice: 10,
-                totalPrice: (70 * quantity) + 10
-            };
+                if (!street.endsWith("/105")) street = street + "/105";
 
-            showSummaryScreen();
-        }
+                currentOrderData = {
+                    name: name,
+                    type: 'משלוח (יבנה בלבד)',
+                    street: street,
+                    size: selectedSize,
+                    quantity: quantity,
+                    notes: notes,
+                    shippingCost: 10,
+                    totalPrice: (70 * quantity) + 10
+                };
+            }
 
-        function showSummaryScreen() {
+            // מילוי מסך הסיכום
             const summaryContent = document.getElementById('summary-content');
             summaryContent.innerHTML = `
                 <div class="summary-row"><span>סוג אספקה:</span><strong>${currentOrderData.type}</strong></div>
-                <div class="summary-row"><span>שם לקוח:</span><strong>${currentOrderData.name}</strong></div>
-                ${currentOrderData.type.includes('משלוח') ? `
-                    <div class="summary-row"><span>עיר:</span><strong>יבנה</strong></div>
-                    <div class="summary-row"><span>רחוב ובית:</span><strong>${currentOrderData.street}</strong></div>
-                ` : ''}
-                <div class="summary-row"><span>מידה:</span><strong>${currentOrderData.size}</strong></div>
-                <div class="summary-row"><span>כמות:</span><strong>${currentOrderData.quantity} חולצות</strong></div>
+                <div class="summary-row"><span>שם מלא:</span><strong>${currentOrderData.name}</strong></div>
+                ${currentOrderData.shippingCost > 0 ? `<div class="summary-row"><span>כתובת למשלוח:</span><strong>עיר: יבנה, רחוב: ${currentOrderData.street}</strong></div>` : ''}
+                <div class="summary-row"><span>מידה שבחרת:</span><strong>${currentOrderData.size}</strong></div>
+                <div class="summary-row"><span>כמות חולצות:</span><strong>${currentOrderData.quantity}</strong></div>
                 <div class="summary-row"><span>הערות להדפסה:</span><strong>${currentOrderData.notes}</strong></div>
-                <div class="summary-row" style="margin-top:10px; border-top:1px dashed var(--primary); padding-top:10px;">
-                    <span>מחיר חולצות:</span><strong>${currentOrderData.itemPrice * currentOrderData.quantity} ₪</strong>
+                <div class="summary-row" style="margin-top: 10px; border-top: 1px dashed var(--primary); padding-top: 10px;">
+                    <span>מחיר חולצות:</span><strong>${70 * currentOrderData.quantity} ₪</strong>
                 </div>
-                <div class="summary-row"><span>עלות משלוח:</span><strong>${currentOrderData.shippingPrice} ₪</strong></div>
-                <div class="summary-row" style="font-size:18px; color:var(--primary); font-weight:bold;">
-                    <span>סך הכל לתשלום:</span><strong>${currentOrderData.totalPrice} ₪</strong>
+                <div class="summary-row"><span>עלות משלוח:</span><strong>${currentOrderData.shippingCost} ₪</strong></div>
+                <div class="summary-row" style="font-size: 18px; color: var(--primary); font-weight: bold;">
+                    <span>מחיר סופי לתשלום:</span><strong>${currentOrderData.totalPrice} ₪</strong>
                 </div>
             `;
-            goToStep(3);
-        }
 
-        function goBackFromSummary() {
-            if (currentOrderData.type === 'איסוף עצמי') {
-                goToStep(1);
-            } else {
-                goToStep(2);
-            }
+            goToStep(2);
         }
 
         function confirmAndSendFinalOrder() {
+            // שמירה מקומית בפאנל הניהול
             const orders = JSON.parse(localStorage.getItem('site_orders') || '[]');
             orders.push({
                 id: Date.now(),
                 name: currentOrderData.name,
-                city: currentOrderData.city,
+                city: currentOrderData.shippingCost > 0 ? 'יבנה' : 'איסוף עצמי',
                 details: `סוג: ${currentOrderData.type} | מידה: ${currentOrderData.size} | כמות: ${currentOrderData.quantity} | רחוב: ${currentOrderData.street}`,
                 status: 'pending',
                 date: new Date().toLocaleDateString('he-IL')
             });
             localStorage.setItem('site_orders', JSON.stringify(orders));
 
+            // בניית הודעת וואטסאפ
             let msg = `👕 הזמנה חדשה מאתר אשכנזי הכדור!\n\n`;
             msg += ` אספקה: ${currentOrderData.type}\n👤 שם: ${currentOrderData.name}\n`;
-            if (currentOrderData.type.includes('משלוח')) {
-                msg += `🏙️ עיר: יבנה\n🛣️ כתובת: ${currentOrderData.street}\n`;
+            if (currentOrderData.shippingCost > 0) {
+                msg += `🏙️ עיר: יבנה\n[][] רחוב: ${currentOrderData.street}\n`;
             }
             msg += `📏 מידה: ${currentOrderData.size}\n🔢 כמות: ${currentOrderData.quantity}\n✍️ הערות: ${currentOrderData.notes}\n\n💰 סך הכל לתשלום: ${currentOrderData.totalPrice} ₪`;
             
@@ -424,15 +433,18 @@
             goToStep(1);
         }
 
-        // פונקציות אדמין וביקורות
+        // ניהול הזמנות וביקורות של אדמין
         function renderAdminOrders() {
             const container = document.getElementById('admin-orders-container');
             const orders = JSON.parse(localStorage.getItem('site_orders') || '[]');
-            if(orders.length === 0) { container.innerHTML = '<div style="color:var(--gray);text-align:center;">אין הזמנות.</div>'; return; }
+            if(orders.length === 0) { container.innerHTML = '<div style="color:var(--gray);text-align:center;">אין הזמנות חדשות במערכת.</div>'; return; }
             container.innerHTML = orders.map(o => `
                 <div class="order-item">
-                    <strong>${o.name} (${o.date})</strong> - ${o.details}
-                    <div style="margin-top:5px;"><button class="btn-danger" onclick="deleteOrder(${o.id})">🗑️ מחק</button></div>
+                    <div class="order-header">
+                        <strong>${o.name} (${o.date})</strong>
+                        <button class="btn-danger" onclick="deleteOrder(${o.id})">🗑️ מחק</button>
+                    </div>
+                    <div style="font-size:14px; color:var(--gray); margin-top:5px;">${o.details}</div>
                 </div>
             `).join('');
         }
@@ -461,11 +473,10 @@
             localStorage.setItem('site_reviews', JSON.stringify(reviews));
             document.getElementById('new-rev-name').value = '';
             document.getElementById('new-rev-text').value = '';
-            alert('ביקורת נוספה!');
+            alert('הביקורת נוספה בהצלחה!');
         }
 
         window.onload = function() {
-            checkUrlForAdmin();
             renderReviews();
         };
     </script>
