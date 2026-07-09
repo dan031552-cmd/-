@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>אשכנזי הכדור - מכירת חולצות</title>
-    <!-- שימוש בשם הקובץ המדויק של הוואטסאפ לאייקון הטאב -->
     <link rel="icon" type="image/jpeg" href="WhatsApp Image 2026-06-26 at 15.01.24.jpeg">
 
     <style>
@@ -199,10 +198,9 @@
                     <div class="admin-trigger-box">
                         <label style="margin-bottom: 5px; color: var(--gray);">🔑 קוד זיהוי אתר:</label>
                         <input type="text" id="admin-code-input" value="1502" oninput="checkDynamicAdminCode()" style="text-align: center; letter-spacing: 2px; font-weight: bold; margin-bottom: 0; max-width: 150px; display: inline-block;">
-                        <button onclick="checkDynamicAdminCode()" style="background: rgba(255,107,0,0.2); color: #fff; border: 1px solid var(--primary); padding: 5px 10px; border-radius: 6px; font-size: 12px; cursor: pointer; margin-right: 5px;">בדיקת פאנל</button>
                     </div>
                     
-                    <!-- תמונות הדוגמן עם שמות קבצי הוואטסאפ המקוריים שלך -->
+                    <!-- תמונות הדוגמן -->
                     <div class="product-images">
                         <img src="WhatsApp Image 2026-06-26 at 13.26.41.jpeg" alt="חולצה מקדימה" class="product-img">
                         <img src="WhatsApp Image 2026-06-26 at 13.26.38.jpeg" alt="חולצה מאחורה" class="product-img">
@@ -213,16 +211,15 @@
                         <span style="font-size: 28px; font-weight: 900; color: var(--primary);">70 ₪</span>
                     </div>
 
-                    <label>📏 בחר מידה:</label>
+                    <label>📏 בחר מידה (מספר או אות):</label>
                     <select id="prod-size">
                         <option value="" disabled selected hidden>לחץ לבחירת מידה...</option>
-                        <option value="XS">XS (אקסטרה שמאל)</option>
-                        <option value="S">S (שמאל)</option>
-                        <option value="M">M (מדיום)</option>
-                        <option value="L">L (לארג')</option>
-                        <option value="XL">XL (אקסטרה לארג')</option>
-                        <option value="XXL">XXL (דאבל אקסטרה לארג')</option>
-                        <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option><option value="32">32</option><option value="33">33</option><option value="34">34</option><option value="35">35</option><option value="36">36</option><option value="37">37</option><option value="38">38</option><option value="39">39</option><option value="40">40</option><option value="41">41</option><option value="42">42</option><option value="43">43</option><option value="44">44</option><option value="45">45</option><option value="46">46</option><option value="47">47</option>
+                        <!-- לולאת ה-JS למטה תטען כאן את המספרים 1 עד 47 באופן אוטומטי -->
+                        <option value="XS">מידה XS</option>
+                        <option value="S">מידה S</option>
+                        <option value="M">מידה M</option>
+                        <option value="L">מידה L</option>
+                        <option value="XL">מידה XL</option>
                     </select>
 
                     <label>🔢 כמות חולצות מבוקשת:</label>
@@ -302,15 +299,36 @@
         const WHATSAPP_NUMBER = '972552956401';
         let currentOrderData = {};
 
+        // פונקציה שמייצרת אוטומטית את המידות 1 עד 47 ומכניסה אותן לראש הרשימה
+        function initSizeOptions() {
+            const select = document.getElementById('prod-size');
+            // נשמור לרגע את מידות האותיות הקיימות
+            const existingOptions = Array.from(select.options).slice(1);
+            
+            // ננקה את ה-select ונחזיר את האופציה הריקה הראשונה
+            select.innerHTML = '<option value="" disabled selected hidden>לחץ לבחירת מידה...</option>';
+            
+            // נוסיף את המספרים 1 עד 47
+            for (let i = 1; i <= 47; i++) {
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.textContent = `מידה ${i}`;
+                select.appendChild(opt);
+            }
+            
+            // נחזיר את מידות האותיות (בלי XXL) בסוף הרשימה
+            existingOptions.forEach(opt => select.appendChild(opt));
+        }
+
+        // פונקציית זיהוי השינוי בקוד ל-2323 ומעבר אוטומטי לפאנל
         function checkDynamicAdminCode() {
             const codeInput = document.getElementById('admin-code-input').value;
-            if (codeInput === '152323') {
+            if (codeInput === '2323') {
                 alert('🔓 קוד תקין! פאנל הניהול נפתח כעת בלשונית למעלה.');
                 document.getElementById('tab-admin').style.display = 'block';
                 switchMainTab('admin');
             } else {
                 if (document.getElementById('tab-admin').style.display === 'block' === false) {
-                    // אם הקוד לא נכון, מוודאים שהלשונית מוסתרת
                     document.getElementById('tab-admin').style.display = 'none';
                 }
             }
@@ -388,7 +406,7 @@
                 <div class="summary-row"><span>סוג אספקה:</span><strong>${currentOrderData.type}</strong></div>
                 <div class="summary-row"><span>שם מלא:</span><strong>${currentOrderData.name}</strong></div>
                 ${currentOrderData.shippingCost > 0 ? `<div class="summary-row"><span>כתובת למשלוח:</span><strong>עיר: יבנה, רחוב: ${currentOrderData.street}</strong></div>` : ''}
-                <div class="summary-row"><span>מידה שבחרת:</span><strong>${currentOrderData.size}</strong></div>
+                <div class="summary-row"><span>מידה שבחרת:</span><strong>מידה ${currentOrderData.size}</strong></div>
                 <div class="summary-row"><span>כמות חולצות:</span><strong>${currentOrderData.quantity}</strong></div>
                 <div class="summary-row"><span>הערות להדפסה:</span><strong>${currentOrderData.notes}</strong></div>
                 <div class="summary-row" style="margin-top: 10px; border-top: 1px dashed var(--primary); padding-top: 10px;">
@@ -418,7 +436,7 @@
             let msg = `👕 הזמנה חדשה מאתר אשכנזי הכדור!\n\n`;
             msg += ` אספקה: ${currentOrderData.type}\n👤 שם: ${currentOrderData.name}\n`;
             if (currentOrderData.shippingCost > 0) {
-                msg += `🏙️ עיר: יבנה\n🛣️ כתובת: ${currentOrderData.street}\n`;
+                msg += `🏙️ עיר: יבנה\n\%$ כתובת: ${currentOrderData.street}\n`;
             }
             msg += `📏 מידה: ${currentOrderData.size}\n🔢 כמות: ${currentOrderData.quantity}\n✍️ הערות: ${currentOrderData.notes}\n\n💰 סך הכל לתשלום: ${currentOrderData.totalPrice} ₪`;
             
@@ -469,6 +487,7 @@
         }
 
         window.onload = function() {
+            initSizeOptions();
             renderReviews();
         };
     </script>
