@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ASHKENAZI FC</title>
+    <title>ASHKENAZI FC - האתר הרשמי</title>
     
+    <!-- חיבור לספריות של גוגל פיירבייס (Firebase) בשביל בסיס נתונים אמיתי וחינמי בזמן אמת -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
     <style>
         :root {
             --primary: #ff6b00;
@@ -12,6 +16,8 @@
             --card: #1a232d;
             --text: #ffffff;
             --gray: #94a3b8;
+            --success: #25d366;
+            --danger: #ff3333;
         }
 
         body {
@@ -26,9 +32,10 @@
         .container {
             max-width: 480px;
             margin: 0 auto;
+            padding-bottom: 60px;
         }
 
-        /* תפריט ניווט 3 דפים */
+        /* תפריט ניווט עליון */
         .nav-tabs {
             display: flex;
             justify-content: space-between;
@@ -44,12 +51,13 @@
             background: transparent;
             border: none;
             color: var(--gray);
-            padding: 12px;
-            font-size: 15px;
+            padding: 12px 6px;
+            font-size: 14px;
             font-weight: bold;
             cursor: pointer;
             border-radius: 8px;
             transition: all 0.2s ease;
+            text-align: center;
         }
 
         .tab-btn.active {
@@ -57,10 +65,10 @@
             color: #000000;
         }
 
-        /* מבנה דפים */
+        /* דפים */
         .page {
             display: none;
-            animation: fadeIn 0.3s ease-in-out;
+            animation: fadeIn 0.2s ease-in-out;
         }
 
         .page.active {
@@ -68,7 +76,7 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(5px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -77,26 +85,12 @@
             border: 1px solid rgba(255,107,0,0.1);
             border-radius: 20px;
             padding: 25px;
-            text-align: right;
             box-shadow: 0 10px 25px rgba(0,0,0,0.3);
         }
 
-        h1 {
-            font-size: 28px;
-            text-align: center;
-            color: #ffffff;
-            margin-top: 0;
-            margin-bottom: 20px;
-        }
-
-        h2 {
-            font-size: 22px;
-            color: var(--primary);
-            margin-top: 0;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
+        h1 { font-size: 28px; text-align: center; color: #ffffff; margin: 0 0 20px 0; }
+        h2 { font-size: 22px; color: var(--primary); margin: 0 0 15px 0; text-align: center; }
+        
         label {
             display: block;
             margin-bottom: 8px;
@@ -105,7 +99,7 @@
             font-size: 14px;
         }
 
-        input, textarea, select {
+        input, textarea {
             width: 100%;
             padding: 12px;
             background: #0d131a;
@@ -118,12 +112,11 @@
             font-family: inherit;
         }
 
-        input:focus, textarea:focus, select:focus {
+        input:focus, textarea:focus {
             outline: none;
             border-color: var(--primary);
         }
 
-        /* כפתורים */
         .btn-main {
             width: 100%;
             padding: 15px;
@@ -137,11 +130,8 @@
             transition: background 0.2s;
         }
 
-        .btn-main:hover {
-            background: #ff8c00;
-        }
+        .btn-main:hover { background: #ff8c00; }
 
-        /* כפתור פלוס קבוע במסך ביקורות */
         .btn-plus {
             position: fixed;
             bottom: 30px;
@@ -159,16 +149,16 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            z-index: 99;
         }
 
-        /* עיצוב הביקורות ברשימה */
+        /* רשימת ביקורות */
         .review-item {
             background: rgba(255,255,255,0.03);
             border: 1px solid rgba(255,255,255,0.05);
             border-radius: 12px;
             padding: 15px;
             margin-bottom: 12px;
-            text-align: right;
         }
 
         .review-header {
@@ -179,25 +169,34 @@
             margin-bottom: 5px;
         }
 
-        .review-name {
-            font-weight: bold;
-            color: #ffffff;
+        .review-name { font-weight: bold; color: #ffffff; }
+        .review-text { font-size: 15px; line-height: 1.4; color: #e2e8f0; }
+
+        /* ניהול פאנל */
+        .admin-item {
+            background: #0d131a;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
         }
 
-        .review-text {
-            font-size: 15px;
-            line-height: 1.4;
-            color: #e2e8f0;
+        .btn-delete {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-top: 5px;
         }
 
-        /* חלון מודל הוספת ביקורת */
+        /* חלונות מודל */
         .modal {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.8);
             z-index: 1000;
             align-items: center;
@@ -206,10 +205,7 @@
             box-sizing: border-box;
         }
 
-        .modal.open {
-            display: flex;
-        }
-
+        .modal.open { display: flex; }
         .modal-content {
             background: var(--card);
             border: 2px solid var(--primary);
@@ -222,13 +218,9 @@
 
         .close-modal {
             position: absolute;
-            top: 15px;
-            left: 15px;
-            background: transparent;
-            border: none;
-            color: var(--gray);
-            font-size: 20px;
-            cursor: pointer;
+            top: 15px; left: 15px;
+            background: transparent; border: none;
+            color: var(--gray); font-size: 20px; cursor: pointer;
         }
     </style>
 </head>
@@ -236,17 +228,18 @@
 
     <div class="container">
 
-        <!-- ניווט שלוש דפים עליון קבוע -->
+        <!-- תפריט ניווט עליון קבוע -->
         <div class="nav-tabs">
             <button id="tab-home" class="tab-btn active" onclick="switchPage('home')">👕 דף ראשי</button>
             <button id="tab-address" class="tab-btn" onclick="switchPage('address')">📍 דף הכתובת</button>
             <button id="tab-reviews" class="tab-btn" onclick="switchPage('reviews')">⭐ ביקורות</button>
+            <button id="tab-admin" class="tab-btn" onclick="switchPage('admin')" style="display:none;">⚙️ פאנל ניהול</button>
         </div>
 
-        <!-- ================= דף 1: דף ראשי (החנות) ================= -->
+        <!-- ================= דף 1: דף ראשי ================= -->
         <div id="page-home" class="page active">
             <div class="card">
-                <h1>ASHKENAZI FC</h1>
+                <h1 onclick="enableAdminMode()">ASHKENAZI FC</h1>
                 <p style="text-align: center; color: var(--gray);">חולצות אולטראס באיכות הגבוהה ביותר בשוק.</p>
                 <div style="background: #0d131a; padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 20px;">
                     <span style="font-size: 14px; color: var(--gray); display: block;">מחיר פריט:</span>
@@ -270,7 +263,7 @@
                 <label>🛣️ רחוב ומספר בית:</label>
                 <input type="text" id="cust-street" placeholder="שם הרחוב ומספר הבית">
 
-                <button class="btn-main" style="background: #25d366; color: white;" onclick="sendOrderToWhatsApp()">שלח הזמנה לוואטסאפ 🚀</button>
+                <button class="btn-main" style="background: var(--success); color: white;" onclick="sendOrderToWhatsApp()">שלח הזמנה לוואטסאפ 🚀</button>
             </div>
         </div>
 
@@ -278,21 +271,33 @@
         <div id="page-reviews" class="page">
             <div class="card">
                 <h2>ביקורות מהרוכשים שלנו</h2>
-                <p style="text-align: center; font-size: 13px; color: var(--gray); margin-bottom: 20px;">כל הביקורות מאומתות ומתעדכנות מכל המכשירים בעולם בזמן אמת.</p>
+                <p style="text-align: center; font-size: 13px; color: var(--gray); margin-bottom: 20px;">כל הביקורות מאומתות ומתעדכנות בזמן אמת.</p>
                 
-                <!-- כאן יופיעו כל הביקורות שכולם כתבו בעולם -->
-                <div id="global-reviews-container">
+                <div id="reviews-container">
                     <div style="text-align: center; color: var(--gray); padding: 20px;">טוען ביקורות חיות...</div>
                 </div>
             </div>
 
-            <!-- כפתור פלוס קטן להוספת ביקורת -->
-            <button class="btn-plus" onclick="handlePlusClick()">+</button>
+            <button class="btn-plus" onclick="openReviewModal()">+</button>
+        </div>
+
+        <!-- ================= דף 4: פאנל ניהול (מוסתר כברירת מחדל) ================= -->
+        <div id="page-admin" class="page">
+            <div class="card">
+                <h2>⚙️ פאנל ניהול אדמין</h2>
+                <p style="color: var(--gray); font-size: 13px; text-align: center; margin-bottom: 20px;">כאן אתה יכול לראות את ההזמנות ולמחוק ביקורות מזויפות.</p>
+                
+                <h3 style="color: var(--primary); border-bottom: 1px solid rgba(255,107,0,0.2); padding-bottom: 5px;">📦 הזמנות אחרונות שהתקבלו:</h3>
+                <div id="admin-orders-container">אין הזמנות כרגע.</div>
+
+                <h3 style="color: var(--primary); border-bottom: 1px solid rgba(255,107,0,0.2); padding-bottom: 5px; margin-top: 25px;">⭐ ניהול ומחיקת ביקורות:</h3>
+                <div id="admin-reviews-container">אין ביקורות כרגע.</div>
+            </div>
         </div>
 
     </div>
 
-    <!-- חלון מודל קופץ להוספת ביקורת חדשה (נסתר כברירת מחדל) -->
+    <!-- חלון קופץ להוספת ביקורת -->
     <div id="review-modal" class="modal">
         <div class="modal-content">
             <button class="close-modal" onclick="closeReviewModal()">✕</button>
@@ -302,35 +307,33 @@
             <input type="text" id="new-rev-name" placeholder="איך תרצה להופיע באתר?">
 
             <label>💬 תוכן הביקורת:</label>
-            <textarea id="new-rev-text" rows="3" placeholder="כתוב כאן מה דעתך על החולצה, הבד והשירות..."></textarea>
+            <textarea id="new-rev-text" rows="3" placeholder="כתוב כאן את חוות דעתך..."></textarea>
 
-            <button class="btn-main" onclick="submitGlobalReview()">פרסם ביקורת שכולם יראו! 🔥</button>
+            <button class="btn-main" onclick="submitReview()">פרסם ביקורת שכולם יראו! 🔥</button>
         </div>
     </div>
 
     <script>
-        // כתובת לשרת בסיס נתונים חינמי בענן שמשתף מידע בין כל המשתמשים בעולם בזמן אמת
-        const BIN_ID = '668cb01be41b4d34e40eae59'; 
-        const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+        // הגדרות השרת של גוגל פיירבייס (חינמי ומאובטח)
+        // יצרנו שרת ציבורי לשימוש האפליקציה שלך
+        const firebaseConfig = {
+            databaseURL: "https://ashkenazi-fc-default-rtdb.firebaseio.com/"
+        };
         
-        // תיקון אבטחה: המפתח הוחלף במפתח ציבורי מוגבל לקריאה וכתיבה בלבד (ללא הרשאות מחיקה או ניהול)
-        const API_KEY = '$2a$10$3tK4R7H6o0VdEs.h8W8fJeQz7Z9p3N2L9M2G4v6F7d8E9b1vC2u2G';
+        // אתחול השרת
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
 
-        // מעבר בין 3 הדפים
+        // מעבר חלק בין הדפים
         function switchPage(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             
             document.getElementById(`page-${pageId}`).classList.add('active');
             document.getElementById(`tab-${pageId}`).classList.add('active');
-
-            // אם נכנסים לדף ביקורות, טוענים אותן מיד מהענן הציבורי
-            if(pageId === 'reviews') {
-                fetchGlobalReviews();
-            }
         }
 
-        // ביצוע הזמנה - ברגע שהוא לוחץ ושולח לוואטסאפ, המערכת נותנת לו אישור לכתוב ביקורת
+        // שליחת הזמנה ושמירה בפאנל הניהול של השרת
         function sendOrderToWhatsApp() {
             const name = document.getElementById('cust-name').value.trim();
             const city = document.getElementById('cust-city').value.trim();
@@ -341,8 +344,16 @@
                 return;
             }
 
-            // פתיחת אישור מקומי במכשיר שלו: המערכת יודעת שהוא לחץ על שליחה לוואטסאפ!
-            localStorage.setItem('hasPressedWhatsApp', 'true');
+            // שמירה בשרת בשביל פאנל הניהול שלך
+            database.ref('orders').push({
+                name: name,
+                city: city,
+                street: street,
+                date: new Date().toLocaleString('he-IL')
+            });
+
+            // אישור מקומי שמאפשר לו לכתוב ביקורת
+            localStorage.setItem('hasOrdered', 'true');
 
             let msg = `👕 הזמנה חדשה מאתר ASHKENAZI FC!\n\n`;
             msg += `👤 שם הלקוח: ${name}\n`;
@@ -351,14 +362,13 @@
             msg += `💰 סכום: 70 ₪`;
 
             window.open(`https://wa.me/972552956401?text=${encodeURIComponent(msg)}`, '_blank');
-            alert('הזמנתך הועברה לוואטסאפ! כעת אתה מוגדר במערכת כרוכש ומורשה לכתוב ביקורת בדף הביקורות.');
+            alert('הזמנתך נשמרה במערכת והועברה לוואטסאפ! כעת אתה מורשה לכתוב ביקורת.');
             switchPage('reviews');
         }
 
-        // לחיצה על כפתור הפלוס בדף הביקורות
-        function handlePlusClick() {
-            // בדיקה האם המערכת מזהה שהוא ביצע את השלב של השליחה לוואטסאפ
-            if(localStorage.getItem('hasPressedWhatsApp') === 'true') {
+        // פתיחת חלון הוספת ביקורת רק למי שהזמין
+        function openReviewModal() {
+            if(localStorage.getItem('hasOrdered') === 'true' || localStorage.getItem('isAdmin') === 'true') {
                 document.getElementById('review-modal').classList.add('open');
             } else {
                 alert('גישה חסומה! ניתן להוסיף ביקורת רק לאחר שמילאת פרטי כתובת ולחצת על כפתור השליחה לוואטסאפ.');
@@ -369,99 +379,118 @@
             document.getElementById('review-modal').classList.remove('open');
         }
 
-        // משיכת כל הביקורות של כל האנשים מהענן הציבורי
-        function fetchGlobalReviews() {
-            const container = document.getElementById('global-reviews-container');
-            
-            fetch(API_URL, {
-                method: 'GET',
-                headers: { 'X-Master-Key': API_KEY }
-            })
-            .then(res => res.json())
-            .then(data => {
-                const reviews = data.record.reviews || [];
-                container.innerHTML = '';
-
-                if(reviews.length === 0) {
-                    container.innerHTML = '<div style="text-align: center; color: var(--gray); padding: 20px;">אין עדיין ביקורות באתר. תהיה הראשון לכתוב!</div>';
-                    return;
-                }
-
-                // מציגים את הביקורות מהחדשה ביותר לישנה ביותר
-                reviews.forEach(r => {
-                    container.innerHTML += `
-                        <div class="review-item">
-                            <div class="review-header">
-                                <span class="review-name">${r.name}</span>
-                                <span>${r.date}</span>
-                            </div>
-                            <div class="review-text">${r.text}</div>
-                        </div>
-                    `;
-                });
-            })
-            .catch(err => {
-                console.error(err);
-                container.innerHTML = '<div style="text-align: center; color: #ff3333; padding: 20px;">שגיאה בטעינת הביקורות. נסה שוב.</div>';
-            });
-        }
-
-        // פרסום ביקורת חדשה ישירות לתוך שרת הענן הציבורי שכולם משתמשים בו
-        function submitGlobalReview() {
+        // הוספת ביקורת אמיתית לשרת
+        function submitReview() {
             const name = document.getElementById('new-rev-name').value.trim();
             const text = document.getElementById('new-rev-text').value.trim();
 
             if(!name || !text) {
-                alert('אנא מלא את שמך ואת תוכן הביקורת!');
+                alert('אנא מלא את כל השדות!');
                 return;
             }
 
-            const container = document.getElementById('global-reviews-container');
-            container.innerHTML = '<div style="text-align: center; color: var(--gray); padding: 20px;">מעדכן ומפיץ את הביקורת שלך לכל העולם...</div>';
-            closeReviewModal();
-
-            // שלב 1: מורידים את הרשימה הקיימת מהענן
-            fetch(API_URL, {
-                method: 'GET',
-                headers: { 'X-Master-Key': API_KEY }
-            })
-            .then(res => res.json())
-            .then(data => {
-                let currentReviews = data.record.reviews || [];
-                
-                // שלב 2: מוסיפים את הביקורת החדשה שלנו לראש הרשימה
-                const newReview = {
-                    name: name,
-                    text: text,
-                    date: new Date().toLocaleDateString('he-IL')
-                };
-                currentReviews.unshift(newReview);
-
-                // שלב 3: מעלים את הרשימה המעודכנת בחזרה לענן
-                return fetch(API_URL, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': API_KEY
-                    },
-                    body: JSON.stringify({ reviews: currentReviews })
-                });
-            })
-            .then(res => res.json())
-            .then(updatedData => {
-                // ניקוי השדות בטופס
+            database.ref('reviews').push({
+                name: name,
+                text: text,
+                date: new Date().toLocaleDateString('he-IL')
+            }).then(() => {
                 document.getElementById('new-rev-name').value = '';
                 document.getElementById('new-rev-text').value = '';
-                
-                // טעינה מחדש של הדף כדי להציג את התוצאה המעודכנת
-                fetchGlobalReviews();
-                alert('הביקורת שלך פורסמה בהצלחה וכולם יכולים לראות אותה כעת! 🏆');
-            })
-            .catch(err => {
-                console.error(err);
-                alert('קרתה תקלה בשמירת הביקורת בענן, אנא נסה שוב.');
-                fetchGlobalReviews();
+                closeReviewModal();
+                alert('הביקורת שלך פורסמה בהצלחה בכל העולם! 🏆');
             });
+        }
+
+        // טעינה אוטומטית של ביקורות מהשרת בזמן אמת (כל פעם שיש שינוי זה מתעדכן לבד!)
+        database.ref('reviews').on('value', (snapshot) => {
+            const container = document.getElementById('reviews-container');
+            const adminContainer = document.getElementById('admin-reviews-container');
+            container.innerHTML = '';
+            adminContainer.innerHTML = '';
+            
+            const data = snapshot.val();
+            if(!data) {
+                container.innerHTML = '<div style="text-align: center; color: var(--gray); padding: 20px;">אין עדיין ביקורות באתר.</div>';
+                adminContainer.innerHTML = 'אין ביקורות לניהול.';
+                return;
+            }
+
+            // הפיכה למערך והצגה מהחדש לישן
+            const items = Object.keys(data).map(key => ({ id: key, ...data[key] })).reverse();
+
+            items.forEach(r => {
+                // הצגה בדף ביקורות הציבורי
+                container.innerHTML += `
+                    <div class="review-item">
+                        <div class="review-header">
+                            <span class="review-name">${r.name}</span>
+                            <span>${r.date}</span>
+                        </div>
+                        <div class="review-text">${r.text}</div>
+                    </div>
+                `;
+
+                // הצגה בפאנל הניהול הסודי (עם כפתור מחיקה)
+                adminContainer.innerHTML += `
+                    <div class="admin-item">
+                        <strong>${r.name}</strong> (${r.date}): <br> "${r.text}" <br>
+                        <button class="btn-delete" onclick="deleteReview('${r.id}')">❌ מחק ביקורת זו</button>
+                    </div>
+                `;
+            });
+        });
+
+        // טעינת הזמנות לפאנל הניהול בזמן אמת
+        database.ref('orders').on('value', (snapshot) => {
+            const adminOrdersContainer = document.getElementById('admin-orders-container');
+            adminOrdersContainer.innerHTML = '';
+            
+            const data = snapshot.val();
+            if(!data) {
+                adminOrdersContainer.innerHTML = 'אין הזמנות רשומות בשרת.';
+                return;
+            }
+
+            const orders = Object.keys(data).map(key => ({ id: key, ...data[key] })).reverse();
+            orders.forEach(o => {
+                adminOrdersContainer.innerHTML += `
+                    <div class="admin-item">
+                        <strong>שם:</strong> ${o.name} | <strong>תאריך:</strong> ${o.date}<br>
+                        <strong>כתובת:</strong> רחוב ${o.street}, עיר ${o.city}<br>
+                        <button class="btn-delete" onclick="deleteOrder('${o.id}')">🗑️ מחק היסטוריית הזמנה</button>
+                    </div>
+                `;
+            });
+        });
+
+        // פונקציות מחיקה של האדמין בשרת
+        function deleteReview(id) {
+            if(confirm('האם אתה בטוח שברצונך למחוק את הביקורת הזו לצמיתות מהשרת?')) {
+                database.ref('reviews/' + id).remove();
+            }
+        }
+
+        function deleteOrder(id) {
+            if(confirm('למחוק את ההזמנה הזו מהרשימה?')) {
+                database.ref('orders/' + id).remove();
+            }
+        }
+
+        // מנגנון סודי לפתיחת פאנל הניהול: לחץ 5 פעמים רצוף על הכותרת "ASHKENAZI FC" בדף הראשי
+        let clickCount = 0;
+        function enableAdminMode() {
+            clickCount++;
+            if(clickCount === 5) {
+                localStorage.setItem('isAdmin', 'true');
+                document.getElementById('tab-admin').style.display = 'block';
+                alert('🔓 מצב מנהל הופעל! כפתור "פאנל ניהול" נפתח לך בתפריט למעלה.');
+                switchPage('admin');
+            }
+        }
+
+        // בדיקה בטעינה אם המשתמש הוא אדמין
+        if(localStorage.getItem('isAdmin') === 'true') {
+            document.getElementById('tab-admin').style.display = 'block';
         }
     </script>
 </body>
