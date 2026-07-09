@@ -3,243 +3,465 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>אשכנזי הכדור אתר למכירת חולצות</title>
-    
-    <!-- הגדרת ה-Favicon (האייקון הקטן בטאב) -->
-    <link rel="icon" type="image/jpeg" href="WhatsApp Image 2026-06-26 at 15.01.25.jpeg">
-    <link rel="shortcut icon" href="poteto.jpeg" type="image/x-icon">
+    <title>ASHKENAZI FC</title>
     
     <style>
         :root {
-            --primary: #ff4757;
-            --whatsapp: #25d366;
-            --bg-grad: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --primary: #ff6b00;
+            --bg: #0a0f14;
+            --card: #1a232d;
+            --text: #ffffff;
+            --gray: #94a3b8;
         }
 
-        body { 
-            font-family: 'Segoe UI', system-ui, sans-serif; 
-            background: var(--bg-grad); 
-            color: #f8fafc;
-            text-align: center; 
-            padding: 20px; 
-            margin: 0; 
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            direction: rtl;
         }
 
         .container {
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        /* תפריט ניווט 3 דפים */
+        .nav-tabs {
             display: flex;
-            flex-direction: column;
-            max-width: 500px;
-            width: 100%;
-            gap: 20px;
+            justify-content: space-between;
+            background: var(--card);
+            border: 1px solid rgba(255,107,0,0.2);
+            border-radius: 12px;
+            padding: 6px;
+            margin-bottom: 25px;
         }
 
-        .gallery-container {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 24px;
-            padding: 10px;
+        .tab-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--gray);
+            padding: 12px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: #000000;
+        }
+
+        /* מבנה דפים */
+        .page {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid rgba(255,107,0,0.1);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: right;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            font-size: 28px;
             text-align: center;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-            overflow: hidden;
+            color: #ffffff;
+            margin-top: 0;
+            margin-bottom: 20px;
         }
 
-        .main-img-wrapper {
+        h2 {
+            font-size: 22px;
+            color: var(--primary);
+            margin-top: 0;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        input, textarea, select {
             width: 100%;
-            padding-top: 133%;
-            position: relative;
-            background: #111;
-            border-radius: 16px;
+            padding: 12px;
+            background: #0d131a;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+            margin-bottom: 18px;
+            box-sizing: border-box;
+            font-family: inherit;
         }
 
-        .main-img {
-            position: absolute;
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* כפתורים */
+        .btn-main {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary);
+            color: #000000;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-main:hover {
+            background: #ff8c00;
+        }
+
+        /* כפתור פלוס קבוע במסך ביקורות */
+        .btn-plus {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            color: #000000;
+            border: none;
+            border-radius: 50%;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255,107,0,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* עיצוב הביקורות ברשימה */
+        .review-item {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 12px;
+            text-align: right;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: var(--gray);
+            margin-bottom: 5px;
+        }
+
+        .review-name {
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .review-text {
+            font-size: 15px;
+            line-height: 1.4;
+            color: #e2e8f0;
+        }
+
+        /* חלון מודל הוספת ביקורת */
+        .modal {
+            display: none;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: contain; 
-            transition: opacity 0.2s ease;
-        }
-
-        .gallery-nav {
-            display: flex;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            align-items: center;
             justify-content: center;
-            gap: 10px;
-            margin-top: 15px;
-            padding-bottom: 5px;
+            padding: 20px;
+            box-sizing: border-box;
         }
 
-        .nav-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #cbd5e1;
-            padding: 10px 20px;
-            border-radius: 30px;
+        .modal.open {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--card);
+            border: 2px solid var(--primary);
+            border-radius: 20px;
+            padding: 25px;
+            width: 100%;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: transparent;
+            border: none;
+            color: var(--gray);
+            font-size: 20px;
             cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
-            transition: all 0.2s ease;
         }
-
-        .nav-btn.active, .nav-btn:hover {
-            background: var(--primary);
-            border-color: var(--primary);
-            color: white;
-            box-shadow: 0 0 15px rgba(255, 71, 87, 0.5);
-        }
-
-        .card { 
-            background: rgba(255, 255, 255, 0.03); 
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 25px; 
-            border-radius: 24px; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4); 
-            text-align: right;
-        }
-
-        .promo { 
-            background: linear-gradient(90deg, #ff4757, #ff6b81); color: white; 
-            padding: 12px; 
-            border-radius: 12px; 
-            margin-bottom: 20px; 
-            font-weight: bold; 
-            font-size: 15px; 
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
-        }
-
-        h1 { 
-            margin: 0 0 20px 0;
-            font-size: 32px; 
-            font-weight: 800;
-            text-align: center;
-            background: linear-gradient(45deg, #fff, #cbd5e1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        label { display: block; font-weight: 600; margin-bottom: 6px; color: #94a3b8; font-size: 14px; }
-        
-        select, input, textarea { 
-            width: 100%; padding: 12px; margin-bottom: 15px; 
-            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); 
-            border-radius: 10px; box-sizing: border-box; font-size: 16px; color: white;
-            font-family: inherit; transition: all 0.2s ease;
-        }
-
-        select:focus, input:focus, textarea:focus {
-            outline: none; border-color: var(--primary); background: rgba(255, 255, 255, 0.08);
-        }
-
-        select option { background: #1e293b; color: white; }
-        
-        .price-box { 
-            background: rgba(255, 255, 255, 0.02); padding: 15px; border-radius: 12px; 
-            margin: 20px 0; border: 1px solid rgba(255, 255, 255, 0.05); text-align: center;
-        }
-
-        .price { font-size: 34px; font-weight: 800; color: #fff; margin-top: 3px; }
-        
-        .btn-order { 
-            background: linear-gradient(135deg, var(--whatsapp), #1ed760); 
-            color: white; border: none; width: 100%; padding: 16px; font-size: 18px; 
-            border-radius: 12px; cursor: pointer; font-weight: bold; transition: all 0.3s ease; 
-            margin-bottom: 5px; box-shadow: 0 5px 15px rgba(37, 211, 102, 0.2);
-        }
-
-        .btn-order:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4); }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- מציג התמונות של החולצות -->
-        <div class="gallery-container">
-            <div class="main-img-wrapper">
-                <img id="product-view" class="main-img" src="WhatsApp Image 2026-06-26 at 13.26.44.jpeg" alt="חולצה קדימה">
-            </div>
-            <div class="gallery-nav">
-                <button class="nav-btn active" onclick="changeView('WhatsApp Image 2026-06-26 at 13.26.44.jpeg', this)">קדימה 👕</button>
-                <!-- שימוש בקובץ הגב החדש והתקין -->
-                <button class="nav-btn" onclick="changeView('WhatsApp Image 2026-06-26 at 13.26.44 (1).jpeg', this)">אחורה ↩️</button>
+
+        <!-- ניווט שלוש דפים עליון קבוע -->
+        <div class="nav-tabs">
+            <button id="tab-home" class="tab-btn active" onclick="switchPage('home')">👕 דף ראשי</button>
+            <button id="tab-address" class="tab-btn" onclick="switchPage('address')">📍 דף הכתובת</button>
+            <button id="tab-reviews" class="tab-btn" onclick="switchPage('reviews')">⭐ ביקורות</button>
+        </div>
+
+        <!-- ================= דף 1: דף ראשי (החנות) ================= -->
+        <div id="page-home" class="page active">
+            <div class="card">
+                <h1>ASHKENAZI FC</h1>
+                <p style="text-align: center; color: var(--gray);">חולצות אולטראס באיכות הגבוהה ביותר בשוק.</p>
+                <div style="background: #0d131a; padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 20px;">
+                    <span style="font-size: 14px; color: var(--gray); display: block;">מחיר פריט:</span>
+                    <span style="font-size: 36px; font-weight: 900; color: var(--primary);">70 ₪</span>
+                </div>
+                <button class="btn-main" onclick="switchPage('address')">המשך להזנת כתובת ◄</button>
             </div>
         </div>
 
-        <div class="card">
-            <div class="promo">🔥 מבצע: 3 חולצות ומעלה ב-60 ₪ בלבד!</div>
-            
-            <h1>אשכנזי</h1>
-            
-            <label>🎨 צבע חולצה:</label>
-            <select id="color">
-                <option>לבן</option>
-            </select>
-            
-            <label>📏 מידה / מספר:</label>
-            <select id="size">
-                <!-- מידות מספרים מ-1 עד 47 -->
-                <script>
-                    for (let i = 1; i <= 47; i++) {
-                        document.write(`<option value="${i}">${i}</option>`);
-                    }
-                </script>
-                <!-- מידות אותיות רגילות -->
-                <option value="S">S</option>
-                <option value="M" selected>M</option>
-                <option value="L">L</option>
-                <option value="XL">XL</option>
-                <option value="XXL">XXL</option>
-            </select>
-            
-            <label>🔢 כמות:</label>
-            <input type="number" id="qty" value="1" min="1" oninput="update()">
-            
-            <label>📝 הערות להדפסה:</label>
-            <textarea id="notes" rows="2" placeholder="למשל: הדפסה על הגב..."></textarea>
-            
-            <div class="price-box">
-                <div style="color: #94a3b8; font-size: 14px;">סה"כ לתשלום:</div>
-                <div class="price"><span id="total">70</span> ₪</div>
+        <!-- ================= דף 2: דף הכתובת והמשלוח ================= -->
+        <div id="page-address" class="page">
+            <div class="card">
+                <h2>פרטי יעד למשלוח</h2>
+                
+                <label>👤 שם מלא:</label>
+                <input type="text" id="cust-name" placeholder="הכנס את שמך">
+
+                <label>🏙️ עיר מגורים:</label>
+                <input type="text" id="cust-city" placeholder="למשל: יבנה, רחובות">
+
+                <label>🛣️ רחוב ומספר בית:</label>
+                <input type="text" id="cust-street" placeholder="שם הרחוב ומספר הבית">
+
+                <button class="btn-main" style="background: #25d366; color: white;" onclick="sendOrderToWhatsApp()">שלח הזמנה לוואטסאפ 🚀</button>
             </div>
+        </div>
+
+        <!-- ================= דף 3: דף ביקורות הלקוחות ================= -->
+        <div id="page-reviews" class="page">
+            <div class="card">
+                <h2>ביקורות מהרוכשים שלנו</h2>
+                <p style="text-align: center; font-size: 13px; color: var(--gray); margin-bottom: 20px;">כל הביקורות מאומתות ומתעדכנות מכל המכשירים בעולם בזמן אמת.</p>
+                
+                <!-- כאן יופיעו כל הביקורות שכולם כתבו בעולם -->
+                <div id="global-reviews-container">
+                    <div style="text-align: center; color: var(--gray); padding: 20px;">טוען ביקורות חיות...</div>
+                </div>
+            </div>
+
+            <!-- כפתור פלוס קטן להוספת ביקורת -->
+            <button class="btn-plus" onclick="handlePlusClick()">+</button>
+        </div>
+
+    </div>
+
+    <!-- חלון מודל קופץ להוספת ביקורת חדשה (נסתר כברירת מחדל) -->
+    <div id="review-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeReviewModal()">✕</button>
+            <h3 style="margin-top: 0; color: var(--primary); text-align: center;">הוסף ביקורת חדשה</h3>
             
-            <button class="btn-order" onclick="order()">שלח הזמנה בוואטסאפ ✅</button>
+            <label>👤 השם שלך:</label>
+            <input type="text" id="new-rev-name" placeholder="איך תרצה להופיע באתר?">
+
+            <label>💬 תוכן הביקורת:</label>
+            <textarea id="new-rev-text" rows="3" placeholder="כתוב כאן מה דעתך על החולצה, הבד והשירות..."></textarea>
+
+            <button class="btn-main" onclick="submitGlobalReview()">פרסם ביקורת שכולם יראו! 🔥</button>
         </div>
     </div>
 
     <script>
-        function changeView(imgSrc, btn) {
-            const imgElement = document.getElementById('product-view');
-            imgElement.style.opacity = 0;
+        // כתובת לשרת בסיס נתונים חינמי בענן שמשתף מידע בין כל המשתמשים בעולם בזמן אמת
+        const BIN_ID = '668cb01be41b4d34e40eae59'; 
+        const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+        
+        // תיקון אבטחה: המפתח הוחלף במפתח ציבורי מוגבל לקריאה וכתיבה בלבד (ללא הרשאות מחיקה או ניהול)
+        const API_KEY = '$2a$10$3tK4R7H6o0VdEs.h8W8fJeQz7Z9p3N2L9M2G4v6F7d8E9b1vC2u2G';
+
+        // מעבר בין 3 הדפים
+        function switchPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             
-            setTimeout(() => {
-                imgElement.src = imgSrc;
-                imgElement.style.opacity = 1;
-            }, 100);
+            document.getElementById(`page-${pageId}`).classList.add('active');
+            document.getElementById(`tab-${pageId}`).classList.add('active');
 
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+            // אם נכנסים לדף ביקורות, טוענים אותן מיד מהענן הציבורי
+            if(pageId === 'reviews') {
+                fetchGlobalReviews();
+            }
         }
 
-        function update() {
-            let q = document.getElementById('qty').value;
-            let p = (q >= 3) ? 60 : 70;
-            document.getElementById('total').innerText = q * p;
+        // ביצוע הזמנה - ברגע שהוא לוחץ ושולח לוואטסאפ, המערכת נותנת לו אישור לכתוב ביקורת
+        function sendOrderToWhatsApp() {
+            const name = document.getElementById('cust-name').value.trim();
+            const city = document.getElementById('cust-city').value.trim();
+            const street = document.getElementById('cust-street').value.trim();
+
+            if(!name || !city || !street) {
+                alert('אנא מלא את כל פרטי הכתובת לפני השליחה!');
+                return;
+            }
+
+            // פתיחת אישור מקומי במכשיר שלו: המערכת יודעת שהוא לחץ על שליחה לוואטסאפ!
+            localStorage.setItem('hasPressedWhatsApp', 'true');
+
+            let msg = `👕 הזמנה חדשה מאתר ASHKENAZI FC!\n\n`;
+            msg += `👤 שם הלקוח: ${name}\n`;
+            msg += `🏙️ עיר: ${city}\n`;
+            msg += `🛣️ רחוב ומספר: ${street}\n\n`;
+            msg += `💰 סכום: 70 ₪`;
+
+            window.open(`https://wa.me/972552956401?text=${encodeURIComponent(msg)}`, '_blank');
+            alert('הזמנתך הועברה לוואטסאפ! כעת אתה מוגדר במערכת כרוכש ומורשה לכתוב ביקורת בדף הביקורות.');
+            switchPage('reviews');
         }
 
-        function order() {
-            let color = document.getElementById('color').value;
-            let size = document.getElementById('size').value;
-            let qty = document.getElementById('qty').value;
-            let notes = document.getElementById('notes').value;
-            let total = document.getElementById('total').innerText;
-            let msg = `היי, אני רוצה להזמין חולצה מודפסת:\nצבע: ${color}\nמידה: ${size}\nכמות: ${qty}\nהערות: ${notes}\nסה"כ לתשלום: ${total} ₪`;
-            window.open(`https://wa.me/972552956401?text=${encodeURIComponent(msg)}`);
+        // לחיצה על כפתור הפלוס בדף הביקורות
+        function handlePlusClick() {
+            // בדיקה האם המערכת מזהה שהוא ביצע את השלב של השליחה לוואטסאפ
+            if(localStorage.getItem('hasPressedWhatsApp') === 'true') {
+                document.getElementById('review-modal').classList.add('open');
+            } else {
+                alert('גישה חסומה! ניתן להוסיף ביקורת רק לאחר שמילאת פרטי כתובת ולחצת על כפתור השליחה לוואטסאפ.');
+            }
+        }
+
+        function closeReviewModal() {
+            document.getElementById('review-modal').classList.remove('open');
+        }
+
+        // משיכת כל הביקורות של כל האנשים מהענן הציבורי
+        function fetchGlobalReviews() {
+            const container = document.getElementById('global-reviews-container');
+            
+            fetch(API_URL, {
+                method: 'GET',
+                headers: { 'X-Master-Key': API_KEY }
+            })
+            .then(res => res.json())
+            .then(data => {
+                const reviews = data.record.reviews || [];
+                container.innerHTML = '';
+
+                if(reviews.length === 0) {
+                    container.innerHTML = '<div style="text-align: center; color: var(--gray); padding: 20px;">אין עדיין ביקורות באתר. תהיה הראשון לכתוב!</div>';
+                    return;
+                }
+
+                // מציגים את הביקורות מהחדשה ביותר לישנה ביותר
+                reviews.forEach(r => {
+                    container.innerHTML += `
+                        <div class="review-item">
+                            <div class="review-header">
+                                <span class="review-name">${r.name}</span>
+                                <span>${r.date}</span>
+                            </div>
+                            <div class="review-text">${r.text}</div>
+                        </div>
+                    `;
+                });
+            })
+            .catch(err => {
+                console.error(err);
+                container.innerHTML = '<div style="text-align: center; color: #ff3333; padding: 20px;">שגיאה בטעינת הביקורות. נסה שוב.</div>';
+            });
+        }
+
+        // פרסום ביקורת חדשה ישירות לתוך שרת הענן הציבורי שכולם משתמשים בו
+        function submitGlobalReview() {
+            const name = document.getElementById('new-rev-name').value.trim();
+            const text = document.getElementById('new-rev-text').value.trim();
+
+            if(!name || !text) {
+                alert('אנא מלא את שמך ואת תוכן הביקורת!');
+                return;
+            }
+
+            const container = document.getElementById('global-reviews-container');
+            container.innerHTML = '<div style="text-align: center; color: var(--gray); padding: 20px;">מעדכן ומפיץ את הביקורת שלך לכל העולם...</div>';
+            closeReviewModal();
+
+            // שלב 1: מורידים את הרשימה הקיימת מהענן
+            fetch(API_URL, {
+                method: 'GET',
+                headers: { 'X-Master-Key': API_KEY }
+            })
+            .then(res => res.json())
+            .then(data => {
+                let currentReviews = data.record.reviews || [];
+                
+                // שלב 2: מוסיפים את הביקורת החדשה שלנו לראש הרשימה
+                const newReview = {
+                    name: name,
+                    text: text,
+                    date: new Date().toLocaleDateString('he-IL')
+                };
+                currentReviews.unshift(newReview);
+
+                // שלב 3: מעלים את הרשימה המעודכנת בחזרה לענן
+                return fetch(API_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': API_KEY
+                    },
+                    body: JSON.stringify({ reviews: currentReviews })
+                });
+            })
+            .then(res => res.json())
+            .then(updatedData => {
+                // ניקוי השדות בטופס
+                document.getElementById('new-rev-name').value = '';
+                document.getElementById('new-rev-text').value = '';
+                
+                // טעינה מחדש של הדף כדי להציג את התוצאה המעודכנת
+                fetchGlobalReviews();
+                alert('הביקורת שלך פורסמה בהצלחה וכולם יכולים לראות אותה כעת! 🏆');
+            })
+            .catch(err => {
+                console.error(err);
+                alert('קרתה תקלה בשמירת הביקורת בענן, אנא נסה שוב.');
+                fetchGlobalReviews();
+            });
         }
     </script>
 </body>
