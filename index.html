@@ -1,513 +1,476 @@
 <!DOCTYPE html>
+
 <html dir="rtl" lang="he">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>אשכנזי הכדור - מכירת חולצות</title>
-    <link rel="icon" type="image/jpeg" href="WhatsApp Image 2026-06-26 at 15.01.24.jpeg">
 
-    <style>
-        :root {
-            --primary: #ff6b00;
-            --bg: #0a0f14;
-            --card: #1a232d;
-            --text: #ffffff;
-            --gray: #94a3b8;
-            --success: #25d366;
-            --danger: #ff3333;
-        }
+<meta charset="UTF-8">
 
-        body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            padding: 20px;
-            direction: rtl;
-        }
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        .container {
-            max-width: 480px;
-            margin: 0 auto;
-            padding-bottom: 60px;
-        }
+<title>אשכנזי</title>
 
-        .nav-tabs {
-            display: flex;
-            justify-content: space-between;
-            background: var(--card);
-            border: 1px solid rgba(255,107,0,0.2);
-            border-radius: 12px;
-            padding: 6px;
-            margin-bottom: 25px;
-        }
 
-        .tab-btn {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: var(--gray);
-            padding: 12px 6px;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 8px;
-            text-align: center;
-        }
+<!-- הגדרת ה-Favicon (האייקון הקטן בטאב) -->
 
-        .tab-btn.active {
-            background: var(--primary);
-            color: #000000;
-        }
+<link rel="icon" type="image/jpeg" href="WhatsApp Image 2026-06-26 at 15.01.25.jpeg">
 
-        .step-container {
-            display: none;
-        }
 
-        .step-container.active {
-            display: block;
-        }
+<style>
 
-        .card {
-            background: var(--card);
-            border: 1px solid rgba(255,107,0,0.1);
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            margin-bottom: 20px;
-        }
+:root {
 
-        h1 { font-size: 28px; text-align: center; color: #ffffff; margin: 0 0 20px 0; }
-        h2 { font-size: 22px; color: var(--primary); margin: 0 0 15px 0; text-align: center; }
-        
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: var(--gray);
-            font-size: 14px;
-        }
+--primary: #ff4757;
 
-        input, textarea, select {
-            width: 100%;
-            padding: 12px;
-            background: #0d131a;
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 10px;
-            color: #fff;
-            font-size: 16px;
-            margin-bottom: 18px;
-            box-sizing: border-box;
-            font-family: inherit;
-        }
+--whatsapp: #25d366;
 
-        input:focus, textarea:focus, select:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
+--bg-grad: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
 
-        .delivery-options {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 18px;
-        }
+}
 
-        .delivery-box {
-            flex: 1;
-            background: #0d131a;
-            border: 2px solid rgba(255,255,255,0.1);
-            border-radius: 12px;
-            padding: 12px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
 
-        .delivery-box.active {
-            border-color: var(--primary);
-            background: rgba(255,107,0,0.05);
-        }
 
-        .delivery-box h3 { margin: 0 0 5px 0; font-size: 15px; color: #fff; }
-        .delivery-box p { margin: 0; font-size: 13px; color: var(--gray); }
+body {
 
-        .product-images {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
+font-family: 'Segoe UI', system-ui, sans-serif;
 
-        .product-img {
-            width: 100%;
-            height: auto;
-            border-radius: 12px;
-            border: 1px solid rgba(255,107,0,0.3);
-            display: block;
-        }
+background: var(--bg-grad);
 
-        .admin-product-thumb {
-            width: 80px;
-            height: auto;
-            border-radius: 6px;
-            border: 1px solid rgba(255,107,0,0.4);
-        }
+color: #f8fafc;
 
-        .btn-group {
-            display: flex;
-            gap: 12px;
-        }
+text-align: center;
 
-        .btn-main {
-            flex: 1;
-            padding: 15px;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            text-align: center;
-        }
+padding: 20px;
 
-        .btn-primary { background: var(--primary); color: #000000; }
-        .btn-secondary { background: #2d3748; color: #ffffff; border: 1px solid rgba(255,255,255,0.1); }
-        .btn-success { background: var(--success); color: white; }
-        .btn-danger { background: var(--danger); color: white; padding: 5px 10px; font-size: 12px; border-radius: 5px; border: none; cursor: pointer;}
+margin: 0;
 
-        .summary-details {
-            background: #0d131a;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255,107,0,0.2);
-        }
+min-height: 100vh;
 
-        .summary-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .summary-row:last-child { border-bottom: none; }
+display: flex;
 
-        .order-item, .review-item {
-            background: #0d131a;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
+justify-content: center;
 
-        .admin-trigger-box {
-            background: #0d131a;
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px dashed rgba(255,255,255,0.1);
-            margin-bottom: 20px;
-            text-align: center;
-        }
-    </style>
+align-items: center;
+
+}
+
+
+
+.container {
+
+display: flex;
+
+flex-direction: column;
+
+max-width: 500px;
+
+width: 100%;
+
+gap: 20px;
+
+}
+
+
+
+.gallery-container {
+
+background: rgba(255, 255, 255, 0.02);
+
+border: 1px solid rgba(255, 255, 255, 0.08);
+
+border-radius: 24px;
+
+padding: 10px;
+
+text-align: center;
+
+box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+
+overflow: hidden;
+
+}
+
+
+
+.main-img-wrapper {
+
+width: 100%;
+
+padding-top: 133%;
+
+position: relative;
+
+background: #111;
+
+border-radius: 16px;
+
+}
+
+
+
+.main-img {
+
+position: absolute;
+
+top: 0;
+
+left: 0;
+
+width: 100%;
+
+height: 100%;
+
+object-fit: contain;
+
+transition: opacity 0.2s ease;
+
+}
+
+
+
+.gallery-nav {
+
+display: flex;
+
+justify-content: center;
+
+gap: 10px;
+
+margin-top: 15px;
+
+padding-bottom: 5px;
+
+}
+
+
+
+.nav-btn {
+
+background: rgba(255, 255, 255, 0.05);
+
+border: 1px solid rgba(255, 255, 255, 0.1);
+
+color: #cbd5e1;
+
+padding: 10px 20px;
+
+border-radius: 30px;
+
+cursor: pointer;
+
+font-weight: 600;
+
+font-size: 14px;
+
+transition: all 0.2s ease;
+
+}
+
+
+
+.nav-btn.active, .nav-btn:hover {
+
+background: var(--primary);
+
+border-color: var(--primary);
+
+color: white;
+
+box-shadow: 0 0 15px rgba(255, 71, 87, 0.5);
+
+}
+
+
+
+.card {
+
+background: rgba(255, 255, 255, 0.03);
+
+backdrop-filter: blur(16px);
+
+-webkit-backdrop-filter: blur(16px);
+
+border: 1px solid rgba(255, 255, 255, 0.08);
+
+padding: 25px;
+
+border-radius: 24px;
+
+box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+
+text-align: right;
+
+}
+
+
+
+.promo {
+
+background: linear-gradient(90deg, #ff4757, #ff6b81); color: white;
+
+padding: 12px;
+
+border-radius: 12px;
+
+margin-bottom: 20px;
+
+font-weight: bold;
+
+font-size: 15px;
+
+text-align: center;
+
+box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+
+}
+
+
+
+h1 {
+
+margin: 0 0 20px 0;
+
+font-size: 32px;
+
+font-weight: 800;
+
+text-align: center;
+
+background: linear-gradient(45deg, #fff, #cbd5e1);
+
+-webkit-background-clip: text;
+
+-webkit-text-fill-color: transparent;
+
+}
+
+
+label { display: block; font-weight: 600; margin-bottom: 6px; color: #94a3b8; font-size: 14px; }
+
+
+select, input, textarea {
+
+width: 100%; padding: 12px; margin-bottom: 15px;
+
+background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+
+border-radius: 10px; box-sizing: border-box; font-size: 16px; color: white;
+
+font-family: inherit; transition: all 0.2s ease;
+
+}
+
+
+
+select:focus, input:focus, textarea:focus {
+
+outline: none; border-color: var(--primary); background: rgba(255, 255, 255, 0.08);
+
+}
+
+
+
+select option { background: #1e293b; color: white; }
+
+
+.price-box {
+
+background: rgba(255, 255, 255, 0.02); padding: 15px; border-radius: 12px;
+
+margin: 20px 0; border: 1px solid rgba(255, 255, 255, 0.05); text-align: center;
+
+}
+
+
+
+.price { font-size: 34px; font-weight: 800; color: #fff; margin-top: 3px; }
+
+
+.btn-order {
+
+background: linear-gradient(135deg, var(--whatsapp), #1ed760);
+
+color: white; border: none; width: 100%; padding: 16px; font-size: 18px;
+
+border-radius: 12px; cursor: pointer; font-weight: bold; transition: all 0.3s ease;
+
+margin-bottom: 5px; box-shadow: 0 5px 15px rgba(37, 211, 102, 0.2);
+
+}
+
+
+
+.btn-order:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4); }
+
+</style>
+
 </head>
+
 <body>
 
-    <div class="container">
 
-        <!-- תפריט ניווט עליון -->
-        <div class="nav-tabs" id="main-nav-tabs">
-            <button id="tab-order" class="tab-btn active" onclick="switchMainTab('order')">👕 ביצוע הזמנה</button>
-            <button id="tab-reviews" class="tab-btn" onclick="switchMainTab('reviews')">⭐ ביקורות</button>
-            <button id="tab-admin" class="tab-btn" onclick="switchMainTab('admin')" style="display:none; border: 1px solid var(--primary);">⚙️ פאנל ניהול</button>
-        </div>
 
-        <div id="page-order" class="main-page-section" style="display: block;">
-            
-            <!-- שלב 1: פרטי הזמנה -->
-            <div id="checkout-step-1" class="step-container active">
-                <div class="card">
-                    <h1>אשכנזי הכדור - מכירת חולצות</h1>
+<div class="container">
 
-                    <!-- שדה קוד הניהול הדינמי -->
-                    <div class="admin-trigger-box">
-                        <label style="margin-bottom: 5px; color: var(--gray);">🔑 קוד זיהוי אתר:</label>
-                        <input type="text" id="admin-code-input" value="1502" oninput="checkDynamicAdminCode()" style="text-align: center; letter-spacing: 2px; font-weight: bold; margin-bottom: 0; max-width: 150px; display: inline-block;">
-                    </div>
-                    
-                    <!-- תמונות המוצר -->
-                    <div class="product-images">
-                        <img src="WhatsApp Image 2026-06-26 at 13.26.41.jpeg" alt="חולצה מקדימה" class="product-img">
-                        <img src="WhatsApp Image 2026-06-26 at 13.26.38.jpeg" alt="חולצה מאחורה" class="product-img">
-                    </div>
+<!-- מציג התמונות של החולצות -->
 
-                    <div style="background: #0d131a; padding: 12px; border-radius: 12px; text-align: center; margin-bottom: 15px;">
-                        <span style="font-size: 13px; color: var(--gray); display: block;">מחיר חולצה:</span>
-                        <span style="font-size: 28px; font-weight: 900; color: var(--primary);">70 ₪</span>
-                    </div>
+<div class="gallery-container">
 
-                    <!-- פרטי לקוח -->
-                    <label>👤 שם מלא:</label>
-                    <input type="text" id="cust-name" placeholder="הכנס את שמך המלא">
+<div class="main-img-wrapper">
 
-                    <label>🛵 סוג אספקה:</label>
-                    <div class="delivery-options">
-                        <div class="delivery-box active" id="deliv-pickup" onclick="setDeliveryType('pickup')">
-                            <h3>📦 איסוף עצמי</h3>
-                            <p>חינם (יבנה)</p>
-                        </div>
-                        <div class="delivery-box" id="deliv-ship" onclick="setDeliveryType('ship')">
-                            <h3>🚚 משלוח</h3>
-                            <p>+20 ₪ (ביבנה)</p>
-                        </div>
-                    </div>
+<img id="product-view" class="main-img" src="WhatsApp Image 2026-06-26 at 13.26.44.jpeg" alt="חולצה קדימה">
 
-                    <label>🏙️ עיר מגורים:</label>
-                    <input type="text" value="יבנה" disabled style="background: #1a232d; color: var(--gray); cursor: not-allowed;">
+</div>
 
-                    <label>🛣️ רחוב ומספר בית:</label>
-                    <input type="text" id="cust-street" placeholder="שם הרחוב ומספר הבית">
+<div class="gallery-nav">
 
-                    <label>📏 בחר מידה:</label>
-                    <select id="prod-size">
-                        <option value="" disabled selected hidden>לחץ לבחירת מידה...</option>
-                        <option value="XS">מידה XS</option>
-                        <option value="S">מידה S</option>
-                        <option value="M">מידה M</option>
-                        <option value="L">מידה L</option>
-                        <option value="XL">מידה XL</option>
-                    </select>
+<button class="nav-btn active" onclick="changeView('WhatsApp Image 2026-06-26 at 13.26.44.jpeg', this)">קדימה 👕</button>
 
-                    <label>🔢 כמות חולצות מבוקשת:</label>
-                    <input type="number" id="prod-quantity" value="1" min="1">
+<!-- שימוש בקובץ הגב החדש והתקין -->
 
-                    <label>✍️ הערות להדפסה על החולצה:</label>
-                    <textarea id="prod-notes" rows="2" placeholder="למשל: מספר 10 מאחורה..."></textarea>
+<button class="nav-btn" onclick="changeView('WhatsApp Image 2026-06-26 at 13.26.44 (1).jpeg', this)">אחורה ↩️</button>
 
-                    <button class="btn-main btn-primary" style="width: 100%; margin-top: 10px;" onclick="processOrderDetails()">המשך למסך סיכום פרטים ◄</button>
-                </div>
-            </div>
+</div>
 
-            <!-- שלב 2: מסך סיכום פרטים -->
-            <div id="checkout-step-2" class="step-container">
-                <div class="card">
-                    <h2>📋 סיכום ההזמנה שלך</h2>
-                    <p style="color: var(--gray); font-size: 14px; text-align: center; margin-bottom: 20px;">אנא בדוק שהפרטים נכונים לפני השליחה</p>
-                    
-                    <div class="summary-details" id="summary-content"></div>
+</div>
 
-                    <div class="btn-group">
-                        <button class="btn-main btn-secondary" onclick="goToStep(1)">✍️ חזור לשינוי פרטים</button>
-                        <button class="btn-main btn-success" onclick="confirmAndSendFinalOrder()">✅ אישור ושליחה לוואטסאפ</button>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <!-- דף ביקורות -->
-        <div id="page-reviews" class="main-page-section" style="display: none;">
-            <div class="card">
-                <h2>ביקורות מהרוכשים שלנו</h2>
-                <div id="reviews-container"></div>
-            </div>
-        </div>
 
-        <!-- פאנל ניהול אדמין סודי -->
-        <div id="page-admin" class="main-page-section" style="display: none;">
-            <div class="card">
-                <h2>⚙️ פאנל ניהול אדמין סודי</h2>
-                <h3 style="color: var(--primary); border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px;">📦 רשימת הזמנות באתר</h3>
-                <div id="admin-orders-container"></div>
+<div class="card">
 
-                <h3 style="color: var(--primary); border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; margin-top: 30px;">✍️ הוספת ביקורת יזומה</h3>
-                <label>שם המבקר:</label>
-                <input type="text" id="new-rev-name">
-                <label>תוכן הביקורת:</label>
-                <textarea id="new-rev-text" rows="2"></textarea>
-                <button class="btn-main btn-primary" onclick="addReviewFromAdmin()">פרסם ביקורת באתר</button>
-            </div>
-        </div>
-    </div>
+<div class="promo">🔥 מבצע: 3 חולצות ומעלה ב-60 ₪ בלבד!</div>
 
-    <script>
-        const WHATSAPP_NUMBER = '972552956401';
-        let currentOrderData = {};
-        let selectedDelivery = 'pickup';
 
-        // הגדרת נתיבי תמונות קבועים בשביל פאנל הניהול
-        const imgFront = "WhatsApp Image 2026-06-26 at 13.26.41.jpeg";
-        const imgBack = "WhatsApp Image 2026-06-26 at 13.26.38.jpeg";
+<h1>אשכנזי</h1>
 
-        function initSizeOptions() {
-            const select = document.getElementById('prod-size');
-            const existingOptions = Array.from(select.options).slice(1);
-            select.innerHTML = '<option value="" disabled selected hidden>לחץ לבחירת מידה...</option>';
-            for (let i = 1; i <= 47; i++) {
-                const opt = document.createElement('option');
-                opt.value = i;
-                opt.textContent = `מידה ${i}`;
-                select.appendChild(opt);
-            }
-            existingOptions.forEach(opt => select.appendChild(opt));
-        }
 
-        function setDeliveryType(type) {
-            selectedDelivery = type;
-            document.querySelectorAll('.delivery-box').forEach(b => b.classList.remove('active'));
-            if(type === 'pickup') {
-                document.getElementById('deliv-pickup').classList.add('active');
-            } else {
-                document.getElementById('deliv-ship').classList.add('active');
-            }
-        }
+<label>🎨 צבע חולצה:</label>
 
-        function checkDynamicAdminCode() {
-            const codeInput = document.getElementById('admin-code-input').value.trim();
-            if (codeInput === '2323') {
-                alert('🔓 קוד תקין! פאנל הניהול הופעל ומופיע כעת בלשונית למעלה.');
-                document.getElementById('tab-admin').style.display = 'block';
-                switchMainTab('admin');
-            } else {
-                if (document.getElementById('tab-admin').style.display === 'block' === false) {
-                    document.getElementById('tab-admin').style.display = 'none';
-                }
-            }
-        }
+<select id="color">
 
-        function goToStep(stepNum) {
-            document.querySelectorAll('.step-container').forEach(s => s.classList.remove('active'));
-            document.getElementById(`checkout-step-${stepNum}`).classList.add('active');
-            window.scrollTo(0, 0);
-        }
+<option>לבן</option>
 
-        function switchMainTab(tabId) {
-            document.querySelectorAll('.main-page-section').forEach(p => p.style.display = 'none');
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(`page-${tabId}`).style.display = 'block';
-            document.getElementById(`tab-${tabId}`).classList.add('active');
-            if(tabId === 'reviews') renderReviews();
-            if(tabId === 'admin') renderAdminOrders();
-        }
+</select>
 
-        function processOrderDetails() {
-            const name = document.getElementById('cust-name').value.trim();
-            const street = document.getElementById('cust-street').value.trim();
-            const selectedSize = document.getElementById('prod-size').value;
-            const quantity = parseInt(document.getElementById('prod-quantity').value) || 1;
-            const notes = document.getElementById('prod-notes').value.trim() || 'אין הערות';
 
-            if (!name || !street) { alert('⚠️ נא למלא שם מלא וכתובת מגורים ביבנה.'); return; }
-            if (!selectedSize) { alert('⚠️ אנא בחר מידה לחולצה.'); return; }
+<label>📏 מידה / מספר:</label>
 
-            const basePrice = 70 * quantity;
-            const deliveryPrice = (selectedDelivery === 'ship') ? 20 : 0;
-            const finalPrice = basePrice + deliveryPrice;
+<select id="size">
 
-            currentOrderData = {
-                name: name,
-                street: street,
-                deliveryText: (selectedDelivery === 'ship') ? 'משלוח (+20 ₪)' : 'איסוף עצמי (חינם)',
-                size: selectedSize,
-                quantity: quantity,
-                notes: notes,
-                totalPrice: finalPrice
-            };
+<!-- מידות מספרים מ-1 עד 47 -->
 
-            const summaryContent = document.getElementById('summary-content');
-            summaryContent.innerHTML = `
-                <div class="summary-row"><span>שם מלא:</span><strong>${currentOrderData.name}</strong></div>
-                <div class="summary-row"><span>סוג אספקה:</span><strong>${currentOrderData.deliveryText}</strong></div>
-                <div class="summary-row"><span>כתובת:</span><strong>עיר: יבנה, רחוב: ${currentOrderData.street}</strong></div>
-                <div class="summary-row"><span>מידה שבחרת:</span><strong>מידה ${currentOrderData.size}</strong></div>
-                <div class="summary-row"><span>כמות חולצות:</span><strong>${currentOrderData.quantity}</strong></div>
-                <div class="summary-row"><span>הערות להדפסה:</span><strong>${currentOrderData.notes}</strong></div>
-                <div class="summary-row" style="font-size: 18px; color: var(--primary); font-weight: bold; margin-top: 10px; border-top: 1px dashed var(--primary); padding-top: 10px;">
-                    <span>מחיר סופי לתשלום:</span><strong>${currentOrderData.totalPrice} ₪</strong>
-                </div>
-            `;
+<script>
 
-            goToStep(2);
-        }
+for (let i = 1; i <= 47; i++) {
 
-        function confirmAndSendFinalOrder() {
-            const orders = JSON.parse(localStorage.getItem('site_orders') || '[]');
-            orders.push({
-                id: Date.now(),
-                name: currentOrderData.name,
-                city: 'יבנה',
-                details: `אספקה: ${currentOrderData.deliveryText} | מידה: ${currentOrderData.size} | כמות: ${currentOrderData.quantity} | רחוב: ${currentOrderData.street} | הערות: ${currentOrderData.notes}`,
-                status: 'pending',
-                date: new Date().toLocaleDateString('he-IL')
-            });
-            localStorage.setItem('site_orders', JSON.stringify(orders));
+document.write(`<option value="${i}">${i}</option>`);
 
-            let msg = `👕 הזמנה חדשה מאתר אשכנזי הכדור!\n\n`;
-            msg += `👤 שם: ${currentOrderData.name}\n🛵 אספקה: ${currentOrderData.deliveryText}\n🏙️ עיר: יבנה\n🛣️ כתובת: ${currentOrderData.street}\n`;
-            msg += `📏 מידה: ${currentOrderData.size}\n🔢 כמות: ${currentOrderData.quantity}\n✍️ הערות: ${currentOrderData.notes}\n\n💰 סך הכל לתשלום: ${currentOrderData.totalPrice} ₪`;
-            
-            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
-            goToStep(1);
-        }
+}
 
-        function renderAdminOrders() {
-            const container = document.getElementById('admin-orders-container');
-            const orders = JSON.parse(localStorage.getItem('site_orders') || '[]');
-            if(orders.length === 0) { 
-                container.innerHTML = '<div style="color:var(--gray);text-align:center;">אין הזמנות חדשות במערכת.</div>'; 
-                return; 
-            }
-            
-            container.innerHTML = orders.map(o => `
-                <div class="order-item">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                        <strong>👤 ${o.name} (${o.date})</strong>
-                        <button class="btn-danger" onclick="deleteOrder(${o.id})">🗑️ מחק</button>
-                    </div>
-                    <div style="font-size:14px; color:var(--gray); margin-bottom: 12px;">${o.details}</div>
-                    
-                    <!-- הצגת תמונות המוצר המשויכות בתוך פאנל הניהול -->
-                    <div style="display: flex; gap: 10px; margin-top: 8px;">
-                        <div>
-                            <span style="font-size:11px; color: var(--gray); display:block;">קדימה:</span>
-                            <img src="${imgFront}" class="admin-product-thumb" alt="חולצה מקדימה">
-                        </div>
-                        <div>
-                            <span style="font-size:11px; color: var(--gray); display:block;">אחורה:</span>
-                            <img src="${imgBack}" class="admin-product-thumb" alt="חולצה מאחורה">
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
+</script>
 
-        function deleteOrder(id) {
-            let orders = JSON.parse(localStorage.getItem('site_orders') || '[]');
-            orders = orders.filter(o => o.id !== id);
-            localStorage.setItem('site_orders', JSON.stringify(orders));
-            renderAdminOrders();
-        }
+<!-- מידות אותיות רגילות -->
 
-        function renderReviews() {
-            const container = document.getElementById('reviews-container');
-            const reviews = JSON.parse(localStorage.getItem('site_reviews') || '[{"name":"אבי מיוסט","text":"חולצה מטורפת הדפסה ברמה גבוהה!"}]');
-            container.innerHTML = reviews.map(r => `
-                <div class="review-item"><strong style="color:var(--primary);">⭐ ${r.name}:</strong> <span>"${r.text}"</span></div>
-            `).join('');
-        }
+<option value="S">S</option>
 
-        function addReviewFromAdmin() {
-            const name = document.getElementById('new-rev-name').value.trim();
-            const text = document.getElementById('new-rev-text').value.trim();
-            if(!name || !text) return;
-            const reviews = JSON.parse(localStorage.getItem('site_reviews') || '[]');
-            reviews.push({ name, text });
-            localStorage.setItem('site_reviews', JSON.stringify(reviews));
-            document.getElementById('new-rev-name').value = '';
-            document.getElementById('new-rev-text').value = '';
-            alert('הביקורת נוספה בהצלחה!');
-        }
+<option value="M" selected>M</option>
 
-        window.onload = function() {
-            initSizeOptions();
-            renderReviews();
-        };
-    </script>
+<option value="L">L</option>
+
+<option value="XL">XL</option>
+
+<option value="XXL">XXL</option>
+
+</select>
+
+
+<label>🔢 כמות:</label>
+
+<input type="number" id="qty" value="1" min="1" oninput="update()">
+
+
+<label>📝 הערות להדפסה:</label>
+
+<textarea id="notes" rows="2" placeholder="למשל: הדפסה על הגב..."></textarea>
+
+
+<div class="price-box">
+
+<div style="color: #94a3b8; font-size: 14px;">סה"כ לתשלום:</div>
+
+<div class="price"><span id="total">70</span> ₪</div>
+
+</div>
+
+
+<button class="btn-order" onclick="order()">שלח הזמנה בוואטסאפ ✅</button>
+
+</div>
+
+</div>
+
+
+
+<script>
+
+function changeView(imgSrc, btn) {
+
+const imgElement = document.getElementById('product-view');
+
+imgElement.style.opacity = 0;
+
+
+setTimeout(() => {
+
+imgElement.src = imgSrc;
+
+imgElement.style.opacity = 1;
+
+}, 100);
+
+
+
+document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+
+btn.classList.add('active');
+
+}
+
+
+
+function update() {
+
+let q = document.getElementById('qty').value;
+
+let p = (q >= 3) ? 60 : 70;
+
+document.getElementById('total').innerText = q * p;
+
+}
+
+
+
+function order() {
+
+let color = document.getElementById('color').value;
+
+let size = document.getElementById('size').value;
+
+let qty = document.getElementById('qty').value;
+
+let notes = document.getElementById('notes').value;
+
+let total = document.getElementById('total').innerText;
+
+let msg = `היי, אני רוצה להזמין חולצה מודפסת:\nצבע: ${color}\nמידה: ${size}\nכמות: ${qty}\nהערות: ${notes}\nסה"כ לתשלום: ${total} ₪`;
+
+window.open(`https://wa.me/972552956401?text=${encodeURIComponent(msg)}`);
+
+}
+
+</script>
+
 </body>
-</html>
+
+</html> 
+
