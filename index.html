@@ -106,6 +106,31 @@
             border-color: var(--primary);
         }
 
+        .delivery-options {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .delivery-box {
+            flex: 1;
+            background: #0d131a;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .delivery-box.active {
+            border-color: var(--primary);
+            background: rgba(255,107,0,0.05);
+        }
+
+        .delivery-box h3 { margin: 0 0 5px 0; font-size: 15px; color: #fff; }
+        .delivery-box p { margin: 0; font-size: 13px; color: var(--gray); }
+
         .product-images {
             display: flex;
             flex-direction: column;
@@ -119,6 +144,13 @@
             border-radius: 12px;
             border: 1px solid rgba(255,107,0,0.3);
             display: block;
+        }
+
+        .admin-product-thumb {
+            width: 80px;
+            height: auto;
+            border-radius: 6px;
+            border: 1px solid rgba(255,107,0,0.4);
         }
 
         .btn-group {
@@ -189,7 +221,7 @@
 
         <div id="page-order" class="main-page-section" style="display: block;">
             
-            <!-- שלב 1: בחירת מוצר ופרטים ראשוניים -->
+            <!-- שלב 1: פרטי הזמנה -->
             <div id="checkout-step-1" class="step-container active">
                 <div class="card">
                     <h1>אשכנזי הכדור - מכירת חולצות</h1>
@@ -200,7 +232,7 @@
                         <input type="text" id="admin-code-input" value="1502" oninput="checkDynamicAdminCode()" style="text-align: center; letter-spacing: 2px; font-weight: bold; margin-bottom: 0; max-width: 150px; display: inline-block;">
                     </div>
                     
-                    <!-- תמונות הדוגמן -->
+                    <!-- תמונות המוצר -->
                     <div class="product-images">
                         <img src="WhatsApp Image 2026-06-26 at 13.26.41.jpeg" alt="חולצה מקדימה" class="product-img">
                         <img src="WhatsApp Image 2026-06-26 at 13.26.38.jpeg" alt="חולצה מאחורה" class="product-img">
@@ -211,10 +243,31 @@
                         <span style="font-size: 28px; font-weight: 900; color: var(--primary);">70 ₪</span>
                     </div>
 
-                    <label>📏 בחר מידה (מספר או אות):</label>
+                    <!-- פרטי לקוח -->
+                    <label>👤 שם מלא:</label>
+                    <input type="text" id="cust-name" placeholder="הכנס את שמך המלא">
+
+                    <label>🛵 סוג אספקה:</label>
+                    <div class="delivery-options">
+                        <div class="delivery-box active" id="deliv-pickup" onclick="setDeliveryType('pickup')">
+                            <h3>📦 איסוף עצמי</h3>
+                            <p>חינם (יבנה)</p>
+                        </div>
+                        <div class="delivery-box" id="deliv-ship" onclick="setDeliveryType('ship')">
+                            <h3>🚚 משלוח</h3>
+                            <p>+20 ₪ (ביבנה)</p>
+                        </div>
+                    </div>
+
+                    <label>🏙️ עיר מגורים:</label>
+                    <input type="text" value="יבנה" disabled style="background: #1a232d; color: var(--gray); cursor: not-allowed;">
+
+                    <label>🛣️ רחוב ומספר בית:</label>
+                    <input type="text" id="cust-street" placeholder="שם הרחוב ומספר הבית">
+
+                    <label>📏 בחר מידה:</label>
                     <select id="prod-size">
                         <option value="" disabled selected hidden>לחץ לבחירת מידה...</option>
-                        <!-- לולאת ה-JS למטה תטען כאן את המספרים 1 עד 47 באופן אוטומטי -->
                         <option value="XS">מידה XS</option>
                         <option value="S">מידה S</option>
                         <option value="M">מידה M</option>
@@ -227,28 +280,6 @@
 
                     <label>✍️ הערות להדפסה על החולצה:</label>
                     <textarea id="prod-notes" rows="2" placeholder="למשל: מספר 10 מאחורה..."></textarea>
-
-                    <label>🛵 בחר סוג אספקה:</label>
-                    <select id="delivery-type" onchange="toggleDeliveryFields()">
-                        <option value="pickup" selected>🏠 איסוף עצמי (חינם - 70 ₪ לחולצה)</option>
-                        <option value="delivery">📦 משלוח לבית ביבנה (תוספת 10 ₪)</option>
-                    </select>
-
-                    <div id="fields-pickup">
-                        <label style="color: #ff9d00;">👤 שם מלא לאיסוף עצמי:</label>
-                        <input type="text" id="pickup-name" placeholder="הכנס את שמך">
-                    </div>
-
-                    <div id="fields-delivery" style="display: none;">
-                        <label>👤 שם מלא של המקבל:</label>
-                        <input type="text" id="cust-name" placeholder="הכנס את שמך המלא">
-
-                        <label>🏙️ עיר מגורים:</label>
-                        <input type="text" value="יבנה" disabled style="background: #1a232d; color: var(--gray); cursor: not-allowed;">
-
-                        <label>🛣️ רחוב ומספר בית:</label>
-                        <input type="text" id="cust-street" placeholder="שם הרחוב ומספר הבית">
-                    </div>
 
                     <button class="btn-main btn-primary" style="width: 100%; margin-top: 10px;" onclick="processOrderDetails()">המשך למסך סיכום פרטים ◄</button>
                 </div>
@@ -298,50 +329,45 @@
     <script>
         const WHATSAPP_NUMBER = '972552956401';
         let currentOrderData = {};
+        let selectedDelivery = 'pickup';
 
-        // פונקציה שמייצרת אוטומטית את המידות 1 עד 47 ומכניסה אותן לראש הרשימה
+        // הגדרת נתיבי תמונות קבועים בשביל פאנל הניהול
+        const imgFront = "WhatsApp Image 2026-06-26 at 13.26.41.jpeg";
+        const imgBack = "WhatsApp Image 2026-06-26 at 13.26.38.jpeg";
+
         function initSizeOptions() {
             const select = document.getElementById('prod-size');
-            // נשמור לרגע את מידות האותיות הקיימות
             const existingOptions = Array.from(select.options).slice(1);
-            
-            // ננקה את ה-select ונחזיר את האופציה הריקה הראשונה
             select.innerHTML = '<option value="" disabled selected hidden>לחץ לבחירת מידה...</option>';
-            
-            // נוסיף את המספרים 1 עד 47
             for (let i = 1; i <= 47; i++) {
                 const opt = document.createElement('option');
                 opt.value = i;
                 opt.textContent = `מידה ${i}`;
                 select.appendChild(opt);
             }
-            
-            // נחזיר את מידות האותיות (בלי XXL) בסוף הרשימה
             existingOptions.forEach(opt => select.appendChild(opt));
         }
 
-        // פונקציית זיהוי השינוי בקוד ל-2323 ומעבר אוטומטי לפאנל
+        function setDeliveryType(type) {
+            selectedDelivery = type;
+            document.querySelectorAll('.delivery-box').forEach(b => b.classList.remove('active'));
+            if(type === 'pickup') {
+                document.getElementById('deliv-pickup').classList.add('active');
+            } else {
+                document.getElementById('deliv-ship').classList.add('active');
+            }
+        }
+
         function checkDynamicAdminCode() {
-            const codeInput = document.getElementById('admin-code-input').value;
+            const codeInput = document.getElementById('admin-code-input').value.trim();
             if (codeInput === '2323') {
-                alert('🔓 קוד תקין! פאנל הניהול נפתח כעת בלשונית למעלה.');
+                alert('🔓 קוד תקין! פאנל הניהול הופעל ומופיע כעת בלשונית למעלה.');
                 document.getElementById('tab-admin').style.display = 'block';
                 switchMainTab('admin');
             } else {
                 if (document.getElementById('tab-admin').style.display === 'block' === false) {
                     document.getElementById('tab-admin').style.display = 'none';
                 }
-            }
-        }
-
-        function toggleDeliveryFields() {
-            const type = document.getElementById('delivery-type').value;
-            if (type === 'pickup') {
-                document.getElementById('fields-pickup').style.display = 'block';
-                document.getElementById('fields-delivery').style.display = 'none';
-            } else {
-                document.getElementById('fields-pickup').style.display = 'none';
-                document.getElementById('fields-delivery').style.display = 'block';
             }
         }
 
@@ -361,59 +387,38 @@
         }
 
         function processOrderDetails() {
+            const name = document.getElementById('cust-name').value.trim();
+            const street = document.getElementById('cust-street').value.trim();
             const selectedSize = document.getElementById('prod-size').value;
             const quantity = parseInt(document.getElementById('prod-quantity').value) || 1;
             const notes = document.getElementById('prod-notes').value.trim() || 'אין הערות';
-            const deliveryType = document.getElementById('delivery-type').value;
 
+            if (!name || !street) { alert('⚠️ נא למלא שם מלא וכתובת מגורים ביבנה.'); return; }
             if (!selectedSize) { alert('⚠️ אנא בחר מידה לחולצה.'); return; }
 
-            if (deliveryType === 'pickup') {
-                const name = document.getElementById('pickup-name').value.trim();
-                if (!name) { alert('⚠️ אנא מלא שם לאיסוף עצמי.'); return; }
-                
-                currentOrderData = {
-                    name: name,
-                    type: 'איסוף עצמי',
-                    street: '—',
-                    size: selectedSize,
-                    quantity: quantity,
-                    notes: notes,
-                    shippingCost: 0,
-                    totalPrice: 70 * quantity
-                };
-            } else {
-                const name = document.getElementById('cust-name').value.trim();
-                let street = document.getElementById('cust-street').value.trim();
-                if (!name || !street) { alert('⚠️ נא למלא שם מלא וכתובת מגורים ביבנה.'); return; }
+            const basePrice = 70 * quantity;
+            const deliveryPrice = (selectedDelivery === 'ship') ? 20 : 0;
+            const finalPrice = basePrice + deliveryPrice;
 
-                if (!street.endsWith("/105")) street = street + "/105";
-
-                currentOrderData = {
-                    name: name,
-                    type: 'משלוח (יבנה בלבד)',
-                    street: street,
-                    size: selectedSize,
-                    quantity: quantity,
-                    notes: notes,
-                    shippingCost: 10,
-                    totalPrice: (70 * quantity) + 10
-                };
-            }
+            currentOrderData = {
+                name: name,
+                street: street,
+                deliveryText: (selectedDelivery === 'ship') ? 'משלוח (+20 ₪)' : 'איסוף עצמי (חינם)',
+                size: selectedSize,
+                quantity: quantity,
+                notes: notes,
+                totalPrice: finalPrice
+            };
 
             const summaryContent = document.getElementById('summary-content');
             summaryContent.innerHTML = `
-                <div class="summary-row"><span>סוג אספקה:</span><strong>${currentOrderData.type}</strong></div>
                 <div class="summary-row"><span>שם מלא:</span><strong>${currentOrderData.name}</strong></div>
-                ${currentOrderData.shippingCost > 0 ? `<div class="summary-row"><span>כתובת למשלוח:</span><strong>עיר: יבנה, רחוב: ${currentOrderData.street}</strong></div>` : ''}
+                <div class="summary-row"><span>סוג אספקה:</span><strong>${currentOrderData.deliveryText}</strong></div>
+                <div class="summary-row"><span>כתובת:</span><strong>עיר: יבנה, רחוב: ${currentOrderData.street}</strong></div>
                 <div class="summary-row"><span>מידה שבחרת:</span><strong>מידה ${currentOrderData.size}</strong></div>
                 <div class="summary-row"><span>כמות חולצות:</span><strong>${currentOrderData.quantity}</strong></div>
                 <div class="summary-row"><span>הערות להדפסה:</span><strong>${currentOrderData.notes}</strong></div>
-                <div class="summary-row" style="margin-top: 10px; border-top: 1px dashed var(--primary); padding-top: 10px;">
-                    <span>מחיר חולצות:</span><strong>${70 * currentOrderData.quantity} ₪</strong>
-                </div>
-                <div class="summary-row"><span>עלות משלוח:</span><strong>${currentOrderData.shippingCost} ₪</strong></div>
-                <div class="summary-row" style="font-size: 18px; color: var(--primary); font-weight: bold;">
+                <div class="summary-row" style="font-size: 18px; color: var(--primary); font-weight: bold; margin-top: 10px; border-top: 1px dashed var(--primary); padding-top: 10px;">
                     <span>מחיר סופי לתשלום:</span><strong>${currentOrderData.totalPrice} ₪</strong>
                 </div>
             `;
@@ -426,18 +431,15 @@
             orders.push({
                 id: Date.now(),
                 name: currentOrderData.name,
-                city: currentOrderData.shippingCost > 0 ? 'יבנה' : 'איסוף עצמי',
-                details: `סוג: ${currentOrderData.type} | מידה: ${currentOrderData.size} | כמות: ${currentOrderData.quantity} | רחוב: ${currentOrderData.street}`,
+                city: 'יבנה',
+                details: `אספקה: ${currentOrderData.deliveryText} | מידה: ${currentOrderData.size} | כמות: ${currentOrderData.quantity} | רחוב: ${currentOrderData.street} | הערות: ${currentOrderData.notes}`,
                 status: 'pending',
                 date: new Date().toLocaleDateString('he-IL')
             });
             localStorage.setItem('site_orders', JSON.stringify(orders));
 
             let msg = `👕 הזמנה חדשה מאתר אשכנזי הכדור!\n\n`;
-            msg += ` אספקה: ${currentOrderData.type}\n👤 שם: ${currentOrderData.name}\n`;
-            if (currentOrderData.shippingCost > 0) {
-                msg += `🏙️ עיר: יבנה\n\%$ כתובת: ${currentOrderData.street}\n`;
-            }
+            msg += `👤 שם: ${currentOrderData.name}\n🛵 אספקה: ${currentOrderData.deliveryText}\n🏙️ עיר: יבנה\n🛣️ כתובת: ${currentOrderData.street}\n`;
             msg += `📏 מידה: ${currentOrderData.size}\n🔢 כמות: ${currentOrderData.quantity}\n✍️ הערות: ${currentOrderData.notes}\n\n💰 סך הכל לתשלום: ${currentOrderData.totalPrice} ₪`;
             
             window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
@@ -447,14 +449,30 @@
         function renderAdminOrders() {
             const container = document.getElementById('admin-orders-container');
             const orders = JSON.parse(localStorage.getItem('site_orders') || '[]');
-            if(orders.length === 0) { container.innerHTML = '<div style="color:var(--gray);text-align:center;">אין הזמנות חדשות במערכת.</div>'; return; }
+            if(orders.length === 0) { 
+                container.innerHTML = '<div style="color:var(--gray);text-align:center;">אין הזמנות חדשות במערכת.</div>'; 
+                return; 
+            }
+            
             container.innerHTML = orders.map(o => `
                 <div class="order-item">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                        <strong>${o.name} (${o.date})</strong>
+                        <strong>👤 ${o.name} (${o.date})</strong>
                         <button class="btn-danger" onclick="deleteOrder(${o.id})">🗑️ מחק</button>
                     </div>
-                    <div style="font-size:14px; color:var(--gray);">${o.details}</div>
+                    <div style="font-size:14px; color:var(--gray); margin-bottom: 12px;">${o.details}</div>
+                    
+                    <!-- הצגת תמונות המוצר המשויכות בתוך פאנל הניהול -->
+                    <div style="display: flex; gap: 10px; margin-top: 8px;">
+                        <div>
+                            <span style="font-size:11px; color: var(--gray); display:block;">קדימה:</span>
+                            <img src="${imgFront}" class="admin-product-thumb" alt="חולצה מקדימה">
+                        </div>
+                        <div>
+                            <span style="font-size:11px; color: var(--gray); display:block;">אחורה:</span>
+                            <img src="${imgBack}" class="admin-product-thumb" alt="חולצה מאחורה">
+                        </div>
+                    </div>
                 </div>
             `).join('');
         }
