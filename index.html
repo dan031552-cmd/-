@@ -5,16 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>אשכנזי</title>
     
-    <!-- Favicon -->
+    <!-- Favicon / אייקון ראשי -->
     <link rel="icon" type="image/jpeg" href="WhatsApp Image 2026-06-26 at 15.01.25.jpeg">
     
     <style>
         :root {
-            --primary: #ff4757;
+            /* פלטת צבעים בהשראת כדורסל BG3800 */
+            --primary: #d94125;
+            --primary-hover: #b8321a;
             --whatsapp: #25d366;
-            --bg-grad: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            --card-border: rgba(255, 255, 255, 0.08);
+            --bg-grad: linear-gradient(135deg, #181d28 0%, #291e18 100%);
+            --card-border: rgba(235, 130, 60, 0.25);
             --gold-glow: 0 0 25px rgba(255, 215, 0, 0.5);
+            --cream-white: #f5eedc;
         }
 
         body { 
@@ -61,10 +64,10 @@
         }
 
         .gallery-container {
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(20, 15, 12, 0.5);
             border: 1px solid var(--card-border);
-            border-radius: 24px; padding: 10px;
-            text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            border-radius: 24px; padding: 12px;
+            text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.5);
             overflow: hidden; transition: all 0.5s ease;
         }
 
@@ -75,25 +78,26 @@
         .main-img-wrapper {
             width: 100%; padding-top: 133%;
             position: relative; background: #111; border-radius: 16px;
+            overflow: hidden;
         }
 
         .main-img {
             position: absolute; top: 0; left: 0;
-            width: 100%; height: 100%; object-fit: contain; transition: opacity 0.2s ease;
+            width: 100%; height: 100%; object-fit: contain; transition: opacity 0.3s ease;
         }
 
         .gallery-nav { display: flex; justify-content: center; gap: 10px; margin-top: 15px; padding-bottom: 5px; }
 
         .nav-btn {
             background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1); color: #cbd5e1;
+            border: 1px solid rgba(255, 255, 255, 0.15); color: var(--cream-white);
             padding: 10px 20px; border-radius: 30px; cursor: pointer;
             font-weight: 600; font-size: 14px; transition: all 0.2s ease;
         }
 
         .nav-btn.active, .nav-btn:hover {
             background: var(--primary); border-color: var(--primary); color: white;
-            box-shadow: 0 0 15px rgba(255, 71, 87, 0.5);
+            box-shadow: 0 0 15px rgba(217, 65, 37, 0.5);
         }
 
         body.gold-mode .nav-btn.active, body.gold-mode .nav-btn:hover {
@@ -102,10 +106,10 @@
         }
 
         .top-code-banner {
-            background: rgba(255, 255, 255, 0.07);
-            border: 2px dashed #ffffff; color: #ffffff;
-            padding: 12px; border-radius: 16px; font-size: 18px; font-weight: 800;
-            letter-spacing: 0.5px; box-shadow: 0 0 20px rgba(255,255,255,0.1); transition: all 0.5s ease;
+            background: rgba(217, 65, 37, 0.15);
+            border: 2px dashed var(--cream-white); color: var(--cream-white);
+            padding: 12px; border-radius: 16px; font-size: 17px; font-weight: 800;
+            letter-spacing: 0.5px; box-shadow: 0 0 20px rgba(0,0,0,0.2); transition: all 0.5s ease;
         }
 
         body.gold-mode .top-code-banner {
@@ -113,10 +117,10 @@
         }
 
         .card { 
-            background: rgba(255, 255, 255, 0.03); 
+            background: rgba(25, 20, 18, 0.55); 
             backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--card-border); padding: 25px; border-radius: 24px; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4); text-align: right; transition: all 0.5s ease;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5); text-align: right; transition: all 0.5s ease;
         }
 
         body.gold-mode .card {
@@ -124,10 +128,10 @@
         }
 
         .promo { 
-            background: linear-gradient(90deg, #ff4757, #ff6b81); color: white; 
+            background: linear-gradient(90deg, #d94125, #ee6b4d); color: white; 
             padding: 12px; border-radius: 12px; margin-bottom: 20px; 
             font-weight: bold; font-size: 15px; text-align: center;
-            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3); transition: all 0.5s ease;
+            box-shadow: 0 4px 15px rgba(217, 65, 37, 0.3); transition: all 0.5s ease;
         }
 
         body.gold-mode .promo {
@@ -137,7 +141,7 @@
 
         h1 { 
             margin: 0 0 20px 0; font-size: 32px; font-weight: 800; text-align: center;
-            background: linear-gradient(45deg, #fff, #cbd5e1);
+            background: linear-gradient(45deg, #ffffff, var(--cream-white));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
@@ -146,12 +150,12 @@
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
         
-        label { display: block; font-weight: 600; margin-bottom: 6px; color: #94a3b8; font-size: 14px; }
+        label { display: block; font-weight: 600; margin-bottom: 6px; color: #d0c8b8; font-size: 14px; }
         body.gold-mode label { color: #ffe899; }
         
         select, input, textarea { 
             width: 100%; padding: 12px; margin-bottom: 15px; 
-            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); 
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); 
             border-radius: 10px; box-sizing: border-box; font-size: 16px; color: white;
             font-family: inherit; transition: all 0.2s ease;
         }
@@ -162,69 +166,105 @@
 
         select:focus, input:focus, textarea:focus { outline: none; border-color: var(--primary); background: rgba(255, 255, 255, 0.08); }
         body.gold-mode select:focus, body.gold-mode input:focus, body.gold-mode textarea:focus { border-color: #ffd700; box-shadow: 0 0 10px rgba(255, 215, 0, 0.4); }
-        select option { background: #1e293b; color: white; }
+        select option { background: #1e1916; color: white; }
         
+        /* כפתורי בחירה (משלוח / הדפסת גב) */
+        .option-group { display: flex; gap: 10px; margin-bottom: 15px; }
+        .option-btn {
+            flex: 1; padding: 12px; border-radius: 10px;
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            text-align: center; cursor: pointer; font-size: 14px; transition: all 0.2s ease; color: #fff;
+        }
+        .option-btn.active { border-color: var(--primary); background: rgba(217,65,37,0.25); font-weight: bold; }
+        body.gold-mode .option-btn.active { border-color: #ffd700; background: rgba(255, 215, 0, 0.2); color: #ffd700; }
+
         .price-box { 
-            background: rgba(255, 255, 255, 0.02); padding: 15px; border-radius: 12px; 
-            margin: 20px 0; border: 1px solid rgba(255, 255, 255, 0.05); text-align: center;
+            background: rgba(255, 255, 255, 0.03); padding: 15px; border-radius: 12px; 
+            margin: 20px 0; border: 1px solid rgba(255, 255, 255, 0.08); text-align: center;
         }
 
         body.gold-mode .price-box { border-color: #ffd700; background: rgba(255, 215, 0, 0.08); }
-        .price { font-size: 34px; font-weight: 800; color: #fff; margin-top: 3px; }
+        .price { font-size: 36px; font-weight: 800; color: #fff; margin-top: 3px; }
         body.gold-mode .price { color: #ffd700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
         
         .btn-order { 
             background: linear-gradient(135deg, var(--whatsapp), #1ed760); 
             color: white; border: none; width: 100%; padding: 16px; font-size: 18px; 
             border-radius: 12px; cursor: pointer; font-weight: bold; transition: all 0.3s ease; 
-            margin-bottom: 5px; box-shadow: 0 5px 15px rgba(37, 211, 102, 0.2);
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.2);
         }
         .btn-order:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4); }
 
-        .delivery-options { display: flex; gap: 10px; margin-bottom: 15px; }
-        .delivery-option {
-            flex: 1; padding: 12px; border-radius: 10px;
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-            text-align: center; cursor: pointer; font-size: 14px; transition: all 0.2s ease;
+        /* Modal - חלון קופץ להדפסה על הגב */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(5px);
+            display: none; justify-content: center; align-items: center; z-index: 10000;
         }
-        .delivery-option.active { border-color: var(--primary); background: rgba(255,71,87,0.15); font-weight: bold; }
-        body.gold-mode .delivery-option.active { border-color: #ffd700; background: rgba(255, 215, 0, 0.2); color: #ffd700; }
-        
-        .reviews-section { margin-top: 25px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 20px; }
+        .modal-card {
+            background: #1e1815; border: 1px solid var(--primary);
+            border-radius: 20px; padding: 25px; max-width: 400px; width: 90%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8); text-align: right; animation: modalPop 0.3s ease;
+        }
+        @keyframes modalPop {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .modal-title { font-size: 20px; font-weight: bold; color: var(--primary); margin-bottom: 10px; text-align: center; }
+        .modal-btn-confirm {
+            background: var(--primary); color: white; border: none; padding: 12px;
+            width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px;
+        }
+
+        .reviews-section { margin-top: 25px; border-top: 1px dashed rgba(255,255,255,0.15); padding-top: 20px; }
         body.gold-mode .reviews-section { border-top-color: rgba(255, 215, 0, 0.3); }
 
         .review-card {
-            background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
             border-radius: 12px; padding: 12px; margin-bottom: 12px; font-size: 14px; text-align: right; position: relative;
         }
         body.gold-mode .review-card { border-color: rgba(255, 215, 0, 0.2); background: rgba(255, 215, 0, 0.03); }
 
         .review-author { font-weight: bold; color: var(--primary); margin-bottom: 4px; }
         body.gold-mode .review-author { color: #ffd700; }
-        .review-user-info { font-size: 11px; color: #94a3b8; margin-bottom: 6px; }
+        .review-user-info { font-size: 11px; color: #a8a090; margin-bottom: 6px; }
         .review-img { max-width: 100%; height: auto; border-radius: 8px; margin-top: 8px; border: 1px solid rgba(255,255,255,0.1); }
 
         .delete-btn {
-            position: absolute; left: 10px; top: 10px; background: rgba(255,71,87,0.2); color: #ff4757;
+            position: absolute; left: 10px; top: 10px; background: rgba(217,65,37,0.2); color: #d94125;
             border: none; border-radius: 6px; padding: 3px 8px; font-size: 11px; cursor: pointer;
         }
 
         .review-form-box {
-            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);
             padding: 15px; border-radius: 12px; margin-top: 15px;
         }
-        body.gold-mode .review-form-box { border-color: rgba(255, 215, 0, 0.3); }
     </style>
 </head>
 <body>
 
     <canvas id="explosion-canvas"></canvas>
 
+    <!-- חלון קופץ עבור הדפסה על הגב -->
+    <div class="modal-overlay" id="back-print-modal">
+        <div class="modal-card">
+            <div class="modal-title">✨ מפרט הדפסה על הגב (+20 ₪)</div>
+            <p style="font-size: 14px; color: #ccc;">פרט מה ברצונך להדפיס על גב החולצה (שם, מספר, לוגו או כיתוב אישי):</p>
+            
+            <label>✍️ כיתוב / מספר לגב:</label>
+            <textarea id="modal-back-text" rows="3" placeholder="למשל: ASHKENAZI #23"></textarea>
+            
+            <button class="modal-btn-confirm" onclick="confirmBackPrint()">אישור ושמירה 👍</button>
+        </div>
+    </div>
+
     <div class="container" id="main-container">
+        <!-- באנר הקוד הסודי -->
         <div class="top-code-banner">
-            ✨ יש לך קוד סודי? הקלד <span style="text-decoration: underline;">2324</span> לקבלת 10 ₪ הנחה ומצב זהב! ✨
+            ✨ יש לך קוד סודי? הקלד <span style="text-decoration: underline;">232</span> לקבלת 10 ₪ הנחה ומצב זהב! ✨
         </div>
 
+        <!-- גלריית התמונות הראשוניות -->
         <div class="gallery-container">
             <div class="main-img-wrapper">
                 <img id="product-view" class="main-img" src="WhatsApp Image 2026-06-26 at 13.26.44.jpeg" alt="חולצה קדימה">
@@ -265,10 +305,23 @@
             <label>🔢 כמות:</label>
             <input type="number" id="qty" value="1" min="1" oninput="updatePrice()">
 
+            <!-- סוג הדפסה (חלון קופץ להדפסת גב) -->
+            <label>🪡 סוג הדפסה:</label>
+            <div class="option-group">
+                <div class="option-btn active" id="print-front-only" onclick="setPrintType('front')">הדפסה קדמית בלבד (70 ₪)</div>
+                <div class="option-btn" id="print-back-add" onclick="setPrintType('back')">הדפסה על הגב (+20 ₪)</div>
+            </div>
+
+            <div id="back-details-preview" style="display: none; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 13px;">
+                <strong>פירוט הדפסה לגב:</strong> <span id="back-text-display"></span>
+                <span style="color: var(--primary); cursor: pointer; text-decoration: underline; margin-right: 8px;" onclick="openBackModal()">(ערוך)</span>
+            </div>
+
+            <!-- אופן אספקה -->
             <label>🛵 אופן אספקה:</label>
-            <div class="delivery-options">
-                <div class="delivery-option active" id="opt-pickup" onclick="setDelivery('pickup')">איסוף עצמי (חינם)</div>
-                <div class="delivery-option" id="opt-shipping" onclick="setDelivery('shipping')">משלוח (+5 ₪)</div>
+            <div class="option-group">
+                <div class="option-btn active" id="opt-pickup" onclick="setDelivery('pickup')">איסוף עצמי (חינם)</div>
+                <div class="option-btn" id="opt-shipping" onclick="setDelivery('shipping')">משלוח (+5 ₪)</div>
             </div>
 
             <div id="address-container" style="display: none;">
@@ -276,20 +329,21 @@
                 <input type="text" id="cust-address" placeholder="רחוב, מספר בית ועיר">
             </div>
             
-            <label>📝 הערות להדפסה:</label>
-            <textarea id="notes" rows="2" placeholder="למשל: הדפסה על הגב..."></textarea>
+            <label>📝 הערות נוספות להזמנה:</label>
+            <textarea id="notes" rows="2" placeholder="כל בקשה מיוחדת..."></textarea>
             
             <label>🏷️ קוד קופון / הנחה:</label>
-            <input type="text" id="secret-code" placeholder="הכנס קוד 2324 כאן" oninput="updatePrice()">
-            <div id="discount-msg" style="display: none; color: #ffd700; font-size: 14px; font-weight: bold; margin-top: -10px; margin-bottom: 15px; text-align: center;">👑 קוד 2324 הופעל! מצב זהב פעיל ו-10 ₪ הנחה הוחלו!</div>
+            <input type="text" id="secret-code" placeholder="הכנס קוד 232 כאן" oninput="updatePrice()">
+            <div id="discount-msg" style="display: none; color: #ffd700; font-size: 14px; font-weight: bold; margin-top: -10px; margin-bottom: 15px; text-align: center;">👑 קוד 232 הופעל! מצב זהב פעיל ו-10 ₪ הנחה הוחלו!</div>
 
             <div class="price-box">
-                <div style="color: #94a3b8; font-size: 14px;">סה"כ לתשלום:</div>
+                <div style="color: #d0c8b8; font-size: 14px;">סה"כ לתשלום:</div>
                 <div class="price"><span id="total">70</span> ₪</div>
             </div>
             
             <button class="btn-order" onclick="order()">שלח הזמנה בוואטסאפ ✅</button>
 
+            <!-- ביקורות -->
             <div class="reviews-section">
                 <h3 style="margin-top:0; font-size:16px; text-align:center;">💬 ביקורות וחוויות של רוכשים:</h3>
                 
@@ -299,9 +353,9 @@
                     <h4 style="margin: 0 0 10px 0; text-align: center;">➕ הוסף ביקורת שלך</h4>
                     
                     <label>אופן הפרסום:</label>
-                    <div class="delivery-options">
-                        <div class="delivery-option active" id="type-anon" onclick="setAuthType('anon')">🕶️ אנונימי</div>
-                        <div class="delivery-option" id="type-login" onclick="setAuthType('login')">🔑 התחברות</div>
+                    <div class="option-group">
+                        <div class="option-btn active" id="type-anon" onclick="setAuthType('anon')">🕶️ אנונימי</div>
+                        <div class="option-btn" id="type-login" onclick="setAuthType('login')">🔑 התחברות</div>
                     </div>
 
                     <div id="login-fields" style="display: none;">
@@ -329,6 +383,8 @@
 
     <script>
         let deliveryMethod = 'pickup';
+        let printType = 'front'; // 'front' or 'back'
+        let backPrintDetails = '';
         let authType = 'anon';
         let goldTriggered = false;
 
@@ -350,8 +406,38 @@
                 imgElement.src = imgSrc;
                 imgElement.style.opacity = 1;
             }, 100);
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.gallery-nav .nav-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
+        }
+
+        function setPrintType(type) {
+            printType = type;
+            document.getElementById('print-front-only').classList.toggle('active', type === 'front');
+            document.getElementById('print-back-add').classList.toggle('active', type === 'back');
+
+            if (type === 'back') {
+                openBackModal();
+            } else {
+                document.getElementById('back-details-preview').style.display = 'none';
+                updatePrice();
+            }
+        }
+
+        function openBackModal() {
+            document.getElementById('back-print-modal').style.display = 'flex';
+        }
+
+        function confirmBackPrint() {
+            let val = document.getElementById('modal-back-text').value.trim();
+            if (!val) {
+                alert('אנא רשום מה ברצונך להדפיס על הגב');
+                return;
+            }
+            backPrintDetails = val;
+            document.getElementById('back-text-display').innerText = val;
+            document.getElementById('back-details-preview').style.display = 'block';
+            document.getElementById('back-print-modal').style.display = 'none';
+            updatePrice();
         }
 
         function setDelivery(method) {
@@ -371,12 +457,21 @@
 
         function updatePrice() {
             let q = parseInt(document.getElementById('qty').value) || 1;
-            let unitPrice = (q >= 3) ? 60 : 70;
-            let deliveryPrice = (deliveryMethod === 'shipping') ? 5 : 0;
-            let total = (q * unitPrice) + deliveryPrice;
+            
+            // מחיר בסיסי לחולצה (70 ₪ רגיל, 60 ₪ לכמות של 3 ומעלה, 90 ₪ אם יש הדפסת גב)
+            let baseUnitPrice = 70;
+            if (printType === 'back') {
+                baseUnitPrice = 90; // מחיר מיוחד להדפסה על הגב
+            } else if (q >= 3) {
+                baseUnitPrice = 60;
+            }
 
+            let deliveryPrice = (deliveryMethod === 'shipping') ? 5 : 0;
+            let total = (q * baseUnitPrice) + deliveryPrice;
+
+            // בדיקת קוד 232 / 2324
             let code = document.getElementById('secret-code').value.trim();
-            if (code === '2324') {
+            if (code === '232' || code === '2324') {
                 total = Math.max(0, total - 10);
                 
                 if (!goldTriggered) {
@@ -443,10 +538,7 @@
             let text = document.getElementById('rev-text').value.trim();
             let fileInput = document.getElementById('rev-image');
 
-            if (!text) {
-                alert('אנא כתוב תוכן לביקורת.');
-                return;
-            }
+            if (!text) { alert('אנא כתוב תוכן לביקורת.'); return; }
 
             let usernameDisplay = "משתמש אנונימי";
             let subInfoDisplay = "";
@@ -498,7 +590,8 @@
         function renderReviews() {
             let reviews = JSON.parse(localStorage.getItem('ashkenazi_reviews')) || [];
             let listHTML = '';
-            let isGoldAdmin = (document.getElementById('secret-code').value.trim() === '2324');
+            let codeVal = document.getElementById('secret-code').value.trim();
+            let isGoldAdmin = (codeVal === '232' || codeVal === '2324');
 
             reviews.forEach(r => {
                 listHTML += `
@@ -537,8 +630,10 @@
             let notes = document.getElementById('notes').value;
             let total = document.getElementById('total').innerText;
             let deliveryText = (deliveryMethod === 'shipping') ? `משלוח לכתובת: ${document.getElementById('cust-address').value}` : 'איסוף עצמי';
+            
+            let printDetailsText = (printType === 'back') ? `הדפסה על הגב: "${backPrintDetails}"` : 'הדפסה קדמית בלבד';
 
-            let msg = `היי, אני רוצה להזמין חולצה מודפסת:\n\n👤 שם: ${name}\n🎨 צבע: ${color}\n📏 מידה: ${size}\n🔢 כמות: ${qty}\n🚚 אופן אספקה: ${deliveryText}\n📝 הערות: ${notes}\n\n💰 סה"כ לתשלום: ${total} ₪`;
+            let msg = `היי, אני רוצה להזמין חולצה מודפסת:\n\n👤 שם: ${name}\n🎨 צבע: ${color}\n📏 מידה: ${size}\n🔢 כמות: ${qty}\n🪡 סוג הדפסה: ${printDetailsText}\n🚚 אופן אספקה: ${deliveryText}\n📝 הערות: ${notes}\n\n💰 סה"כ לתשלום: ${total} ₪`;
             
             window.open(`https://wa.me/972552956401?text=${encodeURIComponent(msg)}`);
         }
