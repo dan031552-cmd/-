@@ -1,476 +1,547 @@
 <!DOCTYPE html>
-
 <html dir="rtl" lang="he">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>אשכנזי</title>
-
-
-<!-- הגדרת ה-Favicon (האייקון הקטן בטאב) -->
-
-<link rel="icon" type="image/jpeg" href="WhatsApp Image 2026-06-26 at 15.01.25.jpeg">
-
-
-<style>
-
-:root {
-
---primary: #ff4757;
-
---whatsapp: #25d366;
-
---bg-grad: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-
-}
-
-
-
-body {
-
-font-family: 'Segoe UI', system-ui, sans-serif;
-
-background: var(--bg-grad);
-
-color: #f8fafc;
-
-text-align: center;
-
-padding: 20px;
-
-margin: 0;
-
-min-height: 100vh;
-
-display: flex;
-
-justify-content: center;
-
-align-items: center;
-
-}
-
-
-
-.container {
-
-display: flex;
-
-flex-direction: column;
-
-max-width: 500px;
-
-width: 100%;
-
-gap: 20px;
-
-}
-
-
-
-.gallery-container {
-
-background: rgba(255, 255, 255, 0.02);
-
-border: 1px solid rgba(255, 255, 255, 0.08);
-
-border-radius: 24px;
-
-padding: 10px;
-
-text-align: center;
-
-box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-
-overflow: hidden;
-
-}
-
-
-
-.main-img-wrapper {
-
-width: 100%;
-
-padding-top: 133%;
-
-position: relative;
-
-background: #111;
-
-border-radius: 16px;
-
-}
-
-
-
-.main-img {
-
-position: absolute;
-
-top: 0;
-
-left: 0;
-
-width: 100%;
-
-height: 100%;
-
-object-fit: contain;
-
-transition: opacity 0.2s ease;
-
-}
-
-
-
-.gallery-nav {
-
-display: flex;
-
-justify-content: center;
-
-gap: 10px;
-
-margin-top: 15px;
-
-padding-bottom: 5px;
-
-}
-
-
-
-.nav-btn {
-
-background: rgba(255, 255, 255, 0.05);
-
-border: 1px solid rgba(255, 255, 255, 0.1);
-
-color: #cbd5e1;
-
-padding: 10px 20px;
-
-border-radius: 30px;
-
-cursor: pointer;
-
-font-weight: 600;
-
-font-size: 14px;
-
-transition: all 0.2s ease;
-
-}
-
-
-
-.nav-btn.active, .nav-btn:hover {
-
-background: var(--primary);
-
-border-color: var(--primary);
-
-color: white;
-
-box-shadow: 0 0 15px rgba(255, 71, 87, 0.5);
-
-}
-
-
-
-.card {
-
-background: rgba(255, 255, 255, 0.03);
-
-backdrop-filter: blur(16px);
-
--webkit-backdrop-filter: blur(16px);
-
-border: 1px solid rgba(255, 255, 255, 0.08);
-
-padding: 25px;
-
-border-radius: 24px;
-
-box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-
-text-align: right;
-
-}
-
-
-
-.promo {
-
-background: linear-gradient(90deg, #ff4757, #ff6b81); color: white;
-
-padding: 12px;
-
-border-radius: 12px;
-
-margin-bottom: 20px;
-
-font-weight: bold;
-
-font-size: 15px;
-
-text-align: center;
-
-box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
-
-}
-
-
-
-h1 {
-
-margin: 0 0 20px 0;
-
-font-size: 32px;
-
-font-weight: 800;
-
-text-align: center;
-
-background: linear-gradient(45deg, #fff, #cbd5e1);
-
--webkit-background-clip: text;
-
--webkit-text-fill-color: transparent;
-
-}
-
-
-label { display: block; font-weight: 600; margin-bottom: 6px; color: #94a3b8; font-size: 14px; }
-
-
-select, input, textarea {
-
-width: 100%; padding: 12px; margin-bottom: 15px;
-
-background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
-
-border-radius: 10px; box-sizing: border-box; font-size: 16px; color: white;
-
-font-family: inherit; transition: all 0.2s ease;
-
-}
-
-
-
-select:focus, input:focus, textarea:focus {
-
-outline: none; border-color: var(--primary); background: rgba(255, 255, 255, 0.08);
-
-}
-
-
-
-select option { background: #1e293b; color: white; }
-
-
-.price-box {
-
-background: rgba(255, 255, 255, 0.02); padding: 15px; border-radius: 12px;
-
-margin: 20px 0; border: 1px solid rgba(255, 255, 255, 0.05); text-align: center;
-
-}
-
-
-
-.price { font-size: 34px; font-weight: 800; color: #fff; margin-top: 3px; }
-
-
-.btn-order {
-
-background: linear-gradient(135deg, var(--whatsapp), #1ed760);
-
-color: white; border: none; width: 100%; padding: 16px; font-size: 18px;
-
-border-radius: 12px; cursor: pointer; font-weight: bold; transition: all 0.3s ease;
-
-margin-bottom: 5px; box-shadow: 0 5px 15px rgba(37, 211, 102, 0.2);
-
-}
-
-
-
-.btn-order:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4); }
-
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אשכנזי</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="WhatsApp Image 2026-06-26 at 15.01.25.jpeg">
+    
+    <style>
+        :root {
+            --primary: #ff4757;
+            --whatsapp: #25d366;
+            --bg-grad: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --gold-glow: 0 0 25px rgba(255, 215, 0, 0.5);
+        }
+
+        body { 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+            background: var(--bg-grad); 
+            color: #f8fafc;
+            text-align: center; 
+            padding: 20px; 
+            margin: 0; 
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background 0.5s ease;
+            overflow-x: hidden;
+        }
+
+        body.gold-mode {
+            background: linear-gradient(135deg, #0f0c03 0%, #1a1500 50%, #2a2100 100%);
+        }
+
+        @keyframes goldShockwave {
+            0% { transform: scale(1) rotate(0deg); }
+            20% { transform: scale(1.03) rotate(-1deg); }
+            40% { transform: scale(0.98) rotate(1deg); }
+            60% { transform: scale(1.02) rotate(-0.5deg); }
+            80% { transform: scale(0.99) rotate(0.5deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        .shake-effect { animation: goldShockwave 0.6s ease-in-out; }
+
+        #explosion-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .container {
+            display: flex; flex-direction: column;
+            max-width: 500px; width: 100%; gap: 20px;
+        }
+
+        .gallery-container {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--card-border);
+            border-radius: 24px; padding: 10px;
+            text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            overflow: hidden; transition: all 0.5s ease;
+        }
+
+        body.gold-mode .gallery-container {
+            border-color: #ffd700; box-shadow: var(--gold-glow);
+        }
+
+        .main-img-wrapper {
+            width: 100%; padding-top: 133%;
+            position: relative; background: #111; border-radius: 16px;
+        }
+
+        .main-img {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%; object-fit: contain; transition: opacity 0.2s ease;
+        }
+
+        .gallery-nav { display: flex; justify-content: center; gap: 10px; margin-top: 15px; padding-bottom: 5px; }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1); color: #cbd5e1;
+            padding: 10px 20px; border-radius: 30px; cursor: pointer;
+            font-weight: 600; font-size: 14px; transition: all 0.2s ease;
+        }
+
+        .nav-btn.active, .nav-btn:hover {
+            background: var(--primary); border-color: var(--primary); color: white;
+            box-shadow: 0 0 15px rgba(255, 71, 87, 0.5);
+        }
+
+        body.gold-mode .nav-btn.active, body.gold-mode .nav-btn:hover {
+            background: linear-gradient(45deg, #ffd700, #ffa500);
+            border-color: #ffd700; color: #000; box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+        }
+
+        .top-code-banner {
+            background: rgba(255, 255, 255, 0.07);
+            border: 2px dashed #ffffff; color: #ffffff;
+            padding: 12px; border-radius: 16px; font-size: 18px; font-weight: 800;
+            letter-spacing: 0.5px; box-shadow: 0 0 20px rgba(255,255,255,0.1); transition: all 0.5s ease;
+        }
+
+        body.gold-mode .top-code-banner {
+            border-color: #ffd700; color: #ffd700; background: rgba(255, 215, 0, 0.15); box-shadow: var(--gold-glow);
+        }
+
+        .card { 
+            background: rgba(255, 255, 255, 0.03); 
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border); padding: 25px; border-radius: 24px; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4); text-align: right; transition: all 0.5s ease;
+        }
+
+        body.gold-mode .card {
+            border-color: #ffd700; box-shadow: var(--gold-glow); background: rgba(20, 16, 0, 0.7);
+        }
+
+        .promo { 
+            background: linear-gradient(90deg, #ff4757, #ff6b81); color: white; 
+            padding: 12px; border-radius: 12px; margin-bottom: 20px; 
+            font-weight: bold; font-size: 15px; text-align: center;
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3); transition: all 0.5s ease;
+        }
+
+        body.gold-mode .promo {
+            background: linear-gradient(90deg, #ffd700, #ff8c00);
+            color: #000; box-shadow: 0 4px 20px rgba(255, 215, 0, 0.5);
+        }
+
+        h1 { 
+            margin: 0 0 20px 0; font-size: 32px; font-weight: 800; text-align: center;
+            background: linear-gradient(45deg, #fff, #cbd5e1);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        body.gold-mode h1 {
+            background: linear-gradient(45deg, #fff7ad, #ffd700, #ff8c00);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        
+        label { display: block; font-weight: 600; margin-bottom: 6px; color: #94a3b8; font-size: 14px; }
+        body.gold-mode label { color: #ffe899; }
+        
+        select, input, textarea { 
+            width: 100%; padding: 12px; margin-bottom: 15px; 
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); 
+            border-radius: 10px; box-sizing: border-box; font-size: 16px; color: white;
+            font-family: inherit; transition: all 0.2s ease;
+        }
+
+        body.gold-mode select, body.gold-mode input, body.gold-mode textarea {
+            border-color: rgba(255, 215, 0, 0.3); background: rgba(255, 215, 0, 0.05);
+        }
+
+        select:focus, input:focus, textarea:focus { outline: none; border-color: var(--primary); background: rgba(255, 255, 255, 0.08); }
+        body.gold-mode select:focus, body.gold-mode input:focus, body.gold-mode textarea:focus { border-color: #ffd700; box-shadow: 0 0 10px rgba(255, 215, 0, 0.4); }
+        select option { background: #1e293b; color: white; }
+        
+        .price-box { 
+            background: rgba(255, 255, 255, 0.02); padding: 15px; border-radius: 12px; 
+            margin: 20px 0; border: 1px solid rgba(255, 255, 255, 0.05); text-align: center;
+        }
+
+        body.gold-mode .price-box { border-color: #ffd700; background: rgba(255, 215, 0, 0.08); }
+        .price { font-size: 34px; font-weight: 800; color: #fff; margin-top: 3px; }
+        body.gold-mode .price { color: #ffd700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+        
+        .btn-order { 
+            background: linear-gradient(135deg, var(--whatsapp), #1ed760); 
+            color: white; border: none; width: 100%; padding: 16px; font-size: 18px; 
+            border-radius: 12px; cursor: pointer; font-weight: bold; transition: all 0.3s ease; 
+            margin-bottom: 5px; box-shadow: 0 5px 15px rgba(37, 211, 102, 0.2);
+        }
+        .btn-order:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4); }
+
+        .delivery-options { display: flex; gap: 10px; margin-bottom: 15px; }
+        .delivery-option {
+            flex: 1; padding: 12px; border-radius: 10px;
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            text-align: center; cursor: pointer; font-size: 14px; transition: all 0.2s ease;
+        }
+        .delivery-option.active { border-color: var(--primary); background: rgba(255,71,87,0.15); font-weight: bold; }
+        body.gold-mode .delivery-option.active { border-color: #ffd700; background: rgba(255, 215, 0, 0.2); color: #ffd700; }
+        
+        .reviews-section { margin-top: 25px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 20px; }
+        body.gold-mode .reviews-section { border-top-color: rgba(255, 215, 0, 0.3); }
+
+        .review-card {
+            background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px; padding: 12px; margin-bottom: 12px; font-size: 14px; text-align: right; position: relative;
+        }
+        body.gold-mode .review-card { border-color: rgba(255, 215, 0, 0.2); background: rgba(255, 215, 0, 0.03); }
+
+        .review-author { font-weight: bold; color: var(--primary); margin-bottom: 4px; }
+        body.gold-mode .review-author { color: #ffd700; }
+        .review-user-info { font-size: 11px; color: #94a3b8; margin-bottom: 6px; }
+        .review-img { max-width: 100%; height: auto; border-radius: 8px; margin-top: 8px; border: 1px solid rgba(255,255,255,0.1); }
+
+        .delete-btn {
+            position: absolute; left: 10px; top: 10px; background: rgba(255,71,87,0.2); color: #ff4757;
+            border: none; border-radius: 6px; padding: 3px 8px; font-size: 11px; cursor: pointer;
+        }
+
+        .review-form-box {
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 15px; border-radius: 12px; margin-top: 15px;
+        }
+        body.gold-mode .review-form-box { border-color: rgba(255, 215, 0, 0.3); }
+    </style>
 </head>
-
 <body>
 
-
-
-<div class="container">
-
-<!-- מציג התמונות של החולצות -->
-
-<div class="gallery-container">
-
-<div class="main-img-wrapper">
-
-<img id="product-view" class="main-img" src="WhatsApp Image 2026-06-26 at 13.26.44.jpeg" alt="חולצה קדימה">
-
-</div>
-
-<div class="gallery-nav">
-
-<button class="nav-btn active" onclick="changeView('WhatsApp Image 2026-06-26 at 13.26.44.jpeg', this)">קדימה 👕</button>
-
-<!-- שימוש בקובץ הגב החדש והתקין -->
-
-<button class="nav-btn" onclick="changeView('WhatsApp Image 2026-06-26 at 13.26.44 (1).jpeg', this)">אחורה ↩️</button>
-
-</div>
-
-</div>
-
-
-
-<div class="card">
-
-<div class="promo">🔥 מבצע: 3 חולצות ומעלה ב-60 ₪ בלבד!</div>
-
-
-<h1>אשכנזי</h1>
-
-
-<label>🎨 צבע חולצה:</label>
-
-<select id="color">
-
-<option>לבן</option>
-
-</select>
-
-
-<label>📏 מידה / מספר:</label>
-
-<select id="size">
-
-<!-- מידות מספרים מ-1 עד 47 -->
-
-<script>
-
-for (let i = 1; i <= 47; i++) {
-
-document.write(`<option value="${i}">${i}</option>`);
-
-}
-
-</script>
-
-<!-- מידות אותיות רגילות -->
-
-<option value="S">S</option>
-
-<option value="M" selected>M</option>
-
-<option value="L">L</option>
-
-<option value="XL">XL</option>
-
-<option value="XXL">XXL</option>
-
-</select>
-
-
-<label>🔢 כמות:</label>
-
-<input type="number" id="qty" value="1" min="1" oninput="update()">
-
-
-<label>📝 הערות להדפסה:</label>
-
-<textarea id="notes" rows="2" placeholder="למשל: הדפסה על הגב..."></textarea>
-
-
-<div class="price-box">
-
-<div style="color: #94a3b8; font-size: 14px;">סה"כ לתשלום:</div>
-
-<div class="price"><span id="total">70</span> ₪</div>
-
-</div>
-
-
-<button class="btn-order" onclick="order()">שלח הזמנה בוואטסאפ ✅</button>
-
-</div>
-
-</div>
-
-
-
-<script>
-
-function changeView(imgSrc, btn) {
-
-const imgElement = document.getElementById('product-view');
-
-imgElement.style.opacity = 0;
-
-
-setTimeout(() => {
-
-imgElement.src = imgSrc;
-
-imgElement.style.opacity = 1;
-
-}, 100);
-
-
-
-document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-
-btn.classList.add('active');
-
-}
-
-
-
-function update() {
-
-let q = document.getElementById('qty').value;
-
-let p = (q >= 3) ? 60 : 70;
-
-document.getElementById('total').innerText = q * p;
-
-}
-
-
-
-function order() {
-
-let color = document.getElementById('color').value;
-
-let size = document.getElementById('size').value;
-
-let qty = document.getElementById('qty').value;
-
-let notes = document.getElementById('notes').value;
-
-let total = document.getElementById('total').innerText;
-
-let msg = `היי, אני רוצה להזמין חולצה מודפסת:\nצבע: ${color}\nמידה: ${size}\nכמות: ${qty}\nהערות: ${notes}\nסה"כ לתשלום: ${total} ₪`;
-
-window.open(`https://wa.me/972552956401?text=${encodeURIComponent(msg)}`);
-
-}
-
-</script>
-
+    <canvas id="explosion-canvas"></canvas>
+
+    <div class="container" id="main-container">
+        <div class="top-code-banner">
+            ✨ יש לך קוד סודי? הקלד <span style="text-decoration: underline;">2324</span> לקבלת 10 ₪ הנחה ומצב זהב! ✨
+        </div>
+
+        <div class="gallery-container">
+            <div class="main-img-wrapper">
+                <img id="product-view" class="main-img" src="WhatsApp Image 2026-06-26 at 13.26.44.jpeg" alt="חולצה קדימה">
+            </div>
+            <div class="gallery-nav">
+                <button class="nav-btn active" onclick="changeView('WhatsApp Image 2026-06-26 at 13.26.44.jpeg', this)">קדימה 👕</button>
+                <button class="nav-btn" onclick="changeView('WhatsApp Image 2026-06-26 at 13.26.44 (1).jpeg', this)">אחורה ↩️</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="promo" id="promo-banner">🔥 מבצע: 3 חולצות ומעלה ב-60 ₪ בלבד!</div>
+            
+            <h1>אשכנזי</h1>
+            
+            <label>👤 שם מלא (חובה):</label>
+            <input type="text" id="cust-name" placeholder="הכנס את שמך">
+
+            <label>🎨 צבע חולצה:</label>
+            <select id="color">
+                <option>לבן</option>
+            </select>
+            
+            <label>📏 מידה / מספר:</label>
+            <select id="size">
+                <script>
+                    for (let i = 1; i <= 47; i++) {
+                        document.write(`<option value="${i}">${i}</option>`);
+                    }
+                </script>
+                <option value="S">S</option>
+                <option value="M" selected>M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+                <option value="XXL">XXL</option>
+            </select>
+            
+            <label>🔢 כמות:</label>
+            <input type="number" id="qty" value="1" min="1" oninput="updatePrice()">
+
+            <label>🛵 אופן אספקה:</label>
+            <div class="delivery-options">
+                <div class="delivery-option active" id="opt-pickup" onclick="setDelivery('pickup')">איסוף עצמי (חינם)</div>
+                <div class="delivery-option" id="opt-shipping" onclick="setDelivery('shipping')">משלוח (+5 ₪)</div>
+            </div>
+
+            <div id="address-container" style="display: none;">
+                <label>🏠 כתובת למשלוח (חובה):</label>
+                <input type="text" id="cust-address" placeholder="רחוב, מספר בית ועיר">
+            </div>
+            
+            <label>📝 הערות להדפסה:</label>
+            <textarea id="notes" rows="2" placeholder="למשל: הדפסה על הגב..."></textarea>
+            
+            <label>🏷️ קוד קופון / הנחה:</label>
+            <input type="text" id="secret-code" placeholder="הכנס קוד 2324 כאן" oninput="updatePrice()">
+            <div id="discount-msg" style="display: none; color: #ffd700; font-size: 14px; font-weight: bold; margin-top: -10px; margin-bottom: 15px; text-align: center;">👑 קוד 2324 הופעל! מצב זהב פעיל ו-10 ₪ הנחה הוחלו!</div>
+
+            <div class="price-box">
+                <div style="color: #94a3b8; font-size: 14px;">סה"כ לתשלום:</div>
+                <div class="price"><span id="total">70</span> ₪</div>
+            </div>
+            
+            <button class="btn-order" onclick="order()">שלח הזמנה בוואטסאפ ✅</button>
+
+            <div class="reviews-section">
+                <h3 style="margin-top:0; font-size:16px; text-align:center;">💬 ביקורות וחוויות של רוכשים:</h3>
+                
+                <div id="reviews-list"></div>
+
+                <div class="review-form-box">
+                    <h4 style="margin: 0 0 10px 0; text-align: center;">➕ הוסף ביקורת שלך</h4>
+                    
+                    <label>אופן הפרסום:</label>
+                    <div class="delivery-options">
+                        <div class="delivery-option active" id="type-anon" onclick="setAuthType('anon')">🕶️ אנונימי</div>
+                        <div class="delivery-option" id="type-login" onclick="setAuthType('login')">🔑 התחברות</div>
+                    </div>
+
+                    <div id="login-fields" style="display: none;">
+                        <label>👤 שם משתמש:</label>
+                        <input type="text" id="rev-username" placeholder="שם משתמש">
+
+                        <label>📧 אימייל:</label>
+                        <input type="email" id="rev-email" placeholder="email@example.com">
+
+                        <label>🔒 סיסמה:</label>
+                        <input type="password" id="rev-pass" placeholder="******">
+                    </div>
+
+                    <label>✍️ תוכן הביקורת:</label>
+                    <textarea id="rev-text" rows="2" placeholder="איך החולצה יושבת עליך?"></textarea>
+
+                    <label>📸 העלה תמונה שלך עם החולצה (אופציונלי):</label>
+                    <input type="file" id="rev-image" accept="image/*" style="padding: 6px;">
+
+                    <button class="btn-order" id="btn-add-review" style="background: var(--primary); font-size: 15px; padding: 10px; margin-top: 5px;" onclick="submitReview()">פרסם ביקורת 🚀</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let deliveryMethod = 'pickup';
+        let authType = 'anon';
+        let goldTriggered = false;
+
+        const defaultReviews = [
+            { id: '1', author: '⭐ דניאל מ.', userTag: '@daniel_m', text: 'חולצה איכותית ברמות! ההדפסה נראית מטורף ולא יורדת בכביסה.', img: null }
+        ];
+
+        window.onload = function() {
+            if (!localStorage.getItem('ashkenazi_reviews')) {
+                localStorage.setItem('ashkenazi_reviews', JSON.stringify(defaultReviews));
+            }
+            renderReviews();
+        };
+
+        function changeView(imgSrc, btn) {
+            const imgElement = document.getElementById('product-view');
+            imgElement.style.opacity = 0;
+            setTimeout(() => {
+                imgElement.src = imgSrc;
+                imgElement.style.opacity = 1;
+            }, 100);
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        function setDelivery(method) {
+            deliveryMethod = method;
+            document.getElementById('opt-pickup').classList.toggle('active', method === 'pickup');
+            document.getElementById('opt-shipping').classList.toggle('active', method === 'shipping');
+            document.getElementById('address-container').style.display = (method === 'shipping') ? 'block' : 'none';
+            updatePrice();
+        }
+
+        function setAuthType(type) {
+            authType = type;
+            document.getElementById('type-anon').classList.toggle('active', type === 'anon');
+            document.getElementById('type-login').classList.toggle('active', type === 'login');
+            document.getElementById('login-fields').style.display = (type === 'login') ? 'block' : 'none';
+        }
+
+        function updatePrice() {
+            let q = parseInt(document.getElementById('qty').value) || 1;
+            let unitPrice = (q >= 3) ? 60 : 70;
+            let deliveryPrice = (deliveryMethod === 'shipping') ? 5 : 0;
+            let total = (q * unitPrice) + deliveryPrice;
+
+            let code = document.getElementById('secret-code').value.trim();
+            if (code === '2324') {
+                total = Math.max(0, total - 10);
+                
+                if (!goldTriggered) {
+                    triggerGoldExplosion();
+                    goldTriggered = true;
+                }
+
+                document.body.classList.add('gold-mode');
+                document.getElementById('discount-msg').style.display = 'block';
+                document.getElementById('promo-banner').innerHTML = '👑 גרסת זהב פעילה! 10 ₪ הנחה הוחלו!';
+                document.getElementById('btn-add-review').style.background = 'linear-gradient(45deg, #ffd700, #ff8c00)';
+                document.getElementById('btn-add-review').style.color = '#000';
+            } else {
+                goldTriggered = false;
+                document.body.classList.remove('gold-mode');
+                document.getElementById('discount-msg').style.display = 'none';
+                document.getElementById('promo-banner').innerHTML = '🔥 מבצע: 3 חולצות ומעלה ב-60 ₪ בלבד!';
+                document.getElementById('btn-add-review').style.background = 'var(--primary)';
+                document.getElementById('btn-add-review').style.color = '#fff';
+            }
+
+            document.getElementById('total').innerText = total;
+            renderReviews();
+        }
+
+        function triggerGoldExplosion() {
+            const container = document.getElementById('main-container');
+            container.classList.add('shake-effect');
+            setTimeout(() => container.classList.remove('shake-effect'), 600);
+
+            const canvas = document.getElementById('explosion-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            let particles = [];
+            for (let i = 0; i < 120; i++) {
+                particles.push({
+                    x: canvas.width / 2, y: canvas.height / 2,
+                    vx: (Math.random() - 0.5) * 18, vy: (Math.random() - 0.5) * 18,
+                    size: Math.random() * 8 + 3,
+                    color: `hsl(${Math.random() * 20 + 45}, 100%, 50%)`,
+                    life: 1
+                });
+            }
+
+            function animateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                let alive = false;
+                particles.forEach(p => {
+                    if (p.life > 0) {
+                        alive = true; p.x += p.vx; p.y += p.vy; p.vy += 0.2; p.life -= 0.025;
+                        ctx.globalAlpha = Math.max(0, p.life); ctx.fillStyle = p.color;
+                        ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
+                    }
+                });
+                if (alive) requestAnimationFrame(animateParticles);
+                else ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+            animateParticles();
+        }
+
+        function submitReview() {
+            let text = document.getElementById('rev-text').value.trim();
+            let fileInput = document.getElementById('rev-image');
+
+            if (!text) {
+                alert('אנא כתוב תוכן לביקורת.');
+                return;
+            }
+
+            let usernameDisplay = "משתמש אנונימי";
+            let subInfoDisplay = "";
+
+            if (authType === 'login') {
+                let uName = document.getElementById('rev-username').value.trim();
+                let uEmail = document.getElementById('rev-email').value.trim();
+                let uPass = document.getElementById('rev-pass').value.trim();
+                
+                if (!uName || !uPass) {
+                    alert('אנא הזן שם משתמש וסיסמה להתחברות.');
+                    return;
+                }
+                usernameDisplay = uName;
+                subInfoDisplay = uEmail ? `@${uEmail.split('@')[0]}` : `@${uName}`;
+            }
+
+            const saveReview = (imgBase64) => {
+                let reviews = JSON.parse(localStorage.getItem('ashkenazi_reviews')) || [];
+                let newReview = {
+                    id: Date.now().toString(),
+                    author: usernameDisplay,
+                    userTag: subInfoDisplay,
+                    text: text,
+                    img: imgBase64
+                };
+                reviews.push(newReview);
+                localStorage.setItem('ashkenazi_reviews', JSON.stringify(reviews));
+
+                document.getElementById('rev-text').value = '';
+                document.getElementById('rev-username').value = '';
+                document.getElementById('rev-email').value = '';
+                document.getElementById('rev-pass').value = '';
+                document.getElementById('rev-image').value = '';
+
+                renderReviews();
+                alert('הביקורת פורסמה בהצלחה!');
+            };
+
+            if (fileInput.files && fileInput.files[0]) {
+                let reader = new FileReader();
+                reader.onload = function(e) { saveReview(e.target.result); };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                saveReview(null);
+            }
+        }
+
+        function renderReviews() {
+            let reviews = JSON.parse(localStorage.getItem('ashkenazi_reviews')) || [];
+            let listHTML = '';
+            let isGoldAdmin = (document.getElementById('secret-code').value.trim() === '2324');
+
+            reviews.forEach(r => {
+                listHTML += `
+                    <div class="review-card">
+                        ${isGoldAdmin ? `<button class="delete-btn" onclick="deleteReview('${r.id}')">מחק 🗑️</button>` : ''}
+                        <div class="review-author">⭐ ${r.author}</div>
+                        ${r.userTag ? `<div class="review-user-info">${r.userTag}</div>` : ''}
+                        <div>"${r.text}"</div>
+                        ${r.img ? `<img src="${r.img}" class="review-img">` : ''}
+                    </div>
+                `;
+            });
+
+            document.getElementById('reviews-list').innerHTML = listHTML;
+        }
+
+        function deleteReview(id) {
+            let reviews = JSON.parse(localStorage.getItem('ashkenazi_reviews')) || [];
+            reviews = reviews.filter(r => r.id !== id);
+            localStorage.setItem('ashkenazi_reviews', JSON.stringify(reviews));
+            renderReviews();
+        }
+
+        function order() {
+            let name = document.getElementById('cust-name').value.trim();
+            if (!name) { alert('אנא הזן את שמך המלא לפני שליחת ההזמנה.'); return; }
+
+            if (deliveryMethod === 'shipping') {
+                let address = document.getElementById('cust-address').value.trim();
+                if (!address) { alert('אנא הזן כתובת למשלוח.'); return; }
+            }
+
+            let color = document.getElementById('color').value;
+            let size = document.getElementById('size').value;
+            let qty = document.getElementById('qty').value;
+            let notes = document.getElementById('notes').value;
+            let total = document.getElementById('total').innerText;
+            let deliveryText = (deliveryMethod === 'shipping') ? `משלוח לכתובת: ${document.getElementById('cust-address').value}` : 'איסוף עצמי';
+
+            let msg = `היי, אני רוצה להזמין חולצה מודפסת:\n\n👤 שם: ${name}\n🎨 צבע: ${color}\n📏 מידה: ${size}\n🔢 כמות: ${qty}\n🚚 אופן אספקה: ${deliveryText}\n📝 הערות: ${notes}\n\n💰 סה"כ לתשלום: ${total} ₪`;
+            
+            window.open(`https://wa.me/972552956401?text=${encodeURIComponent(msg)}`);
+        }
+    </script>
 </body>
-
-</html> 
-
+</html>
