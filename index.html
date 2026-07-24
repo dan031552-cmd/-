@@ -30,10 +30,9 @@
             justify-content: center;
             align-items: center;
             overflow-x: hidden;
-            transition: all 0.5s ease;
+            transition: background 0.8s ease, color 0.8s ease;
         }
 
-        /* מצב זהב */
         body.gold-mode {
             --primary: #ffd700;
             --card-border: rgba(255, 215, 0, 0.6);
@@ -45,7 +44,6 @@
             max-width: 500px; width: 100%; gap: 20px;
         }
 
-        /* ביקורות בראש הדף */
         .reviews-section-top { 
             background: rgba(25, 20, 18, 0.55); 
             backdrop-filter: blur(16px);
@@ -73,17 +71,13 @@
             padding: 15px; border-radius: 12px; margin-top: 15px; display: none;
         }
 
-        .lock-notice {
-            font-size: 13px; color: #aaa; text-align: center; margin-top: 8px;
-            background: rgba(255,255,255,0.03); padding: 8px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);
-        }
-
-        /* קוד קופון - מתחת לביקורות */
+        /* תיבת הקופון ואפקטים */
         .coupon-top-box {
             background: rgba(255, 255, 255, 0.05);
             border: 1px dashed var(--card-border);
             border-radius: 16px; padding: 15px;
             display: flex; gap: 8px; align-items: center; justify-content: center;
+            transition: all 0.4s ease;
         }
 
         .coupon-input {
@@ -94,9 +88,25 @@
         .btn-apply-coupon {
             background: var(--primary); color: white; border: none;
             padding: 10px 15px; border-radius: 8px; font-weight: bold; cursor: pointer;
+            transition: transform 0.2s ease;
         }
 
-        /* גלריה */
+        .btn-apply-coupon:active { transform: scale(0.95); }
+
+        /* אנימציות האפקט */
+        @keyframes couponEffect {
+            0% { transform: scale(1) rotate(0deg); box-shadow: 0 0 0px var(--gold); }
+            20% { transform: scale(1.08) rotate(-2deg); box-shadow: 0 0 25px var(--gold); }
+            40% { transform: scale(1.08) rotate(2deg); box-shadow: 0 0 35px var(--gold); }
+            60% { transform: scale(1.05) rotate(-1deg); box-shadow: 0 0 25px var(--gold); }
+            100% { transform: scale(1) rotate(0deg); box-shadow: 0 0 10px var(--gold); }
+        }
+
+        .coupon-activated-effect {
+            animation: couponEffect 0.6s ease-in-out forwards;
+            border-color: var(--gold) !important;
+        }
+
         .gallery-container {
             background: rgba(20, 15, 12, 0.5);
             border: 1px solid var(--card-border);
@@ -122,7 +132,6 @@
 
         .nav-btn.active { background: var(--primary); border-color: var(--primary); color: white; }
 
-        /* כרטיסיית הזמנה */
         .card { 
             background: rgba(25, 20, 18, 0.55); backdrop-filter: blur(16px);
             border: 1px solid var(--card-border); padding: 25px; border-radius: 24px; 
@@ -158,6 +167,7 @@
         .price-box { 
             background: rgba(255, 255, 255, 0.03); padding: 15px; border-radius: 12px; 
             margin: 20px 0; border: 1px solid rgba(255, 255, 255, 0.08); text-align: center;
+            transition: all 0.3s ease;
         }
 
         .price { font-size: 36px; font-weight: 800; color: #fff; margin-top: 3px; }
@@ -168,7 +178,6 @@
             border-radius: 12px; cursor: pointer; font-weight: bold;
         }
 
-        /* Modal - חלון קופץ להדפסה על הגב */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(5px);
@@ -187,7 +196,6 @@
 </head>
 <body>
 
-    <!-- חלון קופץ להדפסת גב -->
     <div class="modal-overlay" id="back-print-modal">
         <div class="modal-card">
             <div class="modal-title">✨ מפרט הדפסה על הגב (+20 ₪)</div>
@@ -202,17 +210,13 @@
 
     <div class="container">
 
-        <!-- 1. ביקורות בראש הדף -->
+        <!-- 1. אזור ביקורות -->
         <div class="reviews-section-top">
             <h3 style="margin-top:0; font-size:18px; text-align:center; color: var(--cream-white);">💬 חוויות וביקורות של רוכשים</h3>
             
             <div id="reviews-list"></div>
 
-            <div id="review-lock-message" class="lock-notice">
-                🔒 כתיבת ביקורת מתאפשרת רק לאחר לחיצה על כפתור ההזמנה בוואטסאפ למטה.
-            </div>
-
-            <button class="add-review-btn" id="btn-show-review-form" style="display: none;" onclick="toggleReviewForm()">✍️ הוסף את הביקורת שלך על המוצר</button>
+            <button class="add-review-btn" onclick="toggleReviewForm()">✍️ הוסף את הביקורת שלך על המוצר</button>
 
             <div class="review-form-box" id="review-form">
                 <h4 style="margin: 0 0 10px 0; text-align: center; font-size: 15px;">➕ הוסף ביקורת מוצר</h4>
@@ -230,14 +234,14 @@
             </div>
         </div>
 
-        <!-- 2. קוד קופון - קצת מתחת לביקורות -->
-        <div class="coupon-top-box">
+        <!-- 2. קוד קופון 2324 -->
+        <div class="coupon-top-box" id="coupon-box">
             <label style="margin-bottom:0;">🎁 קוד הנחה:</label>
             <input type="text" id="coupon-code-input" class="coupon-input" placeholder="קוד">
             <button class="btn-apply-coupon" onclick="applyCoupon()">הפעל</button>
         </div>
 
-        <!-- 3. גלריית תמונות -->
+        <!-- 3. גלריה -->
         <div class="gallery-container">
             <div class="main-img-wrapper">
                 <img id="product-view" class="main-img" src="WhatsApp Image 2026-06-26 at 13.26.44.jpeg" alt="חולצה קדימה">
@@ -263,14 +267,11 @@
             </select>
             
             <label>📏 מידה / מספר:</label>
-            <select id="size">
-                <!-- יטען ב-JS -->
-            </select>
+            <select id="size"></select>
             
             <label>🔢 כמות:</label>
             <input type="number" id="qty" value="1" min="1" oninput="updatePrice()">
 
-            <!-- סוג הדפסה -->
             <label>🪡 סוג הדפסה:</label>
             <div class="option-group">
                 <div class="option-btn active" id="print-front-only" onclick="setPrintType('front')">הדפסה קדמית בלבד (70 ₪)</div>
@@ -282,7 +283,6 @@
                 <span style="color: var(--primary); cursor: pointer; text-decoration: underline; margin-right: 8px;" onclick="openBackModal()">(ערוך)</span>
             </div>
 
-            <!-- אופן אספקה -->
             <label>🛵 אופן אספקה:</label>
             <div class="option-group">
                 <div class="option-btn active" id="opt-pickup" onclick="setDelivery('pickup')">איסוף עצמי (חינם)</div>
@@ -300,7 +300,7 @@
             <div class="price-box">
                 <div style="color: #d0c8b8; font-size: 14px;">סה"כ לתשלום:</div>
                 <div class="price"><span id="total">70</span> ₪</div>
-                <div id="discount-note" style="color: var(--gold); font-size: 13px; display: none; margin-top: 5px;">✨ הופעלה הנחת קוד 2324 (-10 ₪)</div>
+                <div id="discount-note" style="color: var(--gold); font-size: 13px; display: none; margin-top: 5px; font-weight: bold;">✨ קוד 2324 הופעל! ההנחה חושבה (-10 ₪)</div>
             </div>
             
             <button class="btn-order" onclick="order()">שלח הזמנה בוואטסאפ ✅</button>
@@ -314,9 +314,9 @@
         let discount = 0;
 
         document.addEventListener("DOMContentLoaded", function() {
+            localStorage.clear();
             populateSizes();
             renderReviews();
-            checkPurchaseStatus();
             updatePrice();
         });
 
@@ -325,35 +325,33 @@
             sizeSelect.innerHTML = '';
             for (let i = 1; i <= 47; i++) {
                 let opt = document.createElement('option');
-                opt.value = i;
-                opt.innerText = i;
+                opt.value = i; opt.innerText = i;
                 sizeSelect.appendChild(opt);
             }
             ['S', 'M', 'L', 'XL', 'XXL'].forEach(s => {
                 let opt = document.createElement('option');
-                opt.value = s;
-                opt.innerText = s;
+                opt.value = s; opt.innerText = s;
                 if(s === 'M') opt.selected = true;
                 sizeSelect.appendChild(opt);
             });
         }
 
-        function checkPurchaseStatus() {
-            if (localStorage.getItem('ashkenazi_purchased') === 'true') {
-                document.getElementById('review-lock-message').style.display = 'none';
-                document.getElementById('btn-show-review-form').style.display = 'block';
-            }
-        }
-
-        // קוד קופון 2324
+        /* הפעלת האפקט והורדת המחיר */
         function applyCoupon() {
             let code = document.getElementById('coupon-code-input').value.trim();
             if (code === '2324') {
                 discount = 10;
+                
+                // הוספת אפקט ויזואלי לתיבת הקופון
+                let couponBox = document.getElementById('coupon-box');
+                couponBox.classList.add('coupon-activated-effect');
+                
+                // העברה למצב זהב
                 document.body.classList.add('gold-mode');
                 document.getElementById('discount-note').style.display = 'block';
+                
+                // עדכון המחיר הסופי שכולל -10 ש"ח
                 updatePrice();
-                alert('✨ קוד סודי 2324 הופעל!\n10 ₪ הנחה + מצב זהב!');
             } else {
                 alert('❌ קוד הנחה לא תקין.');
             }
@@ -412,10 +410,11 @@
             let q = parseInt(document.getElementById('qty').value) || 1;
             let baseUnitPrice = (printType === 'back') ? 90 : ((q >= 3) ? 60 : 70);
             let deliveryPrice = (deliveryMethod === 'shipping') ? 5 : 0;
+            
+            // חישוב כולל הפחתה של 10 שקלים מהקופון
             let total = (q * baseUnitPrice) + deliveryPrice - discount;
 
             if (total < 0) total = 0;
-
             document.getElementById('total').innerText = total;
         }
 
@@ -432,7 +431,7 @@
             if (!text) { alert('אנא כתוב תוכן לביקורת.'); return; }
 
             const saveReview = (imgBase64) => {
-                let reviews = JSON.parse(localStorage.getItem('ashkenazi_reviews')) || [];
+                let reviews = JSON.parse(localStorage.getItem('ashkenazi_clean_reviews')) || [];
                 let newReview = {
                     id: Date.now().toString(),
                     author: usernameDisplay,
@@ -440,7 +439,7 @@
                     img: imgBase64
                 };
                 reviews.push(newReview);
-                localStorage.setItem('ashkenazi_reviews', JSON.stringify(reviews));
+                localStorage.setItem('ashkenazi_clean_reviews', JSON.stringify(reviews));
 
                 document.getElementById('rev-text').value = '';
                 document.getElementById('rev-username').value = '';
@@ -461,11 +460,11 @@
         }
 
         function renderReviews() {
-            let reviews = JSON.parse(localStorage.getItem('ashkenazi_reviews')) || [];
+            let reviews = JSON.parse(localStorage.getItem('ashkenazi_clean_reviews')) || [];
             let listHTML = '';
 
             if (reviews.length === 0) {
-                listHTML = '<div style="font-size: 13px; color: #aaa; text-align: center; margin-bottom: 10px;">טרם נכתבו ביקורות. ביצוע הזמנה יאפשר לך לכתוב ביקורת ראשונה!</div>';
+                listHTML = '<div style="font-size: 13px; color: #aaa; text-align: center; margin-bottom: 10px;">טרם נכתבו ביקורות. מוזמן להיות הראשון שממליץ!</div>';
             } else {
                 reviews.forEach(r => {
                     listHTML += `
@@ -489,11 +488,6 @@
                 let address = document.getElementById('cust-address').value.trim();
                 if (!address) { alert('אנא הזן כתובת למשלוח.'); return; }
             }
-
-            localStorage.setItem('ashkenazi_purchased', 'true');
-            document.getElementById('review-lock-message').style.display = 'none';
-            document.getElementById('btn-show-review-form').style.display = 'block';
-            document.getElementById('review-form').style.display = 'block';
 
             let color = document.getElementById('color').value;
             let size = document.getElementById('size').value;
