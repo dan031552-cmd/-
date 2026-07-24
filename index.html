@@ -6,6 +6,8 @@
     <title>אשכנזי מכירת חולצות</title>
     
     <link rel="icon" type="image/jpeg" href="WhatsApp Image 2026-06-26 at 15.01.25.jpeg">
+    <!-- ספריה לאפקט נצנצים/זיקוקים -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
         :root {
@@ -71,7 +73,6 @@
             padding: 15px; border-radius: 12px; margin-top: 15px; display: none;
         }
 
-        /* תיבת הקופון ואפקטים */
         .coupon-top-box {
             background: rgba(255, 255, 255, 0.05);
             border: 1px dashed var(--card-border);
@@ -93,7 +94,6 @@
 
         .btn-apply-coupon:active { transform: scale(0.95); }
 
-        /* אנימציות האפקט */
         @keyframes couponEffect {
             0% { transform: scale(1) rotate(0deg); box-shadow: 0 0 0px var(--gold); }
             20% { transform: scale(1.08) rotate(-2deg); box-shadow: 0 0 25px var(--gold); }
@@ -210,7 +210,7 @@
 
     <div class="container">
 
-        <!-- 1. אזור ביקורות -->
+        <!-- 1. אזור ביקורות בענן -->
         <div class="reviews-section-top">
             <h3 style="margin-top:0; font-size:18px; text-align:center; color: var(--cream-white);">💬 חוויות וביקורות של רוכשים</h3>
             
@@ -230,7 +230,7 @@
                 <label>📸 העלה תמונה שלך עם החולצה (אופציונלי):</label>
                 <input type="file" id="rev-image" accept="image/*" style="padding: 6px;">
 
-                <button class="btn-order" style="background: var(--primary); font-size: 15px; padding: 10px; margin-top: 5px;" onclick="submitReview()">פרסם ביקורת 🚀</button>
+                <button class="btn-order" id="btn-submit-rev" style="background: var(--primary); font-size: 15px; padding: 10px; margin-top: 5px;" onclick="submitReview()">פרסם ביקורת 🚀</button>
             </div>
         </div>
 
@@ -308,15 +308,19 @@
     </div>
 
     <script>
+        // הגדרות ענן לביקורות גלובליות
+        const JSONBIN_URL = 'https://api.jsonbin.io/v3/b/6683f1be2d621316b250529d';
+        const JSONBIN_KEY = '$2a$10$o.3/J6S8W331A8zS0yS2le9f.8O3q3P4Q4z013Z6.123456789'; // מפתח גישה
+
         let deliveryMethod = 'pickup';
         let printType = 'front';
         let backPrintDetails = '';
         let discount = 0;
+        let globalReviews = [];
 
         document.addEventListener("DOMContentLoaded", function() {
-            localStorage.clear();
             populateSizes();
-            renderReviews();
+            loadGlobalReviews();
             updatePrice();
         });
 
@@ -342,15 +346,24 @@
             if (code === '2324') {
                 discount = 10;
                 
-                // הוספת אפקט ויזואלי לתיבת הקופון
+                // אפקט רטט והבזק לתיבה
                 let couponBox = document.getElementById('coupon-box');
                 couponBox.classList.add('coupon-activated-effect');
                 
-                // העברה למצב זהב
+                // אפקט זיקוקים / נצנצים (Confetti)
+                if (typeof confetti === 'function') {
+                    confetti({
+                        particleCount: 100,
+                        spread: 70,
+                        origin: { y: 0.6 },
+                        colors: ['#ffd700', '#d94125', '#ffffff']
+                    });
+                }
+
+                // מעבר למצב זהב
                 document.body.classList.add('gold-mode');
                 document.getElementById('discount-note').style.display = 'block';
                 
-                // עדכון המחיר הסופי שכולל -10 ש"ח
                 updatePrice();
             } else {
                 alert('❌ קוד הנחה לא תקין.');
@@ -411,7 +424,6 @@
             let baseUnitPrice = (printType === 'back') ? 90 : ((q >= 3) ? 60 : 70);
             let deliveryPrice = (deliveryMethod === 'shipping') ? 5 : 0;
             
-            // חישוב כולל הפחתה של 10 שקלים מהקופון
             let total = (q * baseUnitPrice) + deliveryPrice - discount;
 
             if (total < 0) total = 0;
@@ -423,50 +435,90 @@
             form.style.display = (form.style.display === 'block') ? 'none' : 'block';
         }
 
-        function submitReview() {
+        /* טעינת ביקורות מבענן */
+        async function loadGlobalReviews() {
+            let listElem = document.getElementById('reviews-list');
+            listElem.innerHTML = '<div style="font-size:13px; color:#aaa; text-align:center;">טוען ביקורות...</div>';
+            
+            try {
+                let res = await fetch(JSONBIN_URL + '/latest', {
+                    headers: { 'X-Access-Key': JSONBIN_KEY }
+                });
+                if (res.ok) {
+                    let data = await res.json();
+                    globalReviews = data.record.reviews || [];
+                    renderReviews();
+                } else {
+                    renderReviews();
+                }
+            } catch (e) {
+                renderReviews();
+            }
+        }
+
+        /* שליחת ביקורת חדשה לענן */
+        async function submitReview() {
             let text = document.getElementById('rev-text').value.trim();
             let usernameDisplay = document.getElementById('rev-username').value.trim() || 'משתמש אנונימי';
             let fileInput = document.getElementById('rev-image');
+            let submitBtn = document.getElementById('btn-submit-rev');
 
             if (!text) { alert('אנא כתוב תוכן לביקורת.'); return; }
 
-            const saveReview = (imgBase64) => {
-                let reviews = JSON.parse(localStorage.getItem('ashkenazi_clean_reviews')) || [];
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'מפרסם... ⏳';
+
+            const saveAndUpload = async (imgBase64) => {
                 let newReview = {
                     id: Date.now().toString(),
                     author: usernameDisplay,
                     text: text,
                     img: imgBase64
                 };
-                reviews.push(newReview);
-                localStorage.setItem('ashkenazi_clean_reviews', JSON.stringify(reviews));
+                
+                globalReviews.push(newReview);
 
-                document.getElementById('rev-text').value = '';
-                document.getElementById('rev-username').value = '';
-                document.getElementById('rev-image').value = '';
-                document.getElementById('review-form').style.display = 'none';
+                try {
+                    await fetch(JSONBIN_URL, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Access-Key': JSONBIN_KEY
+                        },
+                        body: JSON.stringify({ reviews: globalReviews })
+                    });
 
-                renderReviews();
-                alert('הביקורת פורסמה בהצלחה!');
+                    document.getElementById('rev-text').value = '';
+                    document.getElementById('rev-username').value = '';
+                    document.getElementById('rev-image').value = '';
+                    document.getElementById('review-form').style.display = 'none';
+
+                    renderReviews();
+                    alert('הביקורת פורסמה בהצלחה וגלויה לכולם!');
+                } catch (e) {
+                    alert('תקלה בפרסום. נסה שוב.');
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = 'פרסם ביקורת 🚀';
+                }
             };
 
             if (fileInput.files && fileInput.files[0]) {
                 let reader = new FileReader();
-                reader.onload = function(e) { saveReview(e.target.result); };
+                reader.onload = function(e) { saveAndUpload(e.target.result); };
                 reader.readAsDataURL(fileInput.files[0]);
             } else {
-                saveReview(null);
+                saveAndUpload(null);
             }
         }
 
         function renderReviews() {
-            let reviews = JSON.parse(localStorage.getItem('ashkenazi_clean_reviews')) || [];
             let listHTML = '';
 
-            if (reviews.length === 0) {
+            if (!globalReviews || globalReviews.length === 0) {
                 listHTML = '<div style="font-size: 13px; color: #aaa; text-align: center; margin-bottom: 10px;">טרם נכתבו ביקורות. מוזמן להיות הראשון שממליץ!</div>';
             } else {
-                reviews.forEach(r => {
+                globalReviews.forEach(r => {
                     listHTML += `
                         <div class="review-card">
                             <div class="review-author">⭐ ${r.author}</div>
