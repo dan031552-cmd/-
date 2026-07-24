@@ -10,7 +10,6 @@
     
     <style>
         :root {
-            /* עיצוב וצבעים בהשראת כדורסל BG3800 */
             --primary: #d94125;
             --primary-hover: #b8321a;
             --whatsapp: #25d366;
@@ -32,11 +31,38 @@
             justify-content: center;
             align-items: center;
             overflow-x: hidden;
+            transition: all 0.5s ease;
+        }
+
+        /* מצב זהב */
+        body.gold-mode {
+            --primary: #ffd700;
+            --card-border: rgba(255, 215, 0, 0.6);
+            --bg-grad: linear-gradient(135deg, #2b210a 0%, #110e05 100%);
         }
 
         .container {
             display: flex; flex-direction: column;
             max-width: 500px; width: 100%; gap: 20px;
+        }
+
+        /* שדה קוד הנחה עליון */
+        .coupon-top-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px dashed var(--card-border);
+            border-radius: 16px; padding: 15px;
+            display: flex; gap: 8px; align-items: center; justify-content: center;
+        }
+
+        .coupon-input {
+            width: 120px !important; margin-bottom: 0 !important;
+            text-align: center; font-weight: bold; letter-spacing: 2px;
+        }
+
+        .btn-apply-coupon {
+            background: var(--primary); color: white; border: none;
+            padding: 10px 15px; border-radius: 8px; font-weight: bold; cursor: pointer;
+            transition: all 0.2s ease;
         }
 
         /* עיצוב סקציית ביקורות בחלק העליון */
@@ -54,17 +80,22 @@
         }
 
         .review-author { font-weight: bold; color: var(--primary); margin-bottom: 4px; }
-        .review-user-info { font-size: 11px; color: #a8a090; margin-bottom: 6px; }
         .review-img { max-width: 100%; height: auto; border-radius: 8px; margin-top: 8px; border: 1px solid rgba(255,255,255,0.1); }
 
-        .delete-btn {
-            position: absolute; left: 10px; top: 10px; background: rgba(217,65,37,0.2); color: #d94125;
-            border: none; border-radius: 6px; padding: 3px 8px; font-size: 11px; cursor: pointer; display: none;
+        .add-review-btn {
+            background: rgba(217, 65, 37, 0.15); border: 1px solid var(--primary);
+            color: white; border-radius: 10px; padding: 10px; width: 100%;
+            cursor: pointer; font-weight: bold; font-size: 14px; transition: all 0.2s ease; margin-top: 10px;
         }
 
         .review-form-box {
-            background: rgba(255, 255, 255, 0.03); border: 1px solid var(--primary);
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);
             padding: 15px; border-radius: 12px; margin-top: 15px; display: none;
+        }
+
+        .lock-notice {
+            font-size: 13px; color: #aaa; text-align: center; margin-top: 8px;
+            background: rgba(255,255,255,0.03); padding: 8px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);
         }
 
         /* גלריית התמונות */
@@ -157,7 +188,7 @@
         }
         .btn-order:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4); }
 
-        /* Modal - חלון קופץ */
+        /* Modal - חלון קופץ להדפסה על הגב */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(5px);
@@ -172,12 +203,6 @@
         .modal-btn-confirm {
             background: var(--primary); color: white; border: none; padding: 12px;
             width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px;
-        }
-
-        /* כפתור ניהול סודי */
-        .admin-lock-btn {
-            background: transparent; border: none; color: rgba(255,255,255,0.1);
-            font-size: 10px; cursor: pointer; margin-top: 20px;
         }
     </style>
 </head>
@@ -196,43 +221,44 @@
         </div>
     </div>
 
-    <!-- חלון קופץ עבור כניסת מנהל -->
-    <div class="modal-overlay" id="admin-modal">
-        <div class="modal-card" style="text-align: center;">
-            <div class="modal-title">🔓 כניסת מנהל</div>
-            <label>הכנס קוד סודי:</label>
-            <input type="password" id="admin-code-input" style="text-align: center; letter-spacing: 5px;">
-            <button class="modal-btn-confirm" onclick="checkAdminCode()">כניסה</button>
-            <button class="modal-btn-confirm" style="background: #333; margin-top: 5px;" onclick="closeAdminModal()">ביטול</button>
-        </div>
-    </div>
-
     <div class="container" id="main-container">
 
-        <!-- 1. ביקורות בראש הדף -->
+        <!-- 1. שדה קוד קופון עליון -->
+        <div class="coupon-top-box">
+            <label style="margin-bottom:0;">🎁 קוד הנחה:</label>
+            <input type="text" id="coupon-code-input" class="coupon-input" placeholder="קוד">
+            <button class="btn-apply-coupon" onclick="applyCoupon()">הפעל</button>
+        </div>
+
+        <!-- 2. ביקורות בראש הדף -->
         <div class="reviews-section-top">
             <h3 style="margin-top:0; font-size:18px; text-align:center; color: var(--cream-white);">💬 חוויות וביקורות של רוכשים</h3>
             
             <div id="reviews-list"></div>
 
-            <!-- טופס ניהול ביקורות (מוסתר כברירת מחדל) -->
-            <div class="review-form-box" id="admin-review-form">
-                <h4 style="margin: 0 0 10px 0; text-align: center; color: var(--gold);">➕ הוסף ביקורת מנהל</h4>
+            <div id="review-lock-message" class="lock-notice">
+                🔒 כתיבת ביקורת מתאפשרת רק לאחר לחיצה על כפתור ההזמנה בוואטסאפ למטה.
+            </div>
+
+            <button class="add-review-btn" id="btn-show-review-form" style="display: none;" onclick="toggleReviewForm()">✍️ הוסף את הביקורת שלך על המוצר</button>
+
+            <div class="review-form-box" id="review-form">
+                <h4 style="margin: 0 0 10px 0; text-align: center; font-size: 15px;">➕ הוסף ביקורת מוצר</h4>
                 
-                <label>👤 שם מפרסם (למשל: ⭐ דניאל מ.):</label>
-                <input type="text" id="rev-username" placeholder="שם שיופיע בביקורת">
+                <label>👤 השם שלך:</label>
+                <input type="text" id="rev-username" placeholder="הכנס את שמך">
 
                 <label>✍️ תוכן הביקורת:</label>
-                <textarea id="rev-text" rows="2" placeholder="מה הלקוח אמר?"></textarea>
+                <textarea id="rev-text" rows="2" placeholder="איך החולצה יושבת עליך?"></textarea>
 
-                <label>📸 העלה תמונה (אופציונלי):</label>
+                <label>📸 העלה תמונה שלך עם החולצה (אופציונלי):</label>
                 <input type="file" id="rev-image" accept="image/*" style="padding: 6px;">
 
-                <button class="btn-order" style="background: var(--gold); color: #000; font-size: 15px; padding: 10px; margin-top: 5px;" onclick="submitAdminReview()">פרסם ביקורת 🚀</button>
+                <button class="btn-order" style="background: var(--primary); font-size: 15px; padding: 10px; margin-top: 5px;" onclick="submitReview()">פרסם ביקורת 🚀</button>
             </div>
         </div>
 
-        <!-- 2. גלריית התמונות -->
+        <!-- 3. גלריית התמונות -->
         <div class="gallery-container">
             <div class="main-img-wrapper">
                 <img id="product-view" class="main-img" src="WhatsApp Image 2026-06-26 at 13.26.44.jpeg" alt="חולצה קדימה">
@@ -243,7 +269,7 @@
             </div>
         </div>
 
-        <!-- 3. כרטיסיית ההזמנה -->
+        <!-- 4. כרטיסיית ההזמנה -->
         <div class="card">
             <div class="promo" id="promo-banner">🔥 מבצע: 3 חולצות ומעלה ב-60 ₪ בלבד!</div>
             
@@ -304,27 +330,45 @@
             <div class="price-box">
                 <div style="color: #d0c8b8; font-size: 14px;">סה"כ לתשלום:</div>
                 <div class="price"><span id="total">70</span> ₪</div>
+                <div id="discount-note" style="color: var(--gold); font-size: 13px; display: none; margin-top: 5px;">✨ הופעלה הנחת קוד 2324 (-10 ₪)</div>
             </div>
             
             <button class="btn-order" onclick="order()">שלח הזמנה בוואטסאפ ✅</button>
         </div>
-
-        <!-- כפתור ניהול סודי -->
-        <button class="admin-lock-btn" onclick="openAdminModal()">🔒</button>
     </div>
 
     <script>
         let deliveryMethod = 'pickup';
         let printType = 'front';
         let backPrintDetails = '';
-        let isAdmin = false;
+        let discount = 0;
 
-        // טעינה ראשונית
         window.onload = function() {
             renderReviews();
+            checkPurchaseStatus();
         };
 
-        // גלריה
+        function checkPurchaseStatus() {
+            if (localStorage.getItem('ashkenazi_purchased') === 'true') {
+                document.getElementById('review-lock-message').style.display = 'none';
+                document.getElementById('btn-show-review-form').style.display = 'block';
+            }
+        }
+
+        // הפעלת קוד קופון
+        function applyCoupon() {
+            let code = document.getElementById('coupon-code-input').value.trim();
+            if (code === '2324') {
+                discount = 10;
+                document.body.classList.add('gold-mode');
+                document.getElementById('discount-note').style.display = 'block';
+                updatePrice();
+                alert('✨ קוד סודי 2324 הופעל בהצלחה!\nזכית ב-10 ₪ הנחה + מצב זהב יוקרתי!');
+            } else {
+                alert('❌ קוד הנחה לא תקין.');
+            }
+        }
+
         function changeView(imgSrc, btn) {
             const imgElement = document.getElementById('product-view');
             imgElement.style.opacity = 0;
@@ -336,14 +380,13 @@
             btn.classList.add('active');
         }
 
-        // סוג הדפסה והחלון הקופץ
         function setPrintType(type) {
             printType = type;
             document.getElementById('print-front-only').classList.toggle('active', type === 'front');
             document.getElementById('print-back-add').classList.toggle('active', type === 'back');
 
             if (type === 'back') {
-                document.getElementById('back-print-modal').style.display = 'flex';
+                openBackModal();
             } else {
                 document.getElementById('back-details-preview').style.display = 'none';
                 updatePrice();
@@ -367,7 +410,6 @@
             updatePrice();
         }
 
-        // אופן אספקה
         function setDelivery(method) {
             deliveryMethod = method;
             document.getElementById('opt-pickup').classList.toggle('active', method === 'pickup');
@@ -376,64 +418,44 @@
             updatePrice();
         }
 
-        // עדכון מחיר
         function updatePrice() {
             let q = parseInt(document.getElementById('qty').value) || 1;
-            // מחיר בסיס: 90 להדפסת גב, 70 לרגיל (אלא אם קונים 3+ במבצע)
             let baseUnitPrice = (printType === 'back') ? 90 : ((q >= 3) ? 60 : 70);
             let deliveryPrice = (deliveryMethod === 'shipping') ? 5 : 0;
-            let total = (q * baseUnitPrice) + deliveryPrice;
+            let total = (q * baseUnitPrice) + deliveryPrice - discount;
+
+            if (total < 0) total = 0;
 
             document.getElementById('total').innerText = total;
         }
 
-        // --- מערכת ניהול ביקורות סודית (2324) ---
-
-        function openAdminModal() {
-            document.getElementById('admin-modal').style.display = 'flex';
-            document.getElementById('admin-code-input').focus();
+        function toggleReviewForm() {
+            let form = document.getElementById('review-form');
+            form.style.display = (form.style.display === 'block') ? 'none' : 'block';
         }
 
-        function closeAdminModal() {
-            document.getElementById('admin-modal').style.display = 'none';
-            document.getElementById('admin-code-input').value = '';
-        }
-
-        function checkAdminCode() {
-            let code = document.getElementById('admin-code-input').value.trim();
-            if (code === '2324') {
-                isAdmin = true;
-                document.getElementById('admin-review-form').style.display = 'block';
-                closeAdminModal();
-                renderReviews(); // לרנדר מחדש כדי להציג כפתורי מחק
-                alert('🔓 מצב מנהל פעיל. כעת ניתן להוסיף ולמחוק ביקורות.');
-            } else {
-                alert('❌ קוד שגוי.');
-                closeAdminModal();
-            }
-        }
-
-        function submitAdminReview() {
-            let author = document.getElementById('rev-username').value.trim();
+        function submitReview() {
             let text = document.getElementById('rev-text').value.trim();
+            let usernameDisplay = document.getElementById('rev-username').value.trim() || 'משתמש אנונימי';
             let fileInput = document.getElementById('rev-image');
 
-            if (!author || !text) { alert('אנא מלא שם מפרסם ותוכן הביקורת.'); return; }
+            if (!text) { alert('אנא כתוב תוכן לביקורת.'); return; }
 
             const saveReview = (imgBase64) => {
                 let reviews = JSON.parse(localStorage.getItem('ashkenazi_reviews')) || [];
                 let newReview = {
                     id: Date.now().toString(),
-                    author: author,
+                    author: usernameDisplay,
                     text: text,
                     img: imgBase64
                 };
                 reviews.push(newReview);
                 localStorage.setItem('ashkenazi_reviews', JSON.stringify(reviews));
 
-                document.getElementById('rev-username').value = '';
                 document.getElementById('rev-text').value = '';
+                document.getElementById('rev-username').value = '';
                 document.getElementById('rev-image').value = '';
+                document.getElementById('review-form').style.display = 'none';
 
                 renderReviews();
                 alert('הביקורת פורסמה בהצלחה!');
@@ -453,13 +475,12 @@
             let listHTML = '';
 
             if (reviews.length === 0) {
-                listHTML = '<div style="font-size: 13px; color: #aaa; text-align: center; margin-bottom: 10px;">טרם נכתבו ביקורות.</div>';
+                listHTML = '<div style="font-size: 13px; color: #aaa; text-align: center; margin-bottom: 10px;">טרם נכתבו ביקורות. ביצוע הזמנה יאפשר לך לכתוב ביקורת ראשונה!</div>';
             } else {
                 reviews.forEach(r => {
                     listHTML += `
                         <div class="review-card">
-                            ${isAdmin ? `<button class="delete-btn" style="display:block;" onclick="deleteReview('${r.id}')">מחק 🗑️</button>` : ''}
-                            <div class="review-author">${r.author}</div>
+                            <div class="review-author">⭐ ${r.author}</div>
                             <div>"${r.text}"</div>
                             ${r.img ? `<img src="${r.img}" class="review-img">` : ''}
                         </div>
@@ -470,16 +491,6 @@
             document.getElementById('reviews-list').innerHTML = listHTML;
         }
 
-        function deleteReview(id) {
-            if (!confirm('האם אתה בטוח שברצונך למחוק ביקורת זו?')) return;
-            let reviews = JSON.parse(localStorage.getItem('ashkenazi_reviews')) || [];
-            reviews = reviews.filter(r => r.id !== id);
-            localStorage.setItem('ashkenazi_reviews', JSON.stringify(reviews));
-            renderReviews();
-        }
-
-        // --- שליחת הזמנה לוואטסאפ ---
-
         function order() {
             let name = document.getElementById('cust-name').value.trim();
             if (!name) { alert('אנא הזן את שמך המלא לפני שליחת ההזמנה.'); return; }
@@ -489,6 +500,13 @@
                 if (!address) { alert('אנא הזן כתובת למשלוח.'); return; }
             }
 
+            // שחרור נעילת הביקורות
+            localStorage.setItem('ashkenazi_purchased', 'true');
+            
+            document.getElementById('review-lock-message').style.display = 'none';
+            document.getElementById('btn-show-review-form').style.display = 'block';
+            document.getElementById('review-form').style.display = 'block';
+
             let color = document.getElementById('color').value;
             let size = document.getElementById('size').value;
             let qty = document.getElementById('qty').value;
@@ -497,8 +515,9 @@
             let deliveryText = (deliveryMethod === 'shipping') ? `משלוח לכתובת: ${document.getElementById('cust-address').value}` : 'איסוף עצמי';
             
             let printDetailsText = (printType === 'back') ? `הדפסה על הגב: "${backPrintDetails}"` : 'הדפסה קדמית בלבד';
+            let couponAppliedText = (discount > 0) ? '\n🎁 הופעלה הנחת קוד 2324 (-10 ₪)' : '';
 
-            let msg = `היי, אני רוצה להזמין חולצה מודפסת:\n\n👤 שם: ${name}\n🎨 צבע: ${color}\n📏 מידה: ${size}\n🔢 כמות: ${qty}\n🪡 סוג הדפסה: ${printDetailsText}\n🚚 אופן אספקה: ${deliveryText}\n📝 הערות: ${notes}\n\n💰 סה"כ לתשלום: ${total} ₪`;
+            let msg = `היי, אני רוצה להזמין חולצה מודפסת:\n\n👤 שם: ${name}\n🎨 צבע: ${color}\n📏 מידה: ${size}\n🔢 כמות: ${qty}\n🪡 סוג הדפסה: ${printDetailsText}\n🚚 אופן אספקה: ${deliveryText}${couponAppliedText}\n📝 הערות: ${notes}\n\n💰 סה"כ לתשלום: ${total} ₪`;
             
             window.open(`https://wa.me/972552956401?text=${encodeURIComponent(msg)}`);
         }
