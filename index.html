@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>אשכנזי מכירת חולצות</title>
     
-    <!-- Favicon / אייקון ראשי -->
     <link rel="icon" type="image/jpeg" href="WhatsApp Image 2026-06-26 at 15.01.25.jpeg">
     
     <style>
@@ -46,7 +45,40 @@
             max-width: 500px; width: 100%; gap: 20px;
         }
 
-        /* שדה קוד הנחה עליון */
+        /* ביקורות בראש הדף */
+        .reviews-section-top { 
+            background: rgba(25, 20, 18, 0.55); 
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border); 
+            border-radius: 24px; padding: 20px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5); text-align: right;
+        }
+
+        .review-card {
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px; padding: 12px; margin-bottom: 12px; font-size: 14px; text-align: right;
+        }
+
+        .review-author { font-weight: bold; color: var(--primary); margin-bottom: 4px; }
+        .review-img { max-width: 100%; height: auto; border-radius: 8px; margin-top: 8px; border: 1px solid rgba(255,255,255,0.1); }
+
+        .add-review-btn {
+            background: rgba(217, 65, 37, 0.15); border: 1px solid var(--primary);
+            color: white; border-radius: 10px; padding: 10px; width: 100%;
+            cursor: pointer; font-weight: bold; font-size: 14px; margin-top: 10px;
+        }
+
+        .review-form-box {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 15px; border-radius: 12px; margin-top: 15px; display: none;
+        }
+
+        .lock-notice {
+            font-size: 13px; color: #aaa; text-align: center; margin-top: 8px;
+            background: rgba(255,255,255,0.03); padding: 8px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* קוד קופון - מתחת לביקורות */
         .coupon-top-box {
             background: rgba(255, 255, 255, 0.05);
             border: 1px dashed var(--card-border);
@@ -62,80 +94,37 @@
         .btn-apply-coupon {
             background: var(--primary); color: white; border: none;
             padding: 10px 15px; border-radius: 8px; font-weight: bold; cursor: pointer;
-            transition: all 0.2s ease;
         }
 
-        /* עיצוב סקציית ביקורות בחלק העליון */
-        .reviews-section-top { 
-            background: rgba(25, 20, 18, 0.55); 
-            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--card-border); 
-            border-radius: 24px; padding: 20px; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5); text-align: right;
-        }
-
-        .review-card {
-            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 12px; padding: 12px; margin-bottom: 12px; font-size: 14px; text-align: right; position: relative;
-        }
-
-        .review-author { font-weight: bold; color: var(--primary); margin-bottom: 4px; }
-        .review-img { max-width: 100%; height: auto; border-radius: 8px; margin-top: 8px; border: 1px solid rgba(255,255,255,0.1); }
-
-        .add-review-btn {
-            background: rgba(217, 65, 37, 0.15); border: 1px solid var(--primary);
-            color: white; border-radius: 10px; padding: 10px; width: 100%;
-            cursor: pointer; font-weight: bold; font-size: 14px; transition: all 0.2s ease; margin-top: 10px;
-        }
-
-        .review-form-box {
-            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 15px; border-radius: 12px; margin-top: 15px; display: none;
-        }
-
-        .lock-notice {
-            font-size: 13px; color: #aaa; text-align: center; margin-top: 8px;
-            background: rgba(255,255,255,0.03); padding: 8px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);
-        }
-
-        /* גלריית התמונות */
+        /* גלריה */
         .gallery-container {
             background: rgba(20, 15, 12, 0.5);
             border: 1px solid var(--card-border);
-            border-radius: 24px; padding: 12px;
-            text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-            overflow: hidden;
+            border-radius: 24px; padding: 12px; text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5); overflow: hidden;
         }
 
         .main-img-wrapper {
-            width: 100%; padding-top: 133%;
-            position: relative; background: #111; border-radius: 16px;
-            overflow: hidden;
+            width: 100%; padding-top: 133%; position: relative; background: #111; border-radius: 16px; overflow: hidden;
         }
 
         .main-img {
-            position: absolute; top: 0; left: 0;
-            width: 100%; height: 100%; object-fit: contain; transition: opacity 0.3s ease;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity 0.3s ease;
         }
 
-        .gallery-nav { display: flex; justify-content: center; gap: 10px; margin-top: 15px; padding-bottom: 5px; }
+        .gallery-nav { display: flex; justify-content: center; gap: 10px; margin-top: 15px; }
 
         .nav-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.15); color: var(--cream-white);
-            padding: 10px 20px; border-radius: 30px; cursor: pointer;
-            font-weight: 600; font-size: 14px; transition: all 0.2s ease;
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--cream-white); padding: 10px 20px; border-radius: 30px; cursor: pointer;
+            font-weight: 600; font-size: 14px;
         }
 
-        .nav-btn.active, .nav-btn:hover {
-            background: var(--primary); border-color: var(--primary); color: white;
-            box-shadow: 0 0 15px rgba(217, 65, 37, 0.5);
-        }
+        .nav-btn.active { background: var(--primary); border-color: var(--primary); color: white; }
 
-        /* כרטיסיית ההזמנה */
+        /* כרטיסיית הזמנה */
         .card { 
-            background: rgba(25, 20, 18, 0.55); 
-            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            background: rgba(25, 20, 18, 0.55); backdrop-filter: blur(16px);
             border: 1px solid var(--card-border); padding: 25px; border-radius: 24px; 
             box-shadow: 0 20px 40px rgba(0,0,0,0.5); text-align: right;
         }
@@ -144,32 +133,25 @@
             background: linear-gradient(90deg, #d94125, #ee6b4d); color: white; 
             padding: 12px; border-radius: 12px; margin-bottom: 20px; 
             font-weight: bold; font-size: 15px; text-align: center;
-            box-shadow: 0 4px 15px rgba(217, 65, 37, 0.3);
         }
 
-        h1 { 
-            margin: 0 0 20px 0; font-size: 32px; font-weight: 800; text-align: center;
-            background: linear-gradient(45deg, #ffffff, var(--cream-white));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-        
+        h1 { margin: 0 0 20px 0; font-size: 32px; font-weight: 800; text-align: center; }
         label { display: block; font-weight: 600; margin-bottom: 6px; color: #d0c8b8; font-size: 14px; }
         
         select, input, textarea { 
             width: 100%; padding: 12px; margin-bottom: 15px; 
             background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); 
             border-radius: 10px; box-sizing: border-box; font-size: 16px; color: white;
-            font-family: inherit; transition: all 0.2s ease;
+            font-family: inherit;
         }
 
-        select:focus, input:focus, textarea:focus { outline: none; border-color: var(--primary); background: rgba(255, 255, 255, 0.08); }
         select option { background: #1e1916; color: white; }
         
         .option-group { display: flex; gap: 10px; margin-bottom: 15px; }
         .option-btn {
             flex: 1; padding: 12px; border-radius: 10px;
             background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-            text-align: center; cursor: pointer; font-size: 14px; transition: all 0.2s ease; color: #fff;
+            text-align: center; cursor: pointer; font-size: 14px; color: #fff;
         }
         .option-btn.active { border-color: var(--primary); background: rgba(217,65,37,0.25); font-weight: bold; }
 
@@ -183,10 +165,8 @@
         .btn-order { 
             background: linear-gradient(135deg, var(--whatsapp), #1ed760); 
             color: white; border: none; width: 100%; padding: 16px; font-size: 18px; 
-            border-radius: 12px; cursor: pointer; font-weight: bold; transition: all 0.3s ease; 
-            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.2);
+            border-radius: 12px; cursor: pointer; font-weight: bold;
         }
-        .btn-order:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4); }
 
         /* Modal - חלון קופץ להדפסה על הגב */
         .modal-overlay {
@@ -196,8 +176,7 @@
         }
         .modal-card {
             background: #1e1815; border: 1px solid var(--primary);
-            border-radius: 20px; padding: 25px; max-width: 400px; width: 90%;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8); text-align: right;
+            border-radius: 20px; padding: 25px; max-width: 400px; width: 90%; text-align: right;
         }
         .modal-title { font-size: 20px; font-weight: bold; color: var(--primary); margin-bottom: 10px; text-align: center; }
         .modal-btn-confirm {
@@ -208,7 +187,7 @@
 </head>
 <body>
 
-    <!-- חלון קופץ עבור הדפסה על הגב -->
+    <!-- חלון קופץ להדפסת גב -->
     <div class="modal-overlay" id="back-print-modal">
         <div class="modal-card">
             <div class="modal-title">✨ מפרט הדפסה על הגב (+20 ₪)</div>
@@ -221,16 +200,9 @@
         </div>
     </div>
 
-    <div class="container" id="main-container">
+    <div class="container">
 
-        <!-- 1. שדה קוד קופון עליון -->
-        <div class="coupon-top-box">
-            <label style="margin-bottom:0;">🎁 קוד הנחה:</label>
-            <input type="text" id="coupon-code-input" class="coupon-input" placeholder="קוד">
-            <button class="btn-apply-coupon" onclick="applyCoupon()">הפעל</button>
-        </div>
-
-        <!-- 2. ביקורות בראש הדף -->
+        <!-- 1. ביקורות בראש הדף -->
         <div class="reviews-section-top">
             <h3 style="margin-top:0; font-size:18px; text-align:center; color: var(--cream-white);">💬 חוויות וביקורות של רוכשים</h3>
             
@@ -258,7 +230,14 @@
             </div>
         </div>
 
-        <!-- 3. גלריית התמונות -->
+        <!-- 2. קוד קופון - קצת מתחת לביקורות -->
+        <div class="coupon-top-box">
+            <label style="margin-bottom:0;">🎁 קוד הנחה:</label>
+            <input type="text" id="coupon-code-input" class="coupon-input" placeholder="קוד">
+            <button class="btn-apply-coupon" onclick="applyCoupon()">הפעל</button>
+        </div>
+
+        <!-- 3. גלריית תמונות -->
         <div class="gallery-container">
             <div class="main-img-wrapper">
                 <img id="product-view" class="main-img" src="WhatsApp Image 2026-06-26 at 13.26.44.jpeg" alt="חולצה קדימה">
@@ -269,9 +248,9 @@
             </div>
         </div>
 
-        <!-- 4. כרטיסיית ההזמנה -->
+        <!-- 4. טופס הזמנה -->
         <div class="card">
-            <div class="promo" id="promo-banner">🔥 מבצע: 3 חולצות ומעלה ב-60 ₪ בלבד!</div>
+            <div class="promo">🔥 מבצע: 3 חולצות ומעלה ב-60 ₪ בלבד!</div>
             
             <h1>אשכנזי</h1>
             
@@ -285,16 +264,7 @@
             
             <label>📏 מידה / מספר:</label>
             <select id="size">
-                <script>
-                    for (let i = 1; i <= 47; i++) {
-                        document.write(`<option value="${i}">${i}</option>`);
-                    }
-                </script>
-                <option value="S">S</option>
-                <option value="M" selected>M</option>
-                <option value="L">L</option>
-                <option value="XL">XL</option>
-                <option value="XXL">XXL</option>
+                <!-- יטען ב-JS -->
             </select>
             
             <label>🔢 כמות:</label>
@@ -343,10 +313,30 @@
         let backPrintDetails = '';
         let discount = 0;
 
-        window.onload = function() {
+        document.addEventListener("DOMContentLoaded", function() {
+            populateSizes();
             renderReviews();
             checkPurchaseStatus();
-        };
+            updatePrice();
+        });
+
+        function populateSizes() {
+            const sizeSelect = document.getElementById('size');
+            sizeSelect.innerHTML = '';
+            for (let i = 1; i <= 47; i++) {
+                let opt = document.createElement('option');
+                opt.value = i;
+                opt.innerText = i;
+                sizeSelect.appendChild(opt);
+            }
+            ['S', 'M', 'L', 'XL', 'XXL'].forEach(s => {
+                let opt = document.createElement('option');
+                opt.value = s;
+                opt.innerText = s;
+                if(s === 'M') opt.selected = true;
+                sizeSelect.appendChild(opt);
+            });
+        }
 
         function checkPurchaseStatus() {
             if (localStorage.getItem('ashkenazi_purchased') === 'true') {
@@ -355,7 +345,7 @@
             }
         }
 
-        // הפעלת קוד קופון
+        // קוד קופון 2324
         function applyCoupon() {
             let code = document.getElementById('coupon-code-input').value.trim();
             if (code === '2324') {
@@ -363,7 +353,7 @@
                 document.body.classList.add('gold-mode');
                 document.getElementById('discount-note').style.display = 'block';
                 updatePrice();
-                alert('✨ קוד סודי 2324 הופעל בהצלחה!\nזכית ב-10 ₪ הנחה + מצב זהב יוקרתי!');
+                alert('✨ קוד סודי 2324 הופעל!\n10 ₪ הנחה + מצב זהב!');
             } else {
                 alert('❌ קוד הנחה לא תקין.');
             }
@@ -500,9 +490,7 @@
                 if (!address) { alert('אנא הזן כתובת למשלוח.'); return; }
             }
 
-            // שחרור נעילת הביקורות
             localStorage.setItem('ashkenazi_purchased', 'true');
-            
             document.getElementById('review-lock-message').style.display = 'none';
             document.getElementById('btn-show-review-form').style.display = 'block';
             document.getElementById('review-form').style.display = 'block';
