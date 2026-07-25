@@ -192,7 +192,7 @@
             background: var(--primary); color: white; border: none; padding: 12px;
             width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px;
         }
-        
+
         .review-locked-msg {
             font-size: 13px;
             color: #aaa;
@@ -226,10 +226,8 @@
             
             <div id="reviews-list"></div>
 
-            <!-- כפתור הוספת ביקורת - מופיע רק למי שהזמין -->
             <button class="add-review-btn" id="btn-open-review-form" onclick="toggleReviewForm()" style="display: none;">✍️ הוסף את הביקורת שלך על המוצר</button>
             
-            <!-- הודעה למי שעדיין לא ביצע הזמנה -->
             <div class="review-locked-msg" id="review-locked-msg">
                 🔒 כתיבת ביקורת מתאפשרת רק ללקוחות שביצעו הזמנה דרך הווואטסאפ.
             </div>
@@ -324,8 +322,9 @@
     </div>
 
     <script>
-        const JSONBIN_URL = 'https://api.jsonbin.io/v3/b/6683f1be2d621316b250529d';
-        const JSONBIN_KEY = '$2a$10$o.3/J6S8W331A8zS0yS2le9f.8O3q3P4Q4z013Z6.123456789';
+        // המפתחות המעודכנים שלך
+        const JSONBIN_URL = 'https://api.jsonbin.io/v3/b/6a650551f5f4af5e29c0add6';
+        const JSONBIN_KEY = '$2a$10$eHPbKi1WFSU7UtqssII1LuIqm17YSx0yh0IyC1fJDp7I8rXLyHs8i';
 
         let deliveryMethod = 'pickup';
         let printType = 'front';
@@ -340,7 +339,6 @@
             checkUserOrderPermission();
         });
 
-        // בדיקה האם המשתמש ביצע הזמנה כדי לפתוח את אפשרות כתיבת הביקורת
         function checkUserOrderPermission() {
             const hasOrdered = localStorage.getItem('hasOrdered_ashkenazi');
             if (hasOrdered === 'true') {
@@ -461,16 +459,20 @@
 
         async function loadGlobalReviews() {
             let listElem = document.getElementById('reviews-list');
-            listElem.innerHTML = '<div style="font-size:13px; color:#aaa; text-align:center;">טוען ביקורות...</div>';
+            listElem.innerHTML = '<div style="font-size:13px; color:#aaa; text-align:center;">טוען ביקורות... ⏳</div>';
             
             try {
                 let res = await fetch(JSONBIN_URL + '/latest', {
-                    headers: { 'X-Access-Key': JSONBIN_KEY }
+                    method: 'GET',
+                    headers: { 
+                        'X-Access-Key': JSONBIN_KEY,
+                        'X-Bin-Meta': 'false'
+                    }
                 });
+
                 if (res.ok) {
                     let data = await res.json();
-                    let loaded = data.record.reviews || [];
-                    globalReviews = loaded.filter(r => r.author && !r.author.includes('דניאל'));
+                    globalReviews = data.reviews || [];
                     renderReviews();
                 } else {
                     renderReviews();
@@ -499,10 +501,10 @@
                     img: imgBase64
                 };
                 
-                globalReviews.push(newReview);
+                globalReviews.unshift(newReview);
 
                 try {
-                    await fetch(JSONBIN_URL, {
+                    let res = await fetch(JSONBIN_URL, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
@@ -511,15 +513,19 @@
                         body: JSON.stringify({ reviews: globalReviews })
                     });
 
-                    document.getElementById('rev-text').value = '';
-                    document.getElementById('rev-username').value = '';
-                    document.getElementById('rev-image').value = '';
-                    document.getElementById('review-form').style.display = 'none';
+                    if (res.ok) {
+                        document.getElementById('rev-text').value = '';
+                        document.getElementById('rev-username').value = '';
+                        document.getElementById('rev-image').value = '';
+                        document.getElementById('review-form').style.display = 'none';
 
-                    renderReviews();
-                    alert('הביקורת פורסמה בהצלחה!');
+                        renderReviews();
+                        alert('הביקורת פורסמה בהצלחה וגלויה לכל הרוכשים! 🚀');
+                    } else {
+                        alert('חלה שגיאה בחיבור לשרת.');
+                    }
                 } catch (e) {
-                    alert('תקלה בפרסום. נסה שוב.');
+                    alert('תקלה בחיבור לשרת. נסה שוב.');
                 } finally {
                     submitBtn.disabled = false;
                     submitBtn.innerText = 'פרסם ביקורת 🚀';
@@ -564,7 +570,6 @@
                 if (!address) { alert('אנא הזן כתובת למשלוח.'); return; }
             }
 
-            // סימון שהלקוח ביצע הזמנה ופתיחת הרשאה לביקורת
             localStorage.setItem('hasOrdered_ashkenazi', 'true');
             checkUserOrderPermission();
 
