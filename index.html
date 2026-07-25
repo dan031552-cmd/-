@@ -192,6 +192,16 @@
             background: var(--primary); color: white; border: none; padding: 12px;
             width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px;
         }
+        
+        .review-locked-msg {
+            font-size: 13px;
+            color: #aaa;
+            text-align: center;
+            margin-top: 10px;
+            background: rgba(255,255,255,0.03);
+            padding: 8px;
+            border-radius: 8px;
+        }
     </style>
 </head>
 <body>
@@ -216,7 +226,13 @@
             
             <div id="reviews-list"></div>
 
-            <button class="add-review-btn" onclick="toggleReviewForm()">✍️ הוסף את הביקורת שלך על המוצר</button>
+            <!-- כפתור הוספת ביקורת - מופיע רק למי שהזמין -->
+            <button class="add-review-btn" id="btn-open-review-form" onclick="toggleReviewForm()" style="display: none;">✍️ הוסף את הביקורת שלך על המוצר</button>
+            
+            <!-- הודעה למי שעדיין לא ביצע הזמנה -->
+            <div class="review-locked-msg" id="review-locked-msg">
+                🔒 כתיבת ביקורת מתאפשרת רק ללקוחות שביצעו הזמנה דרך הווואטסאפ.
+            </div>
 
             <div class="review-form-box" id="review-form">
                 <h4 style="margin: 0 0 10px 0; text-align: center; font-size: 15px;">➕ הוסף ביקורת מוצר</h4>
@@ -318,14 +334,23 @@
         let globalReviews = [];
 
         document.addEventListener("DOMContentLoaded", function() {
-            // ניקוי מלא של זיכרון ישן בדפדפן
-            localStorage.clear();
-            sessionStorage.clear();
-            
             populateSizes();
             loadGlobalReviews();
             updatePrice();
+            checkUserOrderPermission();
         });
+
+        // בדיקה האם המשתמש ביצע הזמנה כדי לפתוח את אפשרות כתיבת הביקורת
+        function checkUserOrderPermission() {
+            const hasOrdered = localStorage.getItem('hasOrdered_ashkenazi');
+            if (hasOrdered === 'true') {
+                document.getElementById('btn-open-review-form').style.display = 'block';
+                document.getElementById('review-locked-msg').style.display = 'none';
+            } else {
+                document.getElementById('btn-open-review-form').style.display = 'none';
+                document.getElementById('review-locked-msg').style.display = 'block';
+            }
+        }
 
         function populateSizes() {
             const sizeSelect = document.getElementById('size');
@@ -445,7 +470,6 @@
                 if (res.ok) {
                     let data = await res.json();
                     let loaded = data.record.reviews || [];
-                    // סינון כפול ומוחלט כדי לוודא שאף זכר לא נכנס
                     globalReviews = loaded.filter(r => r.author && !r.author.includes('דניאל'));
                     renderReviews();
                 } else {
@@ -539,6 +563,10 @@
                 let address = document.getElementById('cust-address').value.trim();
                 if (!address) { alert('אנא הזן כתובת למשלוח.'); return; }
             }
+
+            // סימון שהלקוח ביצע הזמנה ופתיחת הרשאה לביקורת
+            localStorage.setItem('hasOrdered_ashkenazi', 'true');
+            checkUserOrderPermission();
 
             let color = document.getElementById('color').value;
             let size = document.getElementById('size').value;
