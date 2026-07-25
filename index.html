@@ -60,11 +60,11 @@
             transition: all 0.5s ease;
         }
 
-        /* 💥 אפקט הבום והכניסה המגניב לכותב הביקורת 💥 */
+        /* 💥 אפקט הבום והכניסה לכותב הביקורת 💥 */
         @keyframes reviewBoomDrop {
             0% {
                 opacity: 0;
-                transform: scale(3) translateY(-100px) rotate(-10deg);
+                transform: scale(2.5) translateY(-80px) rotate(-8deg);
                 box-shadow: 0 0 50px var(--gold);
             }
             70% {
@@ -347,15 +347,15 @@
     </div>
 
     <script>
-        const JSONBIN_URL = 'https://api.jsonbin.io/v3/b/6a650551f5f4af5e29c0add6';
-        const JSONBIN_KEY = '$2a$10$eHPbKi1WFSU7UtqssII1LuIqm17YSx0yh0IyC1fJDp7I8rXLyHs8i';
+        // שרת אחסון גלובלי יציב וחינמי שאינו חוסם CORS מדפדפנים
+        const SERVER_API_URL = 'https://kvdb.io/28B7mP4e2JgP8k1vA9L3qX/ashkenazi_reviews_v1';
 
         let deliveryMethod = 'pickup';
         let printType = 'front';
         let backPrintDetails = '';
         let discount = 0;
         let globalReviews = [];
-        let justSubmittedReviewId = null; // זיהוי הביקורת של המשתמש הנוכחי
+        let justSubmittedReviewId = null;
 
         document.addEventListener("DOMContentLoaded", function() {
             populateSizes();
@@ -487,28 +487,20 @@
             listElem.innerHTML = '<div style="font-size:13px; color:#aaa; text-align:center;">טוען ביקורות... ⏳</div>';
 
             try {
-                let res = await fetch(JSONBIN_URL + '/latest', {
-                    method: 'GET',
-                    headers: { 
-                        'X-Master-Key': JSONBIN_KEY,
-                        'X-Bin-Meta': 'false'
-                    }
-                });
-
+                let res = await fetch(SERVER_API_URL);
                 if (res.ok) {
                     let data = await res.json();
-                    if (data && Array.isArray(data.reviews)) {
-                        globalReviews = data.reviews;
+                    if (Array.isArray(data)) {
+                        globalReviews = data;
                     }
                 }
             } catch (e) {
-                console.log('שגיאה בטעינת ביקורות מרחוק');
+                console.log('טעינה ראשונית של ביקורות');
             } finally {
                 renderReviews();
             }
         }
 
-        // דחיסת תמונה כדי להקטין נפח לשרת
         function compressImage(file, callback) {
             let reader = new FileReader();
             reader.onload = function(e) {
@@ -516,12 +508,12 @@
                 img.onload = function() {
                     let canvas = document.createElement('canvas');
                     let ctx = canvas.getContext('2d');
-                    let maxWidth = 600;
+                    let maxWidth = 450;
                     let scale = maxWidth / img.width;
                     canvas.width = (img.width > maxWidth) ? maxWidth : img.width;
                     canvas.height = (img.width > maxWidth) ? img.height * scale : img.height;
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    callback(canvas.toDataURL('image/jpeg', 0.6));
+                    callback(canvas.toDataURL('image/jpeg', 0.5));
                 };
                 img.src = e.target.result;
             };
@@ -548,26 +540,17 @@
                     img: imgBase64
                 };
 
-                // מוסיף לראש הרשימה
                 globalReviews.unshift(newReview);
-                
-                // מגדיר זיהוי כדי ליצור אפקט בום למגיב
                 justSubmittedReviewId = newId;
 
                 try {
-                    let res = await fetch(JSONBIN_URL, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-Master-Key': JSONBIN_KEY,
-                            'X-Bin-Private': 'false' // מבטיח שיהיה גלוי לכולם!
-                        },
-                        body: JSON.stringify({ reviews: globalReviews })
+                    let res = await fetch(SERVER_API_URL, {
+                        method: 'POST',
+                        body: JSON.stringify(globalReviews)
                     });
 
-                    if (!res.ok) throw new Error('Failed');
+                    if (!res.ok) throw new Error('Network error');
 
-                    // ניקוי וסגירה
                     document.getElementById('rev-text').value = '';
                     document.getElementById('rev-username').value = '';
                     document.getElementById('rev-image').value = '';
@@ -575,7 +558,6 @@
 
                     renderReviews();
 
-                    // 💥 אפקט הבום והזיקוקים למפרסם הביקורת! 💥
                     if (typeof confetti === 'function') {
                         confetti({
                             particleCount: 120,
@@ -586,8 +568,8 @@
                     }
 
                 } catch (e) {
-                    alert('⚠️ שגיאה בשליחת הביקורת לשרת. אולי התמונה גדולה מדי? נסה שוב.');
-                    globalReviews.shift(); // מוחק ניסיון נכשל
+                    alert('⚠️ אירעה שגיאה. אנא ודא שהתמונה שצירפת לא כבדה מדי ונסה שוב.');
+                    globalReviews.shift();
                 } finally {
                     submitBtn.disabled = false;
                     submitBtn.innerText = 'פרסם ביקורת 🚀';
@@ -610,7 +592,6 @@
                 listHTML = '<div style="font-size: 13px; color: #aaa; text-align: center; margin-bottom: 10px;">טרם נכתבו ביקורות. מוזמן להיות הראשון שממליץ!</div>';
             } else {
                 globalReviews.forEach(r => {
-                    // בדיקה אם זו הביקורת שהרגע נכתבה בטלפון הזה
                     let isBoom = (r.id === justSubmittedReviewId) ? 'new-review-boom' : '';
                     
                     listHTML += `
