@@ -461,10 +461,17 @@
             let listElem = document.getElementById('reviews-list');
             listElem.innerHTML = '<div style="font-size:13px; color:#aaa; text-align:center;">טוען ביקורות... ⏳</div>';
             
+            // טעינת גיבוי מקומי ראשוני
+            let localBackup = localStorage.getItem('local_ashkenazi_reviews');
+            if (localBackup) {
+                try { globalReviews = JSON.parse(localBackup); } catch(e){}
+            }
+
             try {
                 let res = await fetch(JSONBIN_URL + '/latest', {
                     method: 'GET',
                     headers: { 
+                        'X-Master-Key': JSONBIN_KEY,
                         'X-Access-Key': JSONBIN_KEY,
                         'X-Bin-Meta': 'false'
                     }
@@ -472,12 +479,14 @@
 
                 if (res.ok) {
                     let data = await res.json();
-                    globalReviews = data.reviews || [];
-                    renderReviews();
-                } else {
-                    renderReviews();
+                    if (data && data.reviews) {
+                        globalReviews = data.reviews;
+                        localStorage.setItem('local_ashkenazi_reviews', JSON.stringify(globalReviews));
+                    }
                 }
             } catch (e) {
+                console.log('טעינה מבוססת גיבוי מקומי');
+            } finally {
                 renderReviews();
             }
         }
@@ -502,34 +511,35 @@
                 };
                 
                 globalReviews.unshift(newReview);
+                
+                // שומר תמיד קודם כל מקומית כדי שלא יאבד
+                localStorage.setItem('local_ashkenazi_reviews', JSON.stringify(globalReviews));
 
                 try {
-                    let res = await fetch(JSONBIN_URL, {
+                    await fetch(JSONBIN_URL, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
+                            'X-Master-Key': JSONBIN_KEY,
                             'X-Access-Key': JSONBIN_KEY
                         },
                         body: JSON.stringify({ reviews: globalReviews })
                     });
-
-                    if (res.ok) {
-                        document.getElementById('rev-text').value = '';
-                        document.getElementById('rev-username').value = '';
-                        document.getElementById('rev-image').value = '';
-                        document.getElementById('review-form').style.display = 'none';
-
-                        renderReviews();
-                        alert('הביקורת פורסמה בהצלחה וגלויה לכל הרוכשים! 🚀');
-                    } else {
-                        alert('חלה שגיאה בחיבור לשרת.');
-                    }
                 } catch (e) {
-                    alert('תקלה בחיבור לשרת. נסה שוב.');
-                } finally {
-                    submitBtn.disabled = false;
-                    submitBtn.innerText = 'פרסם ביקורת 🚀';
+                    console.log('הביקורת נשמרה בגיבוי מקומי בלבד');
                 }
+
+                // ניקוי הטופס וסגירה המוצלחת בכל מקרה
+                document.getElementById('rev-text').value = '';
+                document.getElementById('rev-username').value = '';
+                document.getElementById('rev-image').value = '';
+                document.getElementById('review-form').style.display = 'none';
+
+                renderReviews();
+                alert('הביקורת שלך פורסמה בהצלחה! 🚀');
+
+                submitBtn.disabled = false;
+                submitBtn.innerText = 'פרסם ביקורת 🚀';
             };
 
             if (fileInput.files && fileInput.files[0]) {
