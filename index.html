@@ -42,102 +42,130 @@
         }
 
         .container {
-            display: flex; flex-direction: column;
-            max-width: 500px; width: 100%; gap: 20px;
+            display: flex;
+            flex-direction: column;
+            max-width: 500px;
+            width: 100%;
+            gap: 20px;
         }
 
         .reviews-section-top { 
             background: rgba(25, 20, 18, 0.55); 
             backdrop-filter: blur(16px);
             border: 1px solid var(--card-border); 
-            border-radius: 24px; padding: 20px; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5); text-align: right;
+            border-radius: 24px;
+            padding: 20px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            text-align: right;
         }
 
-        /* אפקט כניסה מוזהב ומגניב לביקורות */
-        @keyframes goldReviewPopIn {
+        /* אפקט כניסה מוזהב לביקורות */
+        @keyframes goldReviewPop {
             0% {
                 opacity: 0;
-                transform: translateY(25px) scale(0.9);
+                transform: translateY(20px) scale(0.95);
                 box-shadow: 0 0 0px rgba(255, 215, 0, 0);
             }
-            60% {
-                transform: translateY(-4px) scale(1.02);
-                box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+            70% {
+                transform: translateY(-2px) scale(1.01);
+                box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
             }
             100% {
                 opacity: 1;
                 transform: translateY(0) scale(1);
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), inset 0 0 10px rgba(255, 215, 0, 0.1);
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
             }
         }
 
         .review-card {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.08) 0%, rgba(20, 15, 10, 0.6) 100%);
-            border: 1px solid rgba(255, 215, 0, 0.35);
-            border-radius: 14px; padding: 14px; margin-bottom: 12px; font-size: 14px; text-align: right;
-            animation: goldReviewPopIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            position: relative;
-            transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.08) 0%, rgba(30, 20, 10, 0.6) 100%);
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            text-align: right;
+            animation: goldReviewPop 0.5s ease-out forwards;
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
         }
 
         .review-card:hover {
-            transform: translateY(-3px) scale(1.01);
+            transform: translateY(-2px);
             border-color: var(--gold);
-            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.25);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.25);
         }
 
-        .review-author { 
-            font-weight: bold; 
-            color: var(--gold); 
-            margin-bottom: 6px; 
-            display: flex; 
-            align-items: center; 
-            gap: 6px; 
-            text-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
+        .review-author {
+            font-weight: bold;
+            color: var(--gold);
+            margin-bottom: 4px;
+            text-shadow: 0 0 6px rgba(255, 215, 0, 0.4);
         }
 
-        .review-img { 
-            max-width: 100%; height: auto; border-radius: 8px; margin-top: 10px; 
-            border: 1px solid rgba(255, 215, 0, 0.3); 
+        .review-img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-top: 8px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
         }
 
         .add-review-btn {
-            background: rgba(217, 65, 37, 0.15); border: 1px solid var(--primary);
-            color: white; border-radius: 10px; padding: 10px; width: 100%;
-            cursor: pointer; font-weight: bold; font-size: 14px; margin-top: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .add-review-btn:hover {
-            background: rgba(217, 65, 37, 0.3);
+            background: rgba(217, 65, 37, 0.15);
+            border: 1px solid var(--primary);
+            color: white;
+            border-radius: 10px;
+            padding: 10px;
+            width: 100%;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            margin-top: 10px;
         }
 
         .review-form-box {
-            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 15px; border-radius: 12px; margin-top: 15px; display: none;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 15px;
+            display: none;
         }
 
         .coupon-top-box {
             background: rgba(255, 255, 255, 0.05);
             border: 1px dashed var(--card-border);
-            border-radius: 16px; padding: 15px;
-            display: flex; gap: 8px; align-items: center; justify-content: center;
+            border-radius: 16px;
+            padding: 15px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            justify-content: center;
             transition: all 0.4s ease;
         }
 
         .coupon-input {
-            width: 120px !important; margin-bottom: 0 !important;
-            text-align: center; font-weight: bold; letter-spacing: 2px;
+            width: 120px !important;
+            margin-bottom: 0 !important;
+            text-align: center;
+            font-weight: bold;
+            letter-spacing: 2px;
         }
 
         .btn-apply-coupon {
-            background: var(--primary); color: white; border: none;
-            padding: 10px 15px; border-radius: 8px; font-weight: bold; cursor: pointer;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
             transition: transform 0.2s ease;
         }
 
-        .btn-apply-coupon:active { transform: scale(0.95); }
+        .btn-apply-coupon:active {
+            transform: scale(0.95);
+        }
 
         @keyframes couponEffect {
             0% { transform: scale(1) rotate(0deg); box-shadow: 0 0 0px var(--gold); }
@@ -155,87 +183,205 @@
         .gallery-container {
             background: rgba(20, 15, 12, 0.5);
             border: 1px solid var(--card-border);
-            border-radius: 24px; padding: 12px; text-align: center;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5); overflow: hidden;
+            border-radius: 24px;
+            padding: 12px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            overflow: hidden;
         }
 
         .main-img-wrapper {
-            width: 100%; padding-top: 133%; position: relative; background: #111; border-radius: 16px; overflow: hidden;
+            width: 100%;
+            padding-top: 133%;
+            position: relative;
+            background: #111;
+            border-radius: 16px;
+            overflow: hidden;
         }
 
         .main-img {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity 0.3s ease;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: opacity 0.3s ease;
         }
 
-        .gallery-nav { display: flex; justify-content: center; gap: 10px; margin-top: 15px; }
+        .gallery-nav {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
 
         .nav-btn {
-            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15);
-            color: var(--cream-white); padding: 10px 20px; border-radius: 30px; cursor: pointer;
-            font-weight: 600; font-size: 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--cream-white);
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
         }
 
-        .nav-btn.active { background: var(--primary); border-color: var(--primary); color: white; }
+        .nav-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
 
         .card { 
-            background: rgba(25, 20, 18, 0.55); backdrop-filter: blur(16px);
-            border: 1px solid var(--card-border); padding: 25px; border-radius: 24px; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5); text-align: right;
+            background: rgba(25, 20, 18, 0.55);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            padding: 25px;
+            border-radius: 24px; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            text-align: right;
         }
 
         .promo { 
-            background: linear-gradient(90deg, #d94125, #ee6b4d); color: white; 
-            padding: 12px; border-radius: 12px; margin-bottom: 20px; 
-            font-weight: bold; font-size: 15px; text-align: center;
+            background: linear-gradient(90deg, #d94125, #ee6b4d);
+            color: white; 
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 20px; 
+            font-weight: bold;
+            font-size: 15px;
+            text-align: center;
         }
 
-        h1 { margin: 0 0 20px 0; font-size: 32px; font-weight: 800; text-align: center; }
-        label { display: block; font-weight: 600; margin-bottom: 6px; color: #d0c8b8; font-size: 14px; }
+        h1 {
+            margin: 0 0 20px 0;
+            font-size: 32px;
+            font-weight: 800;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #d0c8b8;
+            font-size: 14px;
+        }
         
         select, input, textarea { 
-            width: 100%; padding: 12px; margin-bottom: 15px; 
-            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); 
-            border-radius: 10px; box-sizing: border-box; font-size: 16px; color: white;
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px; 
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15); 
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-size: 16px;
+            color: white;
             font-family: inherit;
         }
 
-        select option { background: #1e1916; color: white; }
-        
-        .option-group { display: flex; gap: 10px; margin-bottom: 15px; }
-        .option-btn {
-            flex: 1; padding: 12px; border-radius: 10px;
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-            text-align: center; cursor: pointer; font-size: 14px; color: #fff;
+        select option {
+            background: #1e1916;
+            color: white;
         }
-        .option-btn.active { border-color: var(--primary); background: rgba(217,65,37,0.25); font-weight: bold; }
+        
+        .option-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .option-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            cursor: pointer;
+            font-size: 14px;
+            color: #fff;
+        }
+
+        .option-btn.active {
+            border-color: var(--primary);
+            background: rgba(217,65,37,0.25);
+            font-weight: bold;
+        }
 
         .price-box { 
-            background: rgba(255, 255, 255, 0.03); padding: 15px; border-radius: 12px; 
-            margin: 20px 0; border: 1px solid rgba(255, 255, 255, 0.08); text-align: center;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 15px;
+            border-radius: 12px; 
+            margin: 20px 0;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            text-align: center;
             transition: all 0.3s ease;
         }
 
-        .price { font-size: 36px; font-weight: 800; color: #fff; margin-top: 3px; }
+        .price {
+            font-size: 36px;
+            font-weight: 800;
+            color: #fff;
+            margin-top: 3px;
+        }
         
         .btn-order { 
             background: linear-gradient(135deg, var(--whatsapp), #1ed760); 
-            color: white; border: none; width: 100%; padding: 16px; font-size: 18px; 
-            border-radius: 12px; cursor: pointer; font-weight: bold;
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 16px;
+            font-size: 18px; 
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
         }
 
         .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(5px);
-            display: none; justify-content: center; align-items: center; z-index: 10000;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
         }
+
         .modal-card {
-            background: #1e1815; border: 1px solid var(--primary);
-            border-radius: 20px; padding: 25px; max-width: 400px; width: 90%; text-align: right;
+            background: #1e1815;
+            border: 1px solid var(--primary);
+            border-radius: 20px;
+            padding: 25px;
+            max-width: 400px;
+            width: 90%;
+            text-align: right;
         }
-        .modal-title { font-size: 20px; font-weight: bold; color: var(--primary); margin-bottom: 10px; text-align: center; }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
         .modal-btn-confirm {
-            background: var(--primary); color: white; border: none; padding: 12px;
-            width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 16px;
         }
     </style>
 </head>
@@ -255,10 +401,10 @@
 
     <div class="container">
 
-        <!-- 1. אזור ביקורות מוזהב -->
+        <!-- 1. אזור ביקורות -->
         <div class="reviews-section-top">
-            <h3 style="margin-top:0; font-size:18px; text-align:center; color: var(--gold); text-shadow: 0 0 10px rgba(255,215,0,0.3);">
-                ⭐ חוויות וביקורות זהב של רוכשים ⭐
+            <h3 style="margin-top:0; font-size:18px; text-align:center; color: var(--gold); text-shadow: 0 0 8px rgba(255,215,0,0.3);">
+                ✨ חוויות וביקורות של רוכשים ✨
             </h3>
             
             <div id="reviews-list"></div>
@@ -281,7 +427,7 @@
             </div>
         </div>
 
-        <!-- 2. קוד קופון 2324 -->
+        <!-- 2. קוד קופון -->
         <div class="coupon-top-box" id="coupon-box">
             <label style="margin-bottom:0;">🎁 קוד הנחה:</label>
             <input type="text" id="coupon-code-input" class="coupon-input" placeholder="קוד">
@@ -313,7 +459,7 @@
                 <option>לבן</option>
             </select>
             
-            <label>📏 מידה / מספר (1 עד 47):</label>
+            <label>📏 מידה / מספר:</label>
             <select id="size"></select>
             
             <label>🔢 כמות:</label>
@@ -373,12 +519,11 @@
             updatePrice();
         });
 
-        // יצירת מידות פיזיות מ-1 עד 47 ולאחר מכן מידות אותיות
+        // יצירת מידות 1 עד 47 פיזית ברשימה
         function populateSizes() {
             const sizeSelect = document.getElementById('size');
             sizeSelect.innerHTML = '';
-            
-            // יצירת פריטי מידות פיזיים 1 עד 47
+
             for (let i = 1; i <= 47; i++) {
                 let opt = document.createElement('option');
                 opt.value = i;
@@ -386,7 +531,6 @@
                 sizeSelect.appendChild(opt);
             }
 
-            // הוספת מידות אותיות
             ['S', 'M', 'L', 'XL', 'XXL'].forEach(s => {
                 let opt = document.createElement('option');
                 opt.value = s;
@@ -473,4 +617,157 @@
 
         function updatePrice() {
             let q = parseInt(document.getElementById('qty').value) || 1;
-            let baseUnitPrice = (printType === 'back') ? 90 : ((q >= 3) ? 60 : 70
+            let baseUnitPrice = (printType === 'back') ? 90 : ((q >= 3) ? 60 : 70);
+            let deliveryPrice = (deliveryMethod === 'shipping') ? 5 : 0;
+            
+            let total = (q * baseUnitPrice) + deliveryPrice - discount;
+
+            if (total < 0) total = 0;
+            document.getElementById('total').innerText = total;
+        }
+
+        function toggleReviewForm() {
+            let form = document.getElementById('review-form');
+            form.style.display = (form.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function renderReviews() {
+            let listElem = document.getElementById('reviews-list');
+            listElem.innerHTML = '';
+
+            if (globalReviews.length === 0) {
+                listElem.innerHTML = '<div style="font-size:13px; color:#aaa; text-align:center;">עדיין אין ביקורות. בוא להיות הראשון!</div>';
+                return;
+            }
+
+            globalReviews.forEach((rev, index) => {
+                let card = document.createElement('div');
+                card.className = 'review-card';
+                card.style.animationDelay = (index * 0.1) + 's';
+
+                let imgHtml = rev.image ? `<img src="${rev.image}" class="review-img" alt="תמונת ביקורת">` : '';
+                card.innerHTML = `
+                    <div class="review-author">👑 ${rev.author}</div>
+                    <div style="color: #f5eedc; line-height: 1.4;">${rev.text}</div>
+                    ${imgHtml}
+                `;
+                listElem.appendChild(card);
+            });
+        }
+
+        async function loadGlobalReviews() {
+            let listElem = document.getElementById('reviews-list');
+            listElem.innerHTML = '<div style="font-size:13px; color:var(--gold); text-align:center;">טוען ביקורות...</div>';
+            
+            try {
+                let res = await fetch(JSONBIN_URL + '/latest', {
+                    headers: { 'X-Access-Key': JSONBIN_KEY }
+                });
+                if (res.ok) {
+                    let data = await res.json();
+                    let loaded = data.record.reviews || [];
+                    globalReviews = loaded.filter(r => r.author && !r.author.includes('דניאל'));
+                    renderReviews();
+                } else {
+                    renderReviews();
+                }
+            } catch (e) {
+                renderReviews();
+            }
+        }
+
+        async function submitReview() {
+            let text = document.getElementById('rev-text').value.trim();
+            let usernameDisplay = document.getElementById('rev-username').value.trim() || 'משתמש אנונימי';
+            let fileInput = document.getElementById('rev-image');
+            let submitBtn = document.getElementById('btn-submit-rev');
+
+            if (!text) {
+                alert('אנא כתוב תוכן לביקורת');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'מפרסם...';
+
+            let imageUrl = '';
+            if (fileInput.files && fileInput.files[0]) {
+                try {
+                    imageUrl = await readFileAsBase64(fileInput.files[0]);
+                } catch(e) {
+                    console.error("Error reading image:", e);
+                }
+            }
+
+            let newReview = {
+                author: usernameDisplay,
+                text: text,
+                image: imageUrl
+            };
+
+            globalReviews.unshift(newReview);
+
+            try {
+                await fetch(JSONBIN_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Access-Key': JSONBIN_KEY
+                    },
+                    body: JSON.stringify({ reviews: globalReviews })
+                });
+
+                document.getElementById('rev-text').value = '';
+                document.getElementById('rev-username').value = '';
+                fileInput.value = '';
+                toggleReviewForm();
+                renderReviews();
+            } catch (e) {
+                alert('שגיאה בשמירת הביקורת בשרת.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerText = 'פרסם ביקורת 🚀';
+            }
+        }
+
+        function readFileAsBase64(file) {
+            return new Promise((resolve, reject) => {
+                let reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function order() {
+            let name = document.getElementById('cust-name').value.trim();
+            if (!name) {
+                alert('אנא הזן שם מלא');
+                return;
+            }
+
+            if (deliveryMethod === 'shipping') {
+                let address = document.getElementById('cust-address').value.trim();
+                if (!address) {
+                    alert('אנא הזן כתובת למשלוח');
+                    return;
+                }
+            }
+
+            let color = document.getElementById('color').value;
+            let size = document.getElementById('size').value;
+            let qty = document.getElementById('qty').value;
+            let notes = document.getElementById('notes').value;
+            let total = document.getElementById('total').innerText;
+
+            let printInfo = (printType === 'back') ? `הדפסה על הגב (${backPrintDetails})` : 'הדפסה קדמית בלבד';
+            let deliveryInfo = (deliveryMethod === 'shipping') ? `משלוח לכתובת: ${document.getElementById('cust-address').value}` : 'איסוף עצמי';
+            let couponInfo = (discount > 0) ? '\n🎁 קוד קופון 2324 הופעל' : '';
+
+            let msg = `היי, אני רוצה להזמין חולצה:\n\n👤 שם: ${name}\n🎨 צבע: ${color}\n📏 מידה: ${size}\n🔢 כמות: ${qty}\n🪡 הדפסה: ${printInfo}\n🛵 אספקה: ${deliveryInfo}${couponInfo}\n📝 הערות: ${notes}\n\n💰 סה"כ: ${total} ₪`;
+
+            window.open(`https://wa.me/972500000000?text=${encodeURIComponent(msg)}`);
+        }
+    </script>
+</body>
+</html>
