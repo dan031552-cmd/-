@@ -1,611 +1,476 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html dir="rtl" lang="he">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ashkenazi Shirts - חולצות מודפסות איכותיות</title>
+    <title>אשכנזי מכירת חולצות</title>
     
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/jpeg" href="WhatsApp Image 2026-06-26 at 15.01.25.jpeg">
+    <!-- ספריה לאפקט נצנצים/זיקוקים -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
-    <!-- Canvas Confetti for Coupon Effect -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: rgba(30, 41, 59, 0.85);
-            --primary: #6366f1;
-            --primary-hover: #4f46e5;
-            --accent: #ec4899;
-            --text-main: #f8fafc;
-            --text-muted: #cbd5e1;
-            --border-color: rgba(255, 255, 255, 0.2);
-            --gold-primary: #f59e0b;
-            --gold-border: rgba(245, 158, 11, 0.5);
+            --primary: #d94125;
+            --primary-hover: #b8321a;
+            --whatsapp: #25d366;
+            --bg-grad: linear-gradient(135deg, #181d28 0%, #291e18 100%);
+            --card-border: rgba(235, 130, 60, 0.25);
+            --cream-white: #f5eedc;
+            --gold: #ffd700;
         }
 
-        body {
-            font-family: 'Heebo', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            margin: 0;
-            padding: 20px;
+        body { 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+            background: var(--bg-grad); 
+            color: #f8fafc;
+            text-align: center; 
+            padding: 20px; 
+            margin: 0; 
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: background-color 0.5s ease;
+            overflow-x: hidden;
+            transition: background 0.8s ease, color 0.8s ease;
         }
 
         body.gold-mode {
-            --primary: #f59e0b;
-            --primary-hover: #d97706;
-            --accent: #fbbf24;
-            --border-color: var(--gold-border);
+            --primary: #ffd700;
+            --card-border: rgba(255, 215, 0, 0.6);
+            --bg-grad: linear-gradient(135deg, #2b210a 0%, #110e05 100%);
         }
 
         .container {
-            max-width: 1000px;
-            width: 100%;
-            background: var(--card-bg);
+            display: flex; flex-direction: column;
+            max-width: 500px; width: 100%; gap: 20px;
+        }
+
+        .reviews-section-top { 
+            background: rgba(25, 20, 18, 0.55); 
             backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-radius: 24px;
-            border: 1px solid var(--border-color);
-            padding: 30px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
+            border: 1px solid var(--card-border); 
+            border-radius: 24px; padding: 20px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5); text-align: right;
         }
 
-        header {
-            text-align: center;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 20px;
-        }
-
-        h1 {
-            font-weight: 900;
-            font-size: 2.5rem;
-            margin: 0;
-            background: linear-gradient(135deg, #a5b4fc, #6366f1, #ec4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        body.gold-mode h1 {
-            background: linear-gradient(135deg, #fef3c7, #f59e0b, #b45309);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .subtitle {
-            color: var(--text-muted);
-            margin-top: 5px;
-            font-size: 1.1rem;
-        }
-
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-        }
-
-        @media (max-width: 768px) {
-            .main-content {
-                grid-template-columns: 1fr;
+        /* אפקט כניסה מוזהב ומגניב לביקורות */
+        @keyframes goldReviewPopIn {
+            0% {
+                opacity: 0;
+                transform: translateY(25px) scale(0.9);
+                box-shadow: 0 0 0px rgba(255, 215, 0, 0);
+            }
+            60% {
+                transform: translateY(-4px) scale(1.02);
+                box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), inset 0 0 10px rgba(255, 215, 0, 0.1);
             }
         }
 
+        .review-card {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.08) 0%, rgba(20, 15, 10, 0.6) 100%);
+            border: 1px solid rgba(255, 215, 0, 0.35);
+            border-radius: 14px; padding: 14px; margin-bottom: 12px; font-size: 14px; text-align: right;
+            animation: goldReviewPopIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            position: relative;
+            transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .review-card:hover {
+            transform: translateY(-3px) scale(1.01);
+            border-color: var(--gold);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.25);
+        }
+
+        .review-author { 
+            font-weight: bold; 
+            color: var(--gold); 
+            margin-bottom: 6px; 
+            display: flex; 
+            align-items: center; 
+            gap: 6px; 
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
+        }
+
+        .review-img { 
+            max-width: 100%; height: auto; border-radius: 8px; margin-top: 10px; 
+            border: 1px solid rgba(255, 215, 0, 0.3); 
+        }
+
+        .add-review-btn {
+            background: rgba(217, 65, 37, 0.15); border: 1px solid var(--primary);
+            color: white; border-radius: 10px; padding: 10px; width: 100%;
+            cursor: pointer; font-weight: bold; font-size: 14px; margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .add-review-btn:hover {
+            background: rgba(217, 65, 37, 0.3);
+        }
+
+        .review-form-box {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 15px; border-radius: 12px; margin-top: 15px; display: none;
+        }
+
+        .coupon-top-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px dashed var(--card-border);
+            border-radius: 16px; padding: 15px;
+            display: flex; gap: 8px; align-items: center; justify-content: center;
+            transition: all 0.4s ease;
+        }
+
+        .coupon-input {
+            width: 120px !important; margin-bottom: 0 !important;
+            text-align: center; font-weight: bold; letter-spacing: 2px;
+        }
+
+        .btn-apply-coupon {
+            background: var(--primary); color: white; border: none;
+            padding: 10px 15px; border-radius: 8px; font-weight: bold; cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .btn-apply-coupon:active { transform: scale(0.95); }
+
+        @keyframes couponEffect {
+            0% { transform: scale(1) rotate(0deg); box-shadow: 0 0 0px var(--gold); }
+            20% { transform: scale(1.08) rotate(-2deg); box-shadow: 0 0 25px var(--gold); }
+            40% { transform: scale(1.08) rotate(2deg); box-shadow: 0 0 35px var(--gold); }
+            60% { transform: scale(1.05) rotate(-1deg); box-shadow: 0 0 25px var(--gold); }
+            100% { transform: scale(1) rotate(0deg); box-shadow: 0 0 10px var(--gold); }
+        }
+
+        .coupon-activated-effect {
+            animation: couponEffect 0.6s ease-in-out forwards;
+            border-color: var(--gold) !important;
+        }
+
         .gallery-container {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+            background: rgba(20, 15, 12, 0.5);
+            border: 1px solid var(--card-border);
+            border-radius: 24px; padding: 12px; text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5); overflow: hidden;
         }
 
-        .main-image {
-            width: 100%;
-            height: 350px;
-            border-radius: 16px;
-            object-fit: cover;
-            border: 1px solid var(--border-color);
-            background: #1e293b;
+        .main-img-wrapper {
+            width: 100%; padding-top: 133%; position: relative; background: #111; border-radius: 16px; overflow: hidden;
         }
 
-        .thumbnails {
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            padding-bottom: 5px;
+        .main-img {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity 0.3s ease;
         }
 
-        .thumb {
-            width: 70px;
-            height: 70px;
-            border-radius: 10px;
-            object-fit: cover;
-            cursor: pointer;
-            border: 2px solid transparent;
-            opacity: 0.6;
-            transition: all 0.3s;
+        .gallery-nav { display: flex; justify-content: center; gap: 10px; margin-top: 15px; }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--cream-white); padding: 10px 20px; border-radius: 30px; cursor: pointer;
+            font-weight: 600; font-size: 14px;
         }
 
-        .thumb.active, .thumb:hover {
-            opacity: 1;
-            border-color: var(--primary);
+        .nav-btn.active { background: var(--primary); border-color: var(--primary); color: white; }
+
+        .card { 
+            background: rgba(25, 20, 18, 0.55); backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border); padding: 25px; border-radius: 24px; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5); text-align: right;
         }
 
-        .form-section {
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
+        .promo { 
+            background: linear-gradient(90deg, #d94125, #ee6b4d); color: white; 
+            padding: 12px; border-radius: 12px; margin-bottom: 20px; 
+            font-weight: bold; font-size: 15px; text-align: center;
         }
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .form-row {
-            display: flex;
-            gap: 15px;
-        }
-
-        .form-row .form-group {
-            flex: 1;
-        }
-
-        label {
-            font-weight: 700;
-            font-size: 1rem;
-            color: #ffffff;
-        }
-
-        /* עיצוב תיבות קלט וגלילה מלאה ל-Select */
-        input, select, textarea {
-            width: 100%;
-            height: 48px;
-            padding: 0 16px;
-            background-color: #0f172a !important;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            color: #ffffff !important;
+        h1 { margin: 0 0 20px 0; font-size: 32px; font-weight: 800; text-align: center; }
+        label { display: block; font-weight: 600; margin-bottom: 6px; color: #d0c8b8; font-size: 14px; }
+        
+        select, input, textarea { 
+            width: 100%; padding: 12px; margin-bottom: 15px; 
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); 
+            border-radius: 10px; box-sizing: border-box; font-size: 16px; color: white;
             font-family: inherit;
-            font-size: 1.05rem;
-            font-weight: 700;
-            box-sizing: border-box;
-            cursor: pointer;
         }
 
-        textarea {
-            height: auto;
-            padding: 12px 16px;
+        select option { background: #1e1916; color: white; }
+        
+        .option-group { display: flex; gap: 10px; margin-bottom: 15px; }
+        .option-btn {
+            flex: 1; padding: 12px; border-radius: 10px;
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            text-align: center; cursor: pointer; font-size: 14px; color: #fff;
+        }
+        .option-btn.active { border-color: var(--primary); background: rgba(217,65,37,0.25); font-weight: bold; }
+
+        .price-box { 
+            background: rgba(255, 255, 255, 0.03); padding: 15px; border-radius: 12px; 
+            margin: 20px 0; border: 1px solid rgba(255, 255, 255, 0.08); text-align: center;
+            transition: all 0.3s ease;
         }
 
-        /* עיצוב אופציות התפריט הנפתח */
-        select option, select optgroup {
-            background-color: #0f172a !important;
-            color: #ffffff !important;
-            padding: 8px;
-            font-size: 1rem;
-        }
-
-        select optgroup {
-            font-weight: bold;
-            color: var(--primary) !important;
-        }
-
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.4);
-        }
-
-        .option-toggle {
-            display: flex;
-            gap: 10px;
-        }
-
-        .toggle-btn {
-            flex: 1;
-            padding: 12px;
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-weight: 700;
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        .toggle-btn.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        .coupon-wrapper {
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn-coupon {
-            padding: 0 20px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid var(--border-color);
-            color: white;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 700;
-            transition: all 0.3s;
-        }
-
-        .btn-coupon:hover {
-            background: var(--primary);
-        }
-
-        .price-box {
-            background: rgba(15, 23, 42, 0.8);
-            padding: 15px 20px;
-            border-radius: 16px;
-            border: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 1.3rem;
-            font-weight: 900;
-        }
-
-        .price-amount {
-            color: #4ade80;
-            font-size: 1.6rem;
-        }
-
-        .btn-order {
-            width: 100%;
-            padding: 16px;
-            background: #25d366;
-            color: white;
-            border: none;
-            border-radius: 16px;
-            font-size: 1.2rem;
-            font-weight: 900;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            transition: transform 0.2s, background-color 0.3s;
-            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
-        }
-
-        .btn-order:hover {
-            background: #22c55e;
-            transform: translateY(-2px);
+        .price { font-size: 36px; font-weight: 800; color: #fff; margin-top: 3px; }
+        
+        .btn-order { 
+            background: linear-gradient(135deg, var(--whatsapp), #1ed760); 
+            color: white; border: none; width: 100%; padding: 16px; font-size: 18px; 
+            border-radius: 12px; cursor: pointer; font-weight: bold;
         }
 
         .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(8px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(5px);
+            display: none; justify-content: center; align-items: center; z-index: 10000;
         }
-
-        .modal-overlay.open {
-            opacity: 1;
-            pointer-events: all;
+        .modal-card {
+            background: #1e1815; border: 1px solid var(--primary);
+            border-radius: 20px; padding: 25px; max-width: 400px; width: 90%; text-align: right;
         }
-
-        .modal {
-            background: #1e293b;
-            padding: 25px;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 450px;
-            border: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .reviews-container {
-            border-top: 1px solid var(--border-color);
-            padding-top: 25px;
-            margin-top: 10px;
-        }
-
-        .reviews-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .btn-review-add {
-            padding: 10px 18px;
-            background: var(--primary);
-            border: none;
-            color: white;
-            border-radius: 12px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .review-lock-msg {
-            color: #f59e0b;
-            font-size: 0.9rem;
-            background: rgba(245, 158, 11, 0.1);
-            padding: 8px 12px;
-            border-radius: 8px;
-            border: 1px solid rgba(245, 158, 11, 0.3);
-        }
-
-        .reviews-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            max-height: 300px;
-            overflow-y: auto;
-            padding-left: 5px;
-        }
-
-        .review-card {
-            background: rgba(15, 23, 42, 0.5);
-            border: 1px solid var(--border-color);
-            padding: 15px;
-            border-radius: 14px;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .review-meta {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        .review-author {
-            font-weight: 700;
-            color: white;
-        }
-
-        .review-stars {
-            color: #f59e0b;
+        .modal-title { font-size: 20px; font-weight: bold; color: var(--primary); margin-bottom: 10px; text-align: center; }
+        .modal-btn-confirm {
+            background: var(--primary); color: white; border: none; padding: 12px;
+            width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <header>
-            <h1>Ashkenazi Shirts</h1>
-            <div class="subtitle">חולצות דרייפיט וטריקו בגרפיקה והדפסה איכותית</div>
-        </header>
-
-        <div class="main-content">
-            <!-- גלריה -->
-            <div class="gallery-container">
-                <img id="main-img" src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=800" class="main-image" alt="חולצה מודפסת">
-                <div class="thumbnails">
-                    <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=800" class="thumb active" onclick="changeImage(this)">
-                    <img src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=800" class="thumb" onclick="changeImage(this)">
-                    <img src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800" class="thumb" onclick="changeImage(this)">
-                </div>
-            </div>
-
-            <!-- טופס -->
-            <div class="form-section">
-                
-                <div class="form-group">
-                    <label>שם מלא *</label>
-                    <input type="text" id="cust-name" placeholder="הכנס שם מלא">
-                </div>
-
-                <div class="form-group">
-                    <label>אופן אספקה</label>
-                    <div class="option-toggle">
-                        <div class="toggle-btn active" id="btn-pickup" onclick="setDelivery('pickup')">איסוף עצמי</div>
-                        <div class="toggle-btn" id="btn-shipping" onclick="setDelivery('shipping')">משלוח (35 ₪)</div>
-                    </div>
-                </div>
-
-                <div class="form-group" id="address-group" style="display: none;">
-                    <label>כתובת למשלוח *</label>
-                    <input type="text" id="cust-address" placeholder="עיר, רחוב ומספר בית">
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="color">צבע חולצה</label>
-                        <select id="color">
-                            <option value="שחור">שחור</option>
-                            <option value="לבן">לבן</option>
-                            <option value="כחול נייבי">כחול נייבי</option>
-                            <option value="אפור עכבר">אפור עכבר</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="size">מידה</label>
-                        <select id="size">
-                            <optgroup label="מידות אותיות">
-                                <option value="S">S</option>
-                                <option value="M" selected>M</option>
-                                <option value="L">L</option>
-                                <option value="XL">XL</option>
-                                <option value="XXL">XXL</option>
-                                <option value="3XL">3XL</option>
-                                <option value="4XL">4XL</option>
-                            </optgroup>
-                            <optgroup label="מידות מספרים (1-47)" id="numeric-sizes">
-                                <!-- ייטען בלופ אוטומטי מ-1 עד 47 -->
-                            </optgroup>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>סוג הדפסה</label>
-                    <div class="option-toggle">
-                        <div class="toggle-btn active" id="btn-print-front" onclick="setPrintType('front')">קדמית בלבד</div>
-                        <div class="toggle-btn" id="btn-print-back" onclick="openBackPrintModal()">קדמית + גב (+15 ₪)</div>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="qty">כמות</label>
-                        <input type="number" id="qty" value="1" min="1" onchange="calculateTotal()">
-                    </div>
-
-                    <div class="form-group">
-                        <label>קוד קופון</label>
-                        <div class="coupon-wrapper">
-                            <input type="text" id="coupon-code" placeholder="קוד">
-                            <button class="btn-coupon" onclick="applyCoupon()">הפעל</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>הערות להזמנה</label>
-                    <textarea id="notes" rows="2" placeholder="דגשים מיוחדים, כיתוב רצוי וכו'"></textarea>
-                </div>
-
-                <div class="price-box">
-                    <span>סה"כ לתשלום:</span>
-                    <span class="price-amount" id="total">55 ₪</span>
-                </div>
-
-                <button class="btn-order" onclick="order()">
-                    <span>שלח הזמנה בוואטסאפ</span>
-                    <span>✅</span>
-                </button>
-
-            </div>
-        </div>
-
-        <!-- אזור ביקורות -->
-        <div class="reviews-container">
-            <div class="reviews-header">
-                <h2>ביקורות לקוחות 💬</h2>
-                <div id="review-action-area">
-                    <div class="review-lock-msg" id="review-lock-msg">🔒 כתיבת ביקורת מתאפשרת רק ללקוחות שביצעו הזמנה</div>
-                    <button class="btn-review-add" id="btn-open-review-modal" style="display: none;" onclick="openReviewModal()">✍️ הוסף את הביקורת שלך על המוצר</button>
-                </div>
-            </div>
-
-            <div class="reviews-list" id="reviews-list"></div>
-        </div>
-
-    </div>
-
-    <!-- מודאלים -->
     <div class="modal-overlay" id="back-print-modal">
-        <div class="modal">
-            <h3>הדפסה על הגב (+15 ₪)</h3>
-            <p style="color: var(--text-muted); margin: 0;">מה תרצה להדפיס על גב החולצה?</p>
-            <textarea id="back-print-text" rows="3" placeholder="כתיבת טקסט, מספר, או תיאור של סמל..."></textarea>
-            <div style="display: flex; gap: 10px; justify-content: flex-end;">
-                <button class="btn-coupon" onclick="closeBackPrintModal(false)">ביטול</button>
-                <button class="btn-review-add" onclick="closeBackPrintModal(true)">אישור</button>
-            </div>
+        <div class="modal-card">
+            <div class="modal-title">✨ מפרט הדפסה על הגב (+20 ₪)</div>
+            <p style="font-size: 14px; color: #ccc;">פרט מה ברצונך להדפיס על גב החולצה (שם, מספר, לוגו או כיתוב אישי):</p>
+            
+            <label>✍️ כיתוב / מספר לגב:</label>
+            <textarea id="modal-back-text" rows="3" placeholder="למשל: ASHKENAZI #23"></textarea>
+            
+            <button class="modal-btn-confirm" onclick="confirmBackPrint()">אישור ושמירה 👍</button>
         </div>
     </div>
 
-    <div class="modal-overlay" id="add-review-modal">
-        <div class="modal">
-            <h3>הוסף ביקורת</h3>
-            <div class="form-group">
-                <label>שמך (יוצג בביקורת)</label>
-                <input type="text" id="review-name-input" placeholder="ישראל ישראלי">
+    <div class="container">
+
+        <!-- 1. אזור ביקורות מוזהב -->
+        <div class="reviews-section-top">
+            <h3 style="margin-top:0; font-size:18px; text-align:center; color: var(--gold); text-shadow: 0 0 10px rgba(255,215,0,0.3);">
+                ⭐ חוויות וביקורות זהב של רוכשים ⭐
+            </h3>
+            
+            <div id="reviews-list"></div>
+
+            <button class="add-review-btn" onclick="toggleReviewForm()">✍️ הוסף את הביקורת שלך על המוצר</button>
+
+            <div class="review-form-box" id="review-form">
+                <h4 style="margin: 0 0 10px 0; text-align: center; font-size: 15px; color: var(--gold);">➕ הוסף ביקורת מוצר</h4>
+                
+                <label>👤 השם שלך:</label>
+                <input type="text" id="rev-username" placeholder="הכנס את שמך">
+
+                <label>✍️ תוכן הביקורת:</label>
+                <textarea id="rev-text" rows="2" placeholder="איך החולצה יושבת עליך?"></textarea>
+
+                <label>📸 העלה תמונה שלך עם החולצה (אופציונלי):</label>
+                <input type="file" id="rev-image" accept="image/*" style="padding: 6px;">
+
+                <button class="btn-order" id="btn-submit-rev" style="background: var(--primary); font-size: 15px; padding: 10px; margin-top: 5px;" onclick="submitReview()">פרסם ביקורת 🚀</button>
             </div>
-            <div class="form-group">
-                <label>דירוג</label>
-                <select id="review-rating-select">
-                    <option value="5">⭐⭐⭐⭐⭐ (5/5)</option>
-                    <option value="4">⭐⭐⭐⭐ (4/5)</option>
-                    <option value="3">⭐⭐⭐ (3/5)</option>
-                </select>
+        </div>
+
+        <!-- 2. קוד קופון 2324 -->
+        <div class="coupon-top-box" id="coupon-box">
+            <label style="margin-bottom:0;">🎁 קוד הנחה:</label>
+            <input type="text" id="coupon-code-input" class="coupon-input" placeholder="קוד">
+            <button class="btn-apply-coupon" onclick="applyCoupon()">הפעל</button>
+        </div>
+
+        <!-- 3. גלריה -->
+        <div class="gallery-container">
+            <div class="main-img-wrapper">
+                <img id="product-view" class="main-img" src="WhatsApp Image 2026-06-26 at 13.26.44.jpeg" alt="חולצה קדימה">
             </div>
-            <div class="form-group">
-                <label>תוכן הביקורת</label>
-                <textarea id="review-text-input" rows="3" placeholder="איך הייתה החולצה? האיכות? המשלוח?"></textarea>
+            <div class="gallery-nav">
+                <button class="nav-btn active" onclick="changeView('WhatsApp Image 2026-06-26 at 13.26.44.jpeg', this)">קדימה 👕</button>
+                <button class="nav-btn" onclick="changeView('WhatsApp Image 2026-06-26 at 13.26.44 (1).jpeg', this)">אחורה ↩️</button>
             </div>
-            <div style="display: flex; gap: 10px; justify-content: flex-end;">
-                <button class="btn-coupon" onclick="closeReviewModal()">ביטול</button>
-                <button class="btn-review-add" onclick="submitReview()">פרסם ביקורת 🚀</button>
+        </div>
+
+        <!-- 4. טופס הזמנה -->
+        <div class="card">
+            <div class="promo">🔥 מבצע: 3 חולצות ומעלה ב-60 ₪ בלבד!</div>
+            
+            <h1>אשכנזי</h1>
+            
+            <label>👤 שם מלא (חובה):</label>
+            <input type="text" id="cust-name" placeholder="הכנס את שמך">
+
+            <label>🎨 צבע חולצה:</label>
+            <select id="color">
+                <option>לבן</option>
+            </select>
+            
+            <label>📏 מידה / מספר (1 עד 47):</label>
+            <select id="size"></select>
+            
+            <label>🔢 כמות:</label>
+            <input type="number" id="qty" value="1" min="1" oninput="updatePrice()">
+
+            <label>🪡 סוג הדפסה:</label>
+            <div class="option-group">
+                <div class="option-btn active" id="print-front-only" onclick="setPrintType('front')">הדפסה קדמית בלבד (70 ₪)</div>
+                <div class="option-btn" id="print-back-add" onclick="setPrintType('back')">הדפסה על הגב (90 ₪)</div>
             </div>
+
+            <div id="back-details-preview" style="display: none; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 13px;">
+                <strong>פירוט הדפסה לגב:</strong> <span id="back-text-display"></span>
+                <span style="color: var(--primary); cursor: pointer; text-decoration: underline; margin-right: 8px;" onclick="openBackModal()">(ערוך)</span>
+            </div>
+
+            <label>🛵 אופן אספקה:</label>
+            <div class="option-group">
+                <div class="option-btn active" id="opt-pickup" onclick="setDelivery('pickup')">איסוף עצמי (חינם)</div>
+                <div class="option-btn" id="opt-shipping" onclick="setDelivery('shipping')">משלוח (+5 ₪)</div>
+            </div>
+
+            <div id="address-container" style="display: none;">
+                <label>🏠 כתובת למשלוח (חובה):</label>
+                <input type="text" id="cust-address" placeholder="רחוב, מספר בית ועיר">
+            </div>
+            
+            <label>📝 הערות נוספות להזמנה:</label>
+            <textarea id="notes" rows="2" placeholder="כל בקשה מיוחדת..."></textarea>
+
+            <div class="price-box">
+                <div style="color: #d0c8b8; font-size: 14px;">סה"כ לתשלום:</div>
+                <div class="price"><span id="total">70</span> ₪</div>
+                <div id="discount-note" style="color: var(--gold); font-size: 13px; display: none; margin-top: 5px; font-weight: bold;">✨ קוד 2324 הופעל! ההנחה חושבה (-10 ₪)</div>
+            </div>
+            
+            <button class="btn-order" onclick="order()">שלח הזמנה בוואטסאפ ✅</button>
         </div>
     </div>
 
     <script>
-        const PHONE_NUMBER = "972500000000";
-        const FIREBASE_DB_URL = "https://ashkenazi-shirts-default-rtdb.firebaseio.com/";
+        const JSONBIN_URL = 'https://api.jsonbin.io/v3/b/6683f1be2d621316b250529d';
+        const JSONBIN_KEY = '$2a$10$o.3/J6S8W331A8zS0yS2le9f.8O3q3P4Q4z013Z6.123456789';
 
-        let basePrice = 55;
-        let printExtra = 0;
-        let shippingExtra = 0;
-        let discount = 0;
         let deliveryMethod = 'pickup';
         let printType = 'front';
         let backPrintDetails = '';
+        let discount = 0;
+        let globalReviews = [];
 
-        window.onload = function() {
-            populateNumericSizes();
-            checkUserOrderPermission();
-            fetchReviews();
-        };
+        document.addEventListener("DOMContentLoaded", function() {
+            localStorage.clear();
+            sessionStorage.clear();
+            
+            populateSizes();
+            loadGlobalReviews();
+            updatePrice();
+        });
 
-        // פונקציה שממלאת אוטומטית את המידות מ-1 עד 47
-        function populateNumericSizes() {
-            const container = document.getElementById('numeric-sizes');
+        // יצירת מידות פיזיות מ-1 עד 47 ולאחר מכן מידות אותיות
+        function populateSizes() {
+            const sizeSelect = document.getElementById('size');
+            sizeSelect.innerHTML = '';
+            
+            // יצירת פריטי מידות פיזיים 1 עד 47
             for (let i = 1; i <= 47; i++) {
                 let opt = document.createElement('option');
-                opt.value = "מידה " + i;
-                opt.textContent = "מידה " + i;
-                container.appendChild(opt);
+                opt.value = i;
+                opt.innerText = i;
+                sizeSelect.appendChild(opt);
             }
+
+            // הוספת מידות אותיות
+            ['S', 'M', 'L', 'XL', 'XXL'].forEach(s => {
+                let opt = document.createElement('option');
+                opt.value = s;
+                opt.innerText = s;
+                if(s === 'M') opt.selected = true;
+                sizeSelect.appendChild(opt);
+            });
         }
 
-        function changeImage(el) {
-            document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
-            el.classList.add('active');
-            document.getElementById('main-img').src = el.src;
-        }
+        function applyCoupon() {
+            let code = document.getElementById('coupon-code-input').value.trim();
+            if (code === '2324') {
+                discount = 10;
+                
+                let couponBox = document.getElementById('coupon-box');
+                couponBox.classList.add('coupon-activated-effect');
+                
+                if (typeof confetti === 'function') {
+                    confetti({
+                        particleCount: 100,
+                        spread: 70,
+                        origin: { y: 0.6 },
+                        colors: ['#ffd700', '#d94125', '#ffffff']
+                    });
+                }
 
-        function setDelivery(method) {
-            deliveryMethod = method;
-            document.getElementById('btn-pickup').classList.toggle('active', method === 'pickup');
-            document.getElementById('btn-shipping').classList.toggle('active', method === 'shipping');
-            
-            let addressGroup = document.getElementById('address-group');
-            if (method === 'shipping') {
-                addressGroup.style.display = 'flex';
-                shippingExtra = 35;
+                document.body.classList.add('gold-mode');
+                document.getElementById('discount-note').style.display = 'block';
+                
+                updatePrice();
             } else {
-                addressGroup.style.display = 'none';
-                shippingExtra = 0;
+                alert('❌ קוד הנחה לא תקין.');
             }
-            calculateTotal();
+        }
+
+        function changeView(imgSrc, btn) {
+            const imgElement = document.getElementById('product-view');
+            imgElement.style.opacity = 0;
+            setTimeout(() => {
+                imgElement.src = imgSrc;
+                imgElement.style.opacity = 1;
+            }, 100);
+            document.querySelectorAll('.gallery-nav .nav-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
         }
 
         function setPrintType(type) {
             printType = type;
-            document.getElementById('btn-print-front'
+            document.getElementById('print-front-only').classList.toggle('active', type === 'front');
+            document.getElementById('print-back-add').classList.toggle('active', type === 'back');
+
+            if (type === 'back') {
+                openBackModal();
+            } else {
+                document.getElementById('back-details-preview').style.display = 'none';
+                updatePrice();
+            }
+        }
+
+        function openBackModal() {
+            document.getElementById('back-print-modal').style.display = 'flex';
+        }
+
+        function confirmBackPrint() {
+            let val = document.getElementById('modal-back-text').value.trim();
+            if (!val) {
+                alert('אנא רשום מה ברצונך להדפיס על הגב');
+                return;
+            }
+            backPrintDetails = val;
+            document.getElementById('back-text-display').innerText = val;
+            document.getElementById('back-details-preview').style.display = 'block';
+            document.getElementById('back-print-modal').style.display = 'none';
+            updatePrice();
+        }
+
+        function setDelivery(method) {
+            deliveryMethod = method;
+            document.getElementById('opt-pickup').classList.toggle('active', method === 'pickup');
+            document.getElementById('opt-shipping').classList.toggle('active', method === 'shipping');
+            document.getElementById('address-container').style.display = (method === 'shipping') ? 'block' : 'none';
+            updatePrice();
+        }
+
+        function updatePrice() {
+            let q = parseInt(document.getElementById('qty').value) || 1;
+            let baseUnitPrice = (printType === 'back') ? 90 : ((q >= 3) ? 60 : 70
