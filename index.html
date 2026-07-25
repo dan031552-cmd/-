@@ -1,4 +1,4 @@
-<!DOCTYPE1 html>
+<!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -146,7 +146,6 @@
         /* Form Section */
         .form-section {
             display: flex;
-            flex-direction: flex-direction;
             flex-direction: column;
             gap: 18px;
         }
@@ -604,4 +603,4 @@
 
         function closeBackPrintModal(save) {
             if (save) {
-                let text = doc
+                let text = document.getElementById('back-print-text').value
