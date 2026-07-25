@@ -16,15 +16,15 @@
     <style>
         :root {
             --bg-color: #0f172a;
-            --card-bg: rgba(30, 41, 59, 0.7);
+            --card-bg: rgba(30, 41, 59, 0.85);
             --primary: #6366f1;
             --primary-hover: #4f46e5;
             --accent: #ec4899;
             --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border-color: rgba(255, 255, 255, 0.1);
+            --text-muted: #cbd5e1;
+            --border-color: rgba(255, 255, 255, 0.2);
             --gold-primary: #f59e0b;
-            --gold-border: rgba(245, 158, 11, 0.4);
+            --gold-border: rgba(245, 158, 11, 0.5);
         }
 
         body {
@@ -61,7 +61,6 @@
             display: flex;
             flex-direction: column;
             gap: 30px;
-            transition: border-color 0.5s ease;
         }
 
         header {
@@ -156,34 +155,56 @@
             gap: 8px;
         }
 
-        label {
-            font-weight: 700;
-            font-size: 0.95rem;
+        .form-row {
+            display: flex;
+            gap: 15px;
         }
 
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        label {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #ffffff;
+        }
+
+        /* תיקון מלא וקריטי לרשימות הנפתחות ולתיבות הקלט */
         input, select, textarea {
             width: 100%;
-            padding: 12px 16px;
-            background: rgba(15, 23, 42, 0.6);
+            height: 48px;
+            padding: 0 16px;
+            background-color: #0f172a !important;
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            color: white;
+            color: #ffffff !important;
             font-family: inherit;
-            font-size: 1rem;
+            font-size: 1.05rem;
+            font-weight: 700;
             box-sizing: border-box;
-            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            z-index: 10;
+        }
+
+        textarea {
+            height: auto;
+            padding: 12px 16px;
+        }
+
+        /* וידוא שהאופציות בתוך ה-Select פתוחות ונגישות לחלוטין */
+        select option {
+            background-color: #0f172a !important;
+            color: #ffffff !important;
+            padding: 12px;
+            font-size: 1.05rem;
         }
 
         input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-        }
-
-        body.gold-mode input:focus, 
-        body.gold-mode select:focus, 
-        body.gold-mode textarea:focus {
-            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.4);
         }
 
         .option-toggle {
@@ -193,7 +214,7 @@
 
         .toggle-btn {
             flex: 1;
-            padding: 10px;
+            padding: 12px;
             background: rgba(15, 23, 42, 0.6);
             border: 1px solid var(--border-color);
             border-radius: 12px;
@@ -420,9 +441,9 @@
                     <input type="text" id="cust-address" placeholder="עיר, רחוב ומספר בית">
                 </div>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div class="form-row">
                     <div class="form-group">
-                        <label>צבע חולצה</label>
+                        <label for="color">צבע חולצה</label>
                         <select id="color">
                             <option value="שחור">שחור</option>
                             <option value="לבן">לבן</option>
@@ -432,7 +453,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label>מידה</label>
+                        <label for="size">מידה</label>
                         <select id="size">
                             <option value="S">S</option>
                             <option value="M" selected>M</option>
@@ -451,9 +472,9 @@
                     </div>
                 </div>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div class="form-row">
                     <div class="form-group">
-                        <label>כמות</label>
+                        <label for="qty">כמות</label>
                         <input type="number" id="qty" value="1" min="1" onchange="calculateTotal()">
                     </div>
 
@@ -591,16 +612,3 @@
 
             if (type === 'front') {
                 printExtra = 0;
-                backPrintDetails = '';
-            }
-            calculateTotal();
-        }
-
-        // מודאל הדפסת גב
-        function openBackPrintModal() {
-            document.getElementById('back-print-modal').classList.add('open');
-        }
-
-        function closeBackPrintModal(save) {
-            if (save) {
-                let text = document.getElementById('back-print-text').value
