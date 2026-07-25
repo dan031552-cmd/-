@@ -42,82 +42,123 @@
         }
 
         .container {
-            display: flex; flex-direction: column;
-            max-width: 500px; width: 100%; gap: 20px;
+            display: flex; 
+            flex-direction: column;
+            max-width: 500px; 
+            width: 100%; 
+            gap: 20px;
         }
 
         .reviews-section-top { 
             background: rgba(25, 20, 18, 0.55); 
             backdrop-filter: blur(16px);
             border: 1px solid var(--card-border); 
-            border-radius: 24px; padding: 20px; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5); text-align: right;
+            border-radius: 24px; 
+            padding: 20px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5); 
+            text-align: right;
         }
 
         .review-card {
-            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 12px; padding: 12px; margin-bottom: 12px; font-size: 14px; text-align: right;
+            background: rgba(255,255,255,0.03); 
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px; 
+            padding: 12px; 
+            margin-bottom: 12px; 
+            font-size: 14px; 
+            text-align: right;
             transition: all 0.5s ease;
         }
 
-        /* 💥 אפקט הבום והכניסה לכותב הביקורת 💥 */
+        /* 💥 אפקט כניסה לביקורת חדשה 💥 */
         @keyframes reviewBoomDrop {
             0% {
                 opacity: 0;
-                transform: scale(2.5) translateY(-80px) rotate(-8deg);
-                box-shadow: 0 0 50px var(--gold);
-            }
-            70% {
-                transform: scale(0.95) translateY(10px) rotate(2deg);
-                box-shadow: 0 0 30px var(--primary);
+                transform: scale(1.5) translateY(-20px);
+                box-shadow: 0 0 30px var(--gold);
             }
             100% {
                 opacity: 1;
-                transform: scale(1) translateY(0) rotate(0deg);
-                box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+                transform: scale(1) translateY(0);
             }
         }
 
         .new-review-boom {
-            animation: reviewBoomDrop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            animation: reviewBoomDrop 0.6s ease-out forwards;
             border: 2px solid var(--gold) !important;
             background: rgba(255, 215, 0, 0.08) !important;
         }
 
-        .review-author { font-weight: bold; color: var(--primary); margin-bottom: 4px; }
-        .review-img { max-width: 100%; height: auto; border-radius: 8px; margin-top: 8px; border: 1px solid rgba(255,255,255,0.1); }
+        .review-author { 
+            font-weight: bold; 
+            color: var(--primary); 
+            margin-bottom: 4px; 
+        }
+
+        .review-img { 
+            max-width: 100%; 
+            height: auto; 
+            border-radius: 8px; 
+            margin-top: 8px; 
+            border: 1px solid rgba(255,255,255,0.1); 
+        }
 
         .add-review-btn {
-            background: rgba(217, 65, 37, 0.15); border: 1px solid var(--primary);
-            color: white; border-radius: 10px; padding: 10px; width: 100%;
-            cursor: pointer; font-weight: bold; font-size: 14px; margin-top: 10px;
+            background: rgba(217, 65, 37, 0.15); 
+            border: 1px solid var(--primary);
+            color: white; 
+            border-radius: 10px; 
+            padding: 10px; 
+            width: 100%;
+            cursor: pointer; 
+            font-weight: bold; 
+            font-size: 14px; 
+            margin-top: 10px;
         }
 
         .review-form-box {
-            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 15px; border-radius: 12px; margin-top: 15px; display: none;
+            background: rgba(255, 255, 255, 0.03); 
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 15px; 
+            border-radius: 12px; 
+            margin-top: 15px; 
+            display: none;
         }
 
         .coupon-top-box {
             background: rgba(255, 255, 255, 0.05);
             border: 1px dashed var(--card-border);
-            border-radius: 16px; padding: 15px;
-            display: flex; gap: 8px; align-items: center; justify-content: center;
+            border-radius: 16px; 
+            padding: 15px;
+            display: flex; 
+            gap: 8px; 
+            align-items: center; 
+            justify-content: center;
             transition: all 0.4s ease;
         }
 
         .coupon-input {
-            width: 120px !important; margin-bottom: 0 !important;
-            text-align: center; font-weight: bold; letter-spacing: 2px;
+            width: 120px !important; 
+            margin-bottom: 0 !important;
+            text-align: center; 
+            font-weight: bold; 
+            letter-spacing: 2px;
         }
 
         .btn-apply-coupon {
-            background: var(--primary); color: white; border: none;
-            padding: 10px 15px; border-radius: 8px; font-weight: bold; cursor: pointer;
+            background: var(--primary); 
+            color: white; 
+            border: none;
+            padding: 10px 15px; 
+            border-radius: 8px; 
+            font-weight: bold; 
+            cursor: pointer;
             transition: transform 0.2s ease;
         }
 
-        .btn-apply-coupon:active { transform: scale(0.95); }
+        .btn-apply-coupon:active { 
+            transform: scale(0.95); 
+        }
 
         @keyframes couponEffect {
             0% { transform: scale(1) rotate(0deg); box-shadow: 0 0 0px var(--gold); }
@@ -135,87 +176,205 @@
         .gallery-container {
             background: rgba(20, 15, 12, 0.5);
             border: 1px solid var(--card-border);
-            border-radius: 24px; padding: 12px; text-align: center;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5); overflow: hidden;
+            border-radius: 24px; 
+            padding: 12px; 
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5); 
+            overflow: hidden;
         }
 
         .main-img-wrapper {
-            width: 100%; padding-top: 133%; position: relative; background: #111; border-radius: 16px; overflow: hidden;
+            width: 100%; 
+            padding-top: 133%; 
+            position: relative; 
+            background: #111; 
+            border-radius: 16px; 
+            overflow: hidden;
         }
 
         .main-img {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity 0.3s ease;
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            object-fit: contain; 
+            transition: opacity 0.3s ease;
         }
 
-        .gallery-nav { display: flex; justify-content: center; gap: 10px; margin-top: 15px; }
+        .gallery-nav { 
+            display: flex; 
+            justify-content: center; 
+            gap: 10px; 
+            margin-top: 15px; 
+        }
 
         .nav-btn {
-            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15);
-            color: var(--cream-white); padding: 10px 20px; border-radius: 30px; cursor: pointer;
-            font-weight: 600; font-size: 14px;
+            background: rgba(255, 255, 255, 0.05); 
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--cream-white); 
+            padding: 10px 20px; 
+            border-radius: 30px; 
+            cursor: pointer;
+            font-weight: 600; 
+            font-size: 14px;
         }
 
-        .nav-btn.active { background: var(--primary); border-color: var(--primary); color: white; }
+        .nav-btn.active { 
+            background: var(--primary); 
+            border-color: var(--primary); 
+            color: white; 
+        }
 
         .card { 
-            background: rgba(25, 20, 18, 0.55); backdrop-filter: blur(16px);
-            border: 1px solid var(--card-border); padding: 25px; border-radius: 24px; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5); text-align: right;
+            background: rgba(25, 20, 18, 0.55); 
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border); 
+            padding: 25px; 
+            border-radius: 24px; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5); 
+            text-align: right;
         }
 
         .promo { 
-            background: linear-gradient(90deg, #d94125, #ee6b4d); color: white; 
-            padding: 12px; border-radius: 12px; margin-bottom: 20px; 
-            font-weight: bold; font-size: 15px; text-align: center;
+            background: linear-gradient(90deg, #d94125, #ee6b4d); 
+            color: white; 
+            padding: 12px; 
+            border-radius: 12px; 
+            margin-bottom: 20px; 
+            font-weight: bold; 
+            font-size: 15px; 
+            text-align: center;
         }
 
-        h1 { margin: 0 0 20px 0; font-size: 32px; font-weight: 800; text-align: center; }
-        label { display: block; font-weight: 600; margin-bottom: 6px; color: #d0c8b8; font-size: 14px; }
+        h1 { 
+            margin: 0 0 20px 0; 
+            font-size: 32px; 
+            font-weight: 800; 
+            text-align: center; 
+        }
+
+        label { 
+            display: block; 
+            font-weight: 600; 
+            margin-bottom: 6px; 
+            color: #d0c8b8; 
+            font-size: 14px; 
+        }
         
         select, input, textarea { 
-            width: 100%; padding: 12px; margin-bottom: 15px; 
-            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); 
-            border-radius: 10px; box-sizing: border-box; font-size: 16px; color: white;
+            width: 100%; 
+            padding: 12px; 
+            margin-bottom: 15px; 
+            background: rgba(255, 255, 255, 0.05); 
+            border: 1px solid rgba(255, 255, 255, 0.15); 
+            border-radius: 10px; 
+            box-sizing: border-box; 
+            font-size: 16px; 
+            color: white;
             font-family: inherit;
         }
 
-        select option { background: #1e1916; color: white; }
-        
-        .option-group { display: flex; gap: 10px; margin-bottom: 15px; }
-        .option-btn {
-            flex: 1; padding: 12px; border-radius: 10px;
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-            text-align: center; cursor: pointer; font-size: 14px; color: #fff;
+        select option { 
+            background: #1e1916; 
+            color: white; 
         }
-        .option-btn.active { border-color: var(--primary); background: rgba(217,65,37,0.25); font-weight: bold; }
+        
+        .option-group { 
+            display: flex; 
+            gap: 10px; 
+            margin-bottom: 15px; 
+        }
+
+        .option-btn {
+            flex: 1; 
+            padding: 12px; 
+            border-radius: 10px;
+            background: rgba(255,255,255,0.05); 
+            border: 1px solid rgba(255,255,255,0.1);
+            text-align: center; 
+            cursor: pointer; 
+            font-size: 14px; 
+            color: #fff;
+        }
+
+        .option-btn.active { 
+            border-color: var(--primary); 
+            background: rgba(217,65,37,0.25); 
+            font-weight: bold; 
+        }
 
         .price-box { 
-            background: rgba(255, 255, 255, 0.03); padding: 15px; border-radius: 12px; 
-            margin: 20px 0; border: 1px solid rgba(255, 255, 255, 0.08); text-align: center;
+            background: rgba(255, 255, 255, 0.03); 
+            padding: 15px; 
+            border-radius: 12px; 
+            margin: 20px 0; 
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+            text-align: center;
             transition: all 0.3s ease;
         }
 
-        .price { font-size: 36px; font-weight: 800; color: #fff; margin-top: 3px; }
+        .price { 
+            font-size: 36px; 
+            font-weight: 800; 
+            color: #fff; 
+            margin-top: 3px; 
+        }
         
         .btn-order { 
             background: linear-gradient(135deg, var(--whatsapp), #1ed760); 
-            color: white; border: none; width: 100%; padding: 16px; font-size: 18px; 
-            border-radius: 12px; cursor: pointer; font-weight: bold;
+            color: white; 
+            border: none; 
+            width: 100%; 
+            padding: 16px; 
+            font-size: 18px; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            font-weight: bold;
         }
 
         .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(5px);
-            display: none; justify-content: center; align-items: center; z-index: 10000;
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100vw; 
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.8); 
+            backdrop-filter: blur(5px);
+            display: none; 
+            justify-content: center; 
+            align-items: center; 
+            z-index: 10000;
         }
+
         .modal-card {
-            background: #1e1815; border: 1px solid var(--primary);
-            border-radius: 20px; padding: 25px; max-width: 400px; width: 90%; text-align: right;
+            background: #1e1815; 
+            border: 1px solid var(--primary);
+            border-radius: 20px; 
+            padding: 25px; 
+            max-width: 400px; 
+            width: 90%; 
+            text-align: right;
         }
-        .modal-title { font-size: 20px; font-weight: bold; color: var(--primary); margin-bottom: 10px; text-align: center; }
+
+        .modal-title { 
+            font-size: 20px; 
+            font-weight: bold; 
+            color: var(--primary); 
+            margin-bottom: 10px; 
+            text-align: center; 
+        }
+
         .modal-btn-confirm {
-            background: var(--primary); color: white; border: none; padding: 12px;
-            width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px;
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            padding: 12px;
+            width: 100%; 
+            border-radius: 10px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            font-size: 16px;
         }
 
         .review-locked-msg {
@@ -347,19 +506,19 @@
     </div>
 
     <script>
-        // שרת אחסון גלובלי יציב וחינמי שאינו חוסם CORS מדפדפנים
-        const SERVER_API_URL = 'https://kvdb.io/28B7mP4e2JgP8k1vA9L3qX/ashkenazi_reviews_v1';
+        // 🎯 הקישור המדויק לשרת Firebase שלך:
+        const FIREBASE_URL = 'https://ashkenazi-shirts-default-rtdb.firebaseio.com/reviews.json';
+        const PHONE_NUMBER = "972552956401";
 
         let deliveryMethod = 'pickup';
         let printType = 'front';
         let backPrintDetails = '';
         let discount = 0;
-        let globalReviews = [];
         let justSubmittedReviewId = null;
 
         document.addEventListener("DOMContentLoaded", function() {
             populateSizes();
-            loadGlobalReviews();
+            loadReviewsFromFirebase();
             updatePrice();
             checkUserOrderPermission();
         });
@@ -380,12 +539,14 @@
             sizeSelect.innerHTML = '';
             for (let i = 1; i <= 47; i++) {
                 let opt = document.createElement('option');
-                opt.value = i; opt.innerText = i;
+                opt.value = i; 
+                opt.innerText = i;
                 sizeSelect.appendChild(opt);
             }
             ['S', 'M', 'L', 'XL', 'XXL'].forEach(s => {
                 let opt = document.createElement('option');
-                opt.value = s; opt.innerText = s;
+                opt.value = s; 
+                opt.innerText = s;
                 if(s === 'M') opt.selected = true;
                 sizeSelect.appendChild(opt);
             });
@@ -395,22 +556,15 @@
             let code = document.getElementById('coupon-code-input').value.trim();
             if (code === '2324') {
                 discount = 10;
-                
                 let couponBox = document.getElementById('coupon-box');
                 couponBox.classList.add('coupon-activated-effect');
                 
                 if (typeof confetti === 'function') {
-                    confetti({
-                        particleCount: 100,
-                        spread: 70,
-                        origin: { y: 0.6 },
-                        colors: ['#ffd700', '#d94125', '#ffffff']
-                    });
+                    confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#ffd700', '#d94125', '#ffffff'] });
                 }
 
                 document.body.classList.add('gold-mode');
                 document.getElementById('discount-note').style.display = 'block';
-                
                 updatePrice();
             } else {
                 alert('❌ קוד הנחה לא תקין.');
@@ -420,219 +574,12 @@
         function changeView(imgSrc, btn) {
             const imgElement = document.getElementById('product-view');
             imgElement.style.opacity = 0;
-            setTimeout(() => {
-                imgElement.src = imgSrc;
-                imgElement.style.opacity = 1;
+            setTimeout(() => { 
+                imgElement.src = imgSrc; 
+                imgElement.style.opacity = 1; 
             }, 100);
             document.querySelectorAll('.gallery-nav .nav-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
         }
 
-        function setPrintType(type) {
-            printType = type;
-            document.getElementById('print-front-only').classList.toggle('active', type === 'front');
-            document.getElementById('print-back-add').classList.toggle('active', type === 'back');
-
-            if (type === 'back') {
-                openBackModal();
-            } else {
-                document.getElementById('back-details-preview').style.display = 'none';
-                updatePrice();
-            }
-        }
-
-        function openBackModal() {
-            document.getElementById('back-print-modal').style.display = 'flex';
-        }
-
-        function confirmBackPrint() {
-            let val = document.getElementById('modal-back-text').value.trim();
-            if (!val) {
-                alert('אנא רשום מה ברצונך להדפיס על הגב');
-                return;
-            }
-            backPrintDetails = val;
-            document.getElementById('back-text-display').innerText = val;
-            document.getElementById('back-details-preview').style.display = 'block';
-            document.getElementById('back-print-modal').style.display = 'none';
-            updatePrice();
-        }
-
-        function setDelivery(method) {
-            deliveryMethod = method;
-            document.getElementById('opt-pickup').classList.toggle('active', method === 'pickup');
-            document.getElementById('opt-shipping').classList.toggle('active', method === 'shipping');
-            document.getElementById('address-container').style.display = (method === 'shipping') ? 'block' : 'none';
-            updatePrice();
-        }
-
-        function updatePrice() {
-            let q = parseInt(document.getElementById('qty').value) || 1;
-            let baseUnitPrice = (printType === 'back') ? 90 : ((q >= 3) ? 60 : 70);
-            let deliveryPrice = (deliveryMethod === 'shipping') ? 5 : 0;
-            
-            let total = (q * baseUnitPrice) + deliveryPrice - discount;
-
-            if (total < 0) total = 0;
-            document.getElementById('total').innerText = total;
-        }
-
-        function toggleReviewForm() {
-            let form = document.getElementById('review-form');
-            form.style.display = (form.style.display === 'block') ? 'none' : 'block';
-        }
-
-        async function loadGlobalReviews() {
-            let listElem = document.getElementById('reviews-list');
-            listElem.innerHTML = '<div style="font-size:13px; color:#aaa; text-align:center;">טוען ביקורות... ⏳</div>';
-
-            try {
-                let res = await fetch(SERVER_API_URL);
-                if (res.ok) {
-                    let data = await res.json();
-                    if (Array.isArray(data)) {
-                        globalReviews = data;
-                    }
-                }
-            } catch (e) {
-                console.log('טעינה ראשונית של ביקורות');
-            } finally {
-                renderReviews();
-            }
-        }
-
-        function compressImage(file, callback) {
-            let reader = new FileReader();
-            reader.onload = function(e) {
-                let img = new Image();
-                img.onload = function() {
-                    let canvas = document.createElement('canvas');
-                    let ctx = canvas.getContext('2d');
-                    let maxWidth = 450;
-                    let scale = maxWidth / img.width;
-                    canvas.width = (img.width > maxWidth) ? maxWidth : img.width;
-                    canvas.height = (img.width > maxWidth) ? img.height * scale : img.height;
-                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    callback(canvas.toDataURL('image/jpeg', 0.5));
-                };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        async function submitReview() {
-            let text = document.getElementById('rev-text').value.trim();
-            let usernameDisplay = document.getElementById('rev-username').value.trim() || 'משתמש אנונימי';
-            let fileInput = document.getElementById('rev-image');
-            let submitBtn = document.getElementById('btn-submit-rev');
-
-            if (!text) { alert('אנא כתוב תוכן לביקורת.'); return; }
-
-            submitBtn.disabled = true;
-            submitBtn.innerText = 'מפרסם... ⏳';
-
-            const processUpload = async (imgBase64) => {
-                let newId = 'rev_' + Date.now();
-                let newReview = {
-                    id: newId,
-                    author: usernameDisplay,
-                    text: text,
-                    img: imgBase64
-                };
-
-                globalReviews.unshift(newReview);
-                justSubmittedReviewId = newId;
-
-                try {
-                    let res = await fetch(SERVER_API_URL, {
-                        method: 'POST',
-                        body: JSON.stringify(globalReviews)
-                    });
-
-                    if (!res.ok) throw new Error('Network error');
-
-                    document.getElementById('rev-text').value = '';
-                    document.getElementById('rev-username').value = '';
-                    document.getElementById('rev-image').value = '';
-                    document.getElementById('review-form').style.display = 'none';
-
-                    renderReviews();
-
-                    if (typeof confetti === 'function') {
-                        confetti({
-                            particleCount: 120,
-                            spread: 90,
-                            origin: { y: 0.3 },
-                            colors: ['#ffd700', '#d94125', '#25d366']
-                        });
-                    }
-
-                } catch (e) {
-                    alert('⚠️ אירעה שגיאה. אנא ודא שהתמונה שצירפת לא כבדה מדי ונסה שוב.');
-                    globalReviews.shift();
-                } finally {
-                    submitBtn.disabled = false;
-                    submitBtn.innerText = 'פרסם ביקורת 🚀';
-                }
-            };
-
-            if (fileInput.files && fileInput.files[0]) {
-                compressImage(fileInput.files[0], function(compressedBase64) {
-                    processUpload(compressedBase64);
-                });
-            } else {
-                processUpload(null);
-            }
-        }
-
-        function renderReviews() {
-            let listHTML = '';
-
-            if (!globalReviews || globalReviews.length === 0) {
-                listHTML = '<div style="font-size: 13px; color: #aaa; text-align: center; margin-bottom: 10px;">טרם נכתבו ביקורות. מוזמן להיות הראשון שממליץ!</div>';
-            } else {
-                globalReviews.forEach(r => {
-                    let isBoom = (r.id === justSubmittedReviewId) ? 'new-review-boom' : '';
-                    
-                    listHTML += `
-                        <div class="review-card ${isBoom}">
-                            <div class="review-author">⭐ ${r.author}</div>
-                            <div>"${r.text}"</div>
-                            ${r.img ? `<img src="${r.img}" class="review-img">` : ''}
-                        </div>
-                    `;
-                });
-            }
-
-            document.getElementById('reviews-list').innerHTML = listHTML;
-        }
-
-        function order() {
-            let name = document.getElementById('cust-name').value.trim();
-            if (!name) { alert('אנא הזן את שמך המלא לפני שליחת ההזמנה.'); return; }
-
-            if (deliveryMethod === 'shipping') {
-                let address = document.getElementById('cust-address').value.trim();
-                if (!address) { alert('אנא הזן כתובת למשלוח.'); return; }
-            }
-
-            localStorage.setItem('hasOrdered_ashkenazi', 'true');
-            checkUserOrderPermission();
-
-            let color = document.getElementById('color').value;
-            let size = document.getElementById('size').value;
-            let qty = document.getElementById('qty').value;
-            let notes = document.getElementById('notes').value;
-            let total = document.getElementById('total').innerText;
-            let deliveryText = (deliveryMethod === 'shipping') ? `משלוח לכתובת: ${document.getElementById('cust-address').value}` : 'איסוף עצמי';
-            
-            let printDetailsText = (printType === 'back') ? `הדפסה על הגב: "${backPrintDetails}"` : 'הדפסה קדמית בלבד';
-            let couponAppliedText = (discount > 0) ? '\n🎁 הופעלה הנחת קוד 2324 (-10 ₪)' : '';
-
-            let msg = `היי, אני רוצה להזמין חולצה מודפסת:\n\n👤 שם: ${name}\n🎨 צבע: ${color}\n📏 מידה: ${size}\n🔢 כמות: ${qty}\n🪡 סוג הדפסה: ${printDetailsText}\n🚚 אופן אספקה: ${deliveryText}${couponAppliedText}\n📝 הערות: ${notes}\n\n💰 סה"כ לתשלום: ${total} ₪`;
-            
-            window.open(`https://wa.me/972552956401?text=${encodeURIComponent(msg)}`);
-        }
-    </script>
-</body>
-</html>
+        function setPrin
