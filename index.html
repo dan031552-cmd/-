@@ -40,7 +40,6 @@
             transition: background-color 0.5s ease;
         }
 
-        /* Gold Mode Theme Override */
         body.gold-mode {
             --primary: #f59e0b;
             --primary-hover: #d97706;
@@ -90,7 +89,6 @@
             font-size: 1.1rem;
         }
 
-        /* Layout Grid */
         .main-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -103,7 +101,6 @@
             }
         }
 
-        /* Gallery Section */
         .gallery-container {
             display: flex;
             flex-direction: column;
@@ -142,7 +139,6 @@
             border-color: var(--primary);
         }
 
-        /* Form Section */
         .form-section {
             display: flex;
             flex-direction: column;
@@ -170,7 +166,7 @@
             color: #ffffff;
         }
 
-        /* תיקון מלא וקריטי לרשימות הנפתחות ולתיבות הקלט */
+        /* עיצוב תיבות קלט וגלילה מלאה ל-Select */
         input, select, textarea {
             width: 100%;
             height: 48px;
@@ -184,8 +180,6 @@
             font-weight: 700;
             box-sizing: border-box;
             cursor: pointer;
-            position: relative;
-            z-index: 10;
         }
 
         textarea {
@@ -193,12 +187,17 @@
             padding: 12px 16px;
         }
 
-        /* וידוא שהאופציות בתוך ה-Select פתוחות ונגישות לחלוטין */
-        select option {
+        /* עיצוב אופציות התפריט הנפתח */
+        select option, select optgroup {
             background-color: #0f172a !important;
             color: #ffffff !important;
-            padding: 12px;
-            font-size: 1.05rem;
+            padding: 8px;
+            font-size: 1rem;
+        }
+
+        select optgroup {
+            font-weight: bold;
+            color: var(--primary) !important;
         }
 
         input:focus, select:focus, textarea:focus {
@@ -231,7 +230,6 @@
             border-color: var(--primary);
         }
 
-        /* Coupon Section */
         .coupon-wrapper {
             display: flex;
             gap: 10px;
@@ -252,7 +250,6 @@
             background: var(--primary);
         }
 
-        /* Price display */
         .price-box {
             background: rgba(15, 23, 42, 0.8);
             padding: 15px 20px;
@@ -293,7 +290,6 @@
             transform: translateY(-2px);
         }
 
-        /* Modal Back Print */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -325,7 +321,6 @@
             gap: 15px;
         }
 
-        /* Reviews Section */
         .reviews-container {
             border-top: 1px solid var(--border-color);
             padding-top: 25px;
@@ -376,12 +371,6 @@
             display: flex;
             flex-direction: column;
             gap: 6px;
-            animation: popIn 0.3s ease;
-        }
-
-        @keyframes popIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
         }
 
         .review-meta {
@@ -410,7 +399,7 @@
         </header>
 
         <div class="main-content">
-            <!-- גלריית תמונות -->
+            <!-- גלריה -->
             <div class="gallery-container">
                 <img id="main-img" src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=800" class="main-image" alt="חולצה מודפסת">
                 <div class="thumbnails">
@@ -420,7 +409,7 @@
                 </div>
             </div>
 
-            <!-- טופס הזמנה -->
+            <!-- טופס -->
             <div class="form-section">
                 
                 <div class="form-group">
@@ -455,11 +444,18 @@
                     <div class="form-group">
                         <label for="size">מידה</label>
                         <select id="size">
-                            <option value="S">S</option>
-                            <option value="M" selected>M</option>
-                            <option value="L">L</option>
-                            <option value="XL">XL</option>
-                            <option value="XXL">XXL</option>
+                            <optgroup label="מידות אותיות">
+                                <option value="S">S</option>
+                                <option value="M" selected>M</option>
+                                <option value="L">L</option>
+                                <option value="XL">XL</option>
+                                <option value="XXL">XXL</option>
+                                <option value="3XL">3XL</option>
+                                <option value="4XL">4XL</option>
+                            </optgroup>
+                            <optgroup label="מידות מספרים (1-47)" id="numeric-sizes">
+                                <!-- ייטען בלופ אוטומטי מ-1 עד 47 -->
+                            </optgroup>
                         </select>
                     </div>
                 </div>
@@ -515,14 +511,12 @@
                 </div>
             </div>
 
-            <div class="reviews-list" id="reviews-list">
-                <!-- הביקורות ייטענו מ-Firebase כאן -->
-            </div>
+            <div class="reviews-list" id="reviews-list"></div>
         </div>
 
     </div>
 
-    <!-- מודאל הדפסה על הגב -->
+    <!-- מודאלים -->
     <div class="modal-overlay" id="back-print-modal">
         <div class="modal">
             <h3>הדפסה על הגב (+15 ₪)</h3>
@@ -535,7 +529,6 @@
         </div>
     </div>
 
-    <!-- מודאל הוספת ביקורת -->
     <div class="modal-overlay" id="add-review-modal">
         <div class="modal">
             <h3>הוסף ביקורת</h3>
@@ -563,8 +556,8 @@
     </div>
 
     <script>
-        const PHONE_NUMBER = "972500000000"; // מספר הוואטסאפ לקבלת הזמנות
-        const FIREBASE_DB_URL = "https://ashkenazi-shirts-default-rtdb.firebaseio.com/"; // כתובת הפרויקט ב-Firebase
+        const PHONE_NUMBER = "972500000000";
+        const FIREBASE_DB_URL = "https://ashkenazi-shirts-default-rtdb.firebaseio.com/";
 
         let basePrice = 55;
         let printExtra = 0;
@@ -574,20 +567,29 @@
         let printType = 'front';
         let backPrintDetails = '';
 
-        // טעינה ראשונית
         window.onload = function() {
+            populateNumericSizes();
             checkUserOrderPermission();
             fetchReviews();
         };
 
-        // שינוי תמונה ראשית בגלריה
+        // פונקציה שממלאת אוטומטית את המידות מ-1 עד 47
+        function populateNumericSizes() {
+            const container = document.getElementById('numeric-sizes');
+            for (let i = 1; i <= 47; i++) {
+                let opt = document.createElement('option');
+                opt.value = "מידה " + i;
+                opt.textContent = "מידה " + i;
+                container.appendChild(opt);
+            }
+        }
+
         function changeImage(el) {
             document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
             el.classList.add('active');
             document.getElementById('main-img').src = el.src;
         }
 
-        // שינוי אופן אספקה
         function setDelivery(method) {
             deliveryMethod = method;
             document.getElementById('btn-pickup').classList.toggle('active', method === 'pickup');
@@ -604,11 +606,6 @@
             calculateTotal();
         }
 
-        // שינוי סוג הדפסה
         function setPrintType(type) {
             printType = type;
-            document.getElementById('btn-print-front').classList.toggle('active', type === 'front');
-            document.getElementById('btn-print-back').classList.toggle('active', type === 'back');
-
-            if (type === 'front') {
-                printExtra = 0;
+            document.getElementById('btn-print-front'
