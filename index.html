@@ -6,7 +6,7 @@
     <title>אשכנזי מכירת חולצות</title>
     
     <link rel="icon" type="image/jpeg" href="WhatsApp Image 2026-06-26 at 15.01.25.jpeg">
-    <!-- ספריה לאפקט נצנצים/זיקוקים -->
+    <!-- ספריה לאפקט זיקוקים -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
@@ -57,6 +57,31 @@
         .review-card {
             background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
             border-radius: 12px; padding: 12px; margin-bottom: 12px; font-size: 14px; text-align: right;
+            transition: all 0.5s ease;
+        }
+
+        /* 💥 אפקט הבום והכניסה המגניב לכותב הביקורת 💥 */
+        @keyframes reviewBoomDrop {
+            0% {
+                opacity: 0;
+                transform: scale(3) translateY(-100px) rotate(-10deg);
+                box-shadow: 0 0 50px var(--gold);
+            }
+            70% {
+                transform: scale(0.95) translateY(10px) rotate(2deg);
+                box-shadow: 0 0 30px var(--primary);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0) rotate(0deg);
+                box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+            }
+        }
+
+        .new-review-boom {
+            animation: reviewBoomDrop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            border: 2px solid var(--gold) !important;
+            background: rgba(255, 215, 0, 0.08) !important;
         }
 
         .review-author { font-weight: bold; color: var(--primary); margin-bottom: 4px; }
@@ -322,7 +347,6 @@
     </div>
 
     <script>
-        // המפתחות המעודכנים שלך
         const JSONBIN_URL = 'https://api.jsonbin.io/v3/b/6a650551f5f4af5e29c0add6';
         const JSONBIN_KEY = '$2a$10$eHPbKi1WFSU7UtqssII1LuIqm17YSx0yh0IyC1fJDp7I8rXLyHs8i';
 
@@ -331,6 +355,7 @@
         let backPrintDetails = '';
         let discount = 0;
         let globalReviews = [];
+        let justSubmittedReviewId = null; // זיהוי הביקורת של המשתמש הנוכחי
 
         document.addEventListener("DOMContentLoaded", function() {
             populateSizes();
@@ -460,35 +485,47 @@
         async function loadGlobalReviews() {
             let listElem = document.getElementById('reviews-list');
             listElem.innerHTML = '<div style="font-size:13px; color:#aaa; text-align:center;">טוען ביקורות... ⏳</div>';
-            
-            // טעינת גיבוי מקומי ראשוני
-            let localBackup = localStorage.getItem('local_ashkenazi_reviews');
-            if (localBackup) {
-                try { globalReviews = JSON.parse(localBackup); } catch(e){}
-            }
 
             try {
                 let res = await fetch(JSONBIN_URL + '/latest', {
                     method: 'GET',
                     headers: { 
                         'X-Master-Key': JSONBIN_KEY,
-                        'X-Access-Key': JSONBIN_KEY,
                         'X-Bin-Meta': 'false'
                     }
                 });
 
                 if (res.ok) {
                     let data = await res.json();
-                    if (data && data.reviews) {
+                    if (data && Array.isArray(data.reviews)) {
                         globalReviews = data.reviews;
-                        localStorage.setItem('local_ashkenazi_reviews', JSON.stringify(globalReviews));
                     }
                 }
             } catch (e) {
-                console.log('טעינה מבוססת גיבוי מקומי');
+                console.log('שגיאה בטעינת ביקורות מרחוק');
             } finally {
                 renderReviews();
             }
+        }
+
+        // דחיסת תמונה כדי להקטין נפח לשרת
+        function compressImage(file, callback) {
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let img = new Image();
+                img.onload = function() {
+                    let canvas = document.createElement('canvas');
+                    let ctx = canvas.getContext('2d');
+                    let maxWidth = 600;
+                    let scale = maxWidth / img.width;
+                    canvas.width = (img.width > maxWidth) ? maxWidth : img.width;
+                    canvas.height = (img.width > maxWidth) ? img.height * scale : img.height;
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    callback(canvas.toDataURL('image/jpeg', 0.6));
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
         }
 
         async function submitReview() {
@@ -502,52 +539,67 @@
             submitBtn.disabled = true;
             submitBtn.innerText = 'מפרסם... ⏳';
 
-            const saveAndUpload = async (imgBase64) => {
+            const processUpload = async (imgBase64) => {
+                let newId = 'rev_' + Date.now();
                 let newReview = {
-                    id: Date.now().toString(),
+                    id: newId,
                     author: usernameDisplay,
                     text: text,
                     img: imgBase64
                 };
-                
+
+                // מוסיף לראש הרשימה
                 globalReviews.unshift(newReview);
                 
-                // שומר תמיד קודם כל מקומית כדי שלא יאבד
-                localStorage.setItem('local_ashkenazi_reviews', JSON.stringify(globalReviews));
+                // מגדיר זיהוי כדי ליצור אפקט בום למגיב
+                justSubmittedReviewId = newId;
 
                 try {
-                    await fetch(JSONBIN_URL, {
+                    let res = await fetch(JSONBIN_URL, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
                             'X-Master-Key': JSONBIN_KEY,
-                            'X-Access-Key': JSONBIN_KEY
+                            'X-Bin-Private': 'false' // מבטיח שיהיה גלוי לכולם!
                         },
                         body: JSON.stringify({ reviews: globalReviews })
                     });
+
+                    if (!res.ok) throw new Error('Failed');
+
+                    // ניקוי וסגירה
+                    document.getElementById('rev-text').value = '';
+                    document.getElementById('rev-username').value = '';
+                    document.getElementById('rev-image').value = '';
+                    document.getElementById('review-form').style.display = 'none';
+
+                    renderReviews();
+
+                    // 💥 אפקט הבום והזיקוקים למפרסם הביקורת! 💥
+                    if (typeof confetti === 'function') {
+                        confetti({
+                            particleCount: 120,
+                            spread: 90,
+                            origin: { y: 0.3 },
+                            colors: ['#ffd700', '#d94125', '#25d366']
+                        });
+                    }
+
                 } catch (e) {
-                    console.log('הביקורת נשמרה בגיבוי מקומי בלבד');
+                    alert('⚠️ שגיאה בשליחת הביקורת לשרת. אולי התמונה גדולה מדי? נסה שוב.');
+                    globalReviews.shift(); // מוחק ניסיון נכשל
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = 'פרסם ביקורת 🚀';
                 }
-
-                // ניקוי הטופס וסגירה המוצלחת בכל מקרה
-                document.getElementById('rev-text').value = '';
-                document.getElementById('rev-username').value = '';
-                document.getElementById('rev-image').value = '';
-                document.getElementById('review-form').style.display = 'none';
-
-                renderReviews();
-                alert('הביקורת שלך פורסמה בהצלחה! 🚀');
-
-                submitBtn.disabled = false;
-                submitBtn.innerText = 'פרסם ביקורת 🚀';
             };
 
             if (fileInput.files && fileInput.files[0]) {
-                let reader = new FileReader();
-                reader.onload = function(e) { saveAndUpload(e.target.result); };
-                reader.readAsDataURL(fileInput.files[0]);
+                compressImage(fileInput.files[0], function(compressedBase64) {
+                    processUpload(compressedBase64);
+                });
             } else {
-                saveAndUpload(null);
+                processUpload(null);
             }
         }
 
@@ -558,8 +610,11 @@
                 listHTML = '<div style="font-size: 13px; color: #aaa; text-align: center; margin-bottom: 10px;">טרם נכתבו ביקורות. מוזמן להיות הראשון שממליץ!</div>';
             } else {
                 globalReviews.forEach(r => {
+                    // בדיקה אם זו הביקורת שהרגע נכתבה בטלפון הזה
+                    let isBoom = (r.id === justSubmittedReviewId) ? 'new-review-boom' : '';
+                    
                     listHTML += `
-                        <div class="review-card">
+                        <div class="review-card ${isBoom}">
                             <div class="review-author">⭐ ${r.author}</div>
                             <div>"${r.text}"</div>
                             ${r.img ? `<img src="${r.img}" class="review-img">` : ''}
